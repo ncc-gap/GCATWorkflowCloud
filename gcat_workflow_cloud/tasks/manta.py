@@ -27,7 +27,6 @@ class Task(abstract_task.Abstract_task):
                 '\t'.join([
                     "--input-recursive NORMAL_BAM_DIR",
                     "--env NORMAL_BAM_FILE",
-                    "--env SAMPLE",
                     "--output-recursive OUTPUT_DIR",
                     "--input-recursive  REFERENCE_DIR",
                     "--env  REFERENCE_FILE",
@@ -40,7 +39,6 @@ class Task(abstract_task.Abstract_task):
                     '\t'.join([
                         "%s/cram/%s" % (output_dir, sample),
                         "%s.markdup.cram" % (sample),
-                        sample,
                         "%s/manta/%s" % (output_dir, sample),
                         param_conf.get(self.CONF_SECTION, "reference_dir"),
                         param_conf.get(self.CONF_SECTION, "reference_file"),

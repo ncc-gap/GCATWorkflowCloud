@@ -10,7 +10,7 @@ class Task(abstract_task.Abstract_task):
     def __init__(self, output_dir, task_dir, sample_conf, param_conf, run_conf):
 
         super(Task, self).__init__(
-            "compat-collectwgsmetrics.sh",
+            "compat-bammetrics.sh",
             param_conf.get(self.CONF_SECTION, "image"),
             param_conf.get(self.CONF_SECTION, "resource"),
             output_dir + "/logging"

@@ -1,0 +1,6 @@
+build
+dist
+gcat_workflow_cloud.egg-info
+log
+tmp
+*.pyc
