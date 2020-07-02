@@ -1,0 +1,38 @@
+language: python
+branches:
+  only:
+    - master
+    
+matrix:
+  include:
+    - name: "Python 3.7 and dna, GRCh38"
+      python: 3.7
+      dist: xenial
+      env:
+        - MODE=germline
+
+before_script:
+ - mkdir ~/.aws;
+   echo "[default]" > ~/.aws/credentials;
+   echo "aws_access_key_id = ${AWS_ACCESS_KEY_ID}" >> ~/.aws/credentials;
+   echo "aws_secret_access_key = ${AWS_SECRET_ACCESS_KEY}" >> ~/.aws/credentials;
+   echo "[default]" > ~/.aws/config;
+   echo "region = ${AWS_DEFAULT_REGION}" >> ~/.aws/config;
+   echo "output = ${AWS_DEFAULT_OUTPUT}" >> ~/.aws/config;
+ - wget https://github.com/aokad/ecsub/archive/master.zip;
+   unzip master.zip;
+   CURRENT=$(pwd);
+   cd ecsub-master;
+   python setup.py build install;
+   cd ${CURRENT};
+
+script:
+  - python setup.py build install
+  - if [ ${MODE} == "germline" ]; then gcat_workflow_cloud ${MODE} test/sample_${MODE}.csv ${AWS_S3_BUCKET}/${MODE}.${EXEC} test/param_${MODE}_ecsub.cfg --engine ecsub; fi
+
+notifications:
+  emails:
+    - aokada@ncc.go.jp
+  on_success: change
+  on_failure: always
+

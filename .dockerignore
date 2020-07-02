@@ -1,0 +1,15 @@
+.git
+.idea
+build
+dist
+docker
+example_conf
+log
+test
+tmp
+.python-version
+.travis.yml
+LICENSE
+Dockerfile
+gcat_workflow_cloud.egg-info
+*.pyc
