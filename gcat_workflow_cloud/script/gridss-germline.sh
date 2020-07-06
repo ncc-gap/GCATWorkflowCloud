@@ -28,3 +28,5 @@ bash gridss.sh \
     --picardoptions VALIDATION_STRINGENCY=LENIENT \
     ${INPUT_BAM}
 
+rm -f ${INPUT_BAM}
+rm -f ${INPUT_BAM}.bai
