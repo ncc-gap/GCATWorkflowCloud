@@ -20,12 +20,13 @@ See, https://github.com/aokad/ecsub
 
 # Quick Start
 
+Run with us-east-1.
+
 ```sh
-export YOUR_BUCKET=s3://aokad-ana-tokyo
+export YOUR_BUCKET=s3://aokad-ana-virginia
 
 gcat_workflow_cloud germline \
   example_conf/germline_sample.csv \
   ${YOUR_BUCKET}/gcat_workflow_cloud_test \
   example_conf/germline_gcat_ecsub.cfg
 ```
-
