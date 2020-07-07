@@ -12,6 +12,9 @@ if sys.version_info.major == 2:
 else:
     import configparser as cp
 
+class JobError(Exception):
+    template = "[%s] Failure job execution with exit_code (%d)"
+
 def run(args):
     args.output_dir = args.output_dir.rstrip("/")
     
@@ -80,6 +83,8 @@ def run(args):
         p_fq2cram = multiprocessing.Process(target = batch_engine.execute, args = (fq2cram_task,))
         p_fq2cram.start()
         p_fq2cram.join()
+        if p_fq2cram.exitcode != 0:
+            raise JobError(JobError.template % (fq2cram_task.TASK_NAME, p_fq2cram.exitcode))
 
         p_haploypecaller = multiprocessing.Process(target = batch_engine.execute, args = (haploypecaller_task,))
         p_collectwgsmetrics = multiprocessing.Process(target = batch_engine.execute, args = (collectwgsmetrics_task,))
@@ -96,12 +101,29 @@ def run(args):
         p_melt.start()
 
         p_haploypecaller.join()
-        p_haploypecaller.join()
         p_collectwgsmetrics.join()
         p_collectmultiplemetrics.join()
         p_gridss.join()
         p_manta.join()
         p_melt.join()
     
+        if p_fq2cram.exitcode != 0:
+            raise JobError(JobError.template % (haploypecaller_task.TASK_NAME, p_haploypecaller.exitcode))
+        
+        if p_fq2cram.exitcode != 0:
+            raise JobError(JobError.template % (collectwgsmetrics_task.TASK_NAME, p_collectwgsmetrics.exitcode))
+        
+        if p_fq2cram.exitcode != 0:
+            raise JobError(JobError.template % (collectmultiplemetrics_task.TASK_NAME, p_collectmultiplemetrics.exitcode))
+        
+        if p_fq2cram.exitcode != 0:
+            raise JobError(JobError.template % (gridss_task.TASK_NAME, p_gridss.exitcode))
+        
+        if p_fq2cram.exitcode != 0:
+            raise JobError(JobError.template % (manta_task.TASK_NAME, p_manta.exitcode))
+        
+        if p_fq2cram.exitcode != 0:
+            raise JobError(JobError.template % (melt_task.TASK_NAME, p_melt.exitcode))
+        
     if args.engine == "ecsub":
         factory.print_summary(run_conf, log_dir)

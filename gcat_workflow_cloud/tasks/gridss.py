@@ -1,6 +1,5 @@
 #! /usr/bin/env python
 
-import os
 import gcat_workflow_cloud.abstract_task as abstract_task
 
 class Task(abstract_task.Abstract_task):
