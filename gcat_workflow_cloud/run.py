@@ -13,7 +13,8 @@ else:
     import configparser as cp
 
 class JobError(Exception):
-    template = "[%s] Failure job execution with exit_code (%d)"
+    def error_text(name, code):
+        return "[%s] Failure job execution with exit_code (%s)" % (name, str(code))
 
 def run(args):
     args.output_dir = args.output_dir.rstrip("/")
@@ -42,18 +43,19 @@ def run(args):
         
     # preparing batch job engine
     if args.engine == "dsub":
-        factory = be.Dsub_factory()
+        batch_engine = be.Dsub_factory()
     elif args.engine == "azmon":
-        factory = be.Azmon_factory()
+        batch_engine = be.Azmon_factory()
     elif args.engine == "ecsub":
-        factory = be.Ecsub_factory()
-        factory.s3_wdir = args.output_dir + "/ecsub"
-        factory.wdir = tmp_dir + "/ecsub"
+        batch_engine = be.Ecsub_factory()
+        batch_engine.s3_wdir = args.output_dir + "/ecsub"
+        batch_engine.wdir = tmp_dir + "/ecsub"
     else:
-        factory = be.Awsub_factory()
+        batch_engine = be.Awsub_factory()
 
-    factory.dryrun = args.dryrun
-    batch_engine = be.Batch_engine(factory, param_conf.get("general", "instance_option"))
+    batch_engine.dryrun = args.dryrun
+    batch_engine.general_param = param_conf.get("general", "instance_option")
+    
     
     # upload config files
     storage = st.Storage(dryrun = args.dryrun)
@@ -81,10 +83,15 @@ def run(args):
         melt_task = melt.Task(args.output_dir, tmp_dir, sample_conf, param_conf, run_conf)
 
         p_fq2cram = multiprocessing.Process(target = batch_engine.execute, args = (fq2cram_task,))
-        p_fq2cram.start()
-        p_fq2cram.join()
+        
+        try:
+            p_fq2cram.start()
+            p_fq2cram.join()
+        except KeyboardInterrupt:
+            pass
+        
         if p_fq2cram.exitcode != 0:
-            raise JobError(JobError.template % (fq2cram_task.TASK_NAME, p_fq2cram.exitcode))
+            raise JobError(JobError.error_text(fq2cram_task.TASK_NAME, p_fq2cram.exitcode))
 
         p_haploypecaller = multiprocessing.Process(target = batch_engine.execute, args = (haploypecaller_task,))
         p_collectwgsmetrics = multiprocessing.Process(target = batch_engine.execute, args = (collectwgsmetrics_task,))
@@ -93,37 +100,41 @@ def run(args):
         p_manta = multiprocessing.Process(target = batch_engine.execute, args = (manta_task,))
         p_melt = multiprocessing.Process(target = batch_engine.execute, args = (melt_task,))
 
-        p_haploypecaller.start()
-        p_collectwgsmetrics.start()
-        p_collectmultiplemetrics.start()
-        p_gridss.start()
-        p_manta.start()
-        p_melt.start()
+        try:
+            p_haploypecaller.start()
+            p_collectwgsmetrics.start()
+            p_collectmultiplemetrics.start()
+            p_gridss.start()
+            p_manta.start()
+            p_melt.start()
 
-        p_haploypecaller.join()
-        p_collectwgsmetrics.join()
-        p_collectmultiplemetrics.join()
-        p_gridss.join()
-        p_manta.join()
-        p_melt.join()
-    
-        if p_fq2cram.exitcode != 0:
-            raise JobError(JobError.template % (haploypecaller_task.TASK_NAME, p_haploypecaller.exitcode))
+            p_haploypecaller.join()
+            p_collectwgsmetrics.join()
+            p_collectmultiplemetrics.join()
+            p_gridss.join()
+            p_manta.join()
+            p_melt.join()
+
+        except KeyboardInterrupt:
+            pass
+
+        if p_haploypecaller.exitcode != 0:
+            raise JobError(JobError.error_text(haploypecaller_task.TASK_NAME, p_haploypecaller.exitcode))
         
-        if p_fq2cram.exitcode != 0:
-            raise JobError(JobError.template % (collectwgsmetrics_task.TASK_NAME, p_collectwgsmetrics.exitcode))
+        if p_collectwgsmetrics.exitcode != 0:
+            raise JobError(JobError.error_text(collectwgsmetrics_task.TASK_NAME, p_collectwgsmetrics.exitcode))
         
-        if p_fq2cram.exitcode != 0:
-            raise JobError(JobError.template % (collectmultiplemetrics_task.TASK_NAME, p_collectmultiplemetrics.exitcode))
+        if p_collectmultiplemetrics.exitcode != 0:
+            raise JobError(JobError.error_text(collectmultiplemetrics_task.TASK_NAME, p_collectmultiplemetrics.exitcode))
         
-        if p_fq2cram.exitcode != 0:
-            raise JobError(JobError.template % (gridss_task.TASK_NAME, p_gridss.exitcode))
+        if p_gridss.exitcode != 0:
+            raise JobError(JobError.error_text(gridss_task.TASK_NAME, p_gridss.exitcode))
         
-        if p_fq2cram.exitcode != 0:
-            raise JobError(JobError.template % (manta_task.TASK_NAME, p_manta.exitcode))
+        if p_manta.exitcode != 0:
+            raise JobError(JobError.error_text(manta_task.TASK_NAME, p_manta.exitcode))
         
-        if p_fq2cram.exitcode != 0:
-            raise JobError(JobError.template % (melt_task.TASK_NAME, p_melt.exitcode))
+        if p_melt.exitcode != 0:
+            raise JobError(JobError.error_text(melt_task.TASK_NAME, p_melt.exitcode))
         
     if args.engine == "ecsub":
-        factory.print_summary(run_conf, log_dir)
+        batch_engine.print_summary(run_conf, log_dir)

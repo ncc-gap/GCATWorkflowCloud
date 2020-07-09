@@ -1,26 +1,43 @@
 #! /usr/bin/env python
 
-import abc, subprocess
+import subprocess
+import signal
 
 class Abstract_factory(object):
-    __metaclass__ = abc.ABCMeta
-    dryrun = False
-    
     def __init__(self):
+        self.general_param = ""
+        self.dryrun = False
+        
+    #@abc.abstractmethod
+    def generate_commands(self, task):
         pass
+    
+    def _execute(self, task):
+        proc = subprocess.Popen(self.generate_commands(task))
+        
+        try:
+            while proc.poll() is None:
+                pass
+            
+        except KeyboardInterrupt:
+            proc.send_signal(signal.SIGINT)
+            while proc.poll() is None:
+                pass
+            return 1
+        
+        if proc.returncode == 0:
+            return 0
+        return 1
+        
+    def execute(self, task):
+        exit(self._execute(task))
 
-    @abc.abstractmethod
-    def execute_closure(self, task, general_param):
-        pass
-
-    @abc.abstractmethod
-    def print_command_closure(self, task, general_param):
-        pass
-
-    @abc.abstractmethod
-    def generate_commands(self, task, general_param):
-        pass
-
+    def seq_execute(self, tasks):
+        for task in tasks:
+            if self._execute(task) != 0:
+                exit(1)
+        exit(0)
+        
     def base_commands(self, commands):
         if self.dryrun:
             return ["echo", ">>"] + commands
@@ -28,77 +45,27 @@ class Abstract_factory(object):
 
 class Dsub_factory(Abstract_factory):
 
-    def execute_closure(self, general_param):
-        def execute(task):
-            subprocess.check_call(self.generate_commands(task, general_param))
-        return execute
+    def generate_commands(self, task):
 
-    def seq_execute_closure(self, general_param):
-        def seq_execute(tasks):
-            for task in tasks:
-                subprocess.check_call(self.generate_commands(task, general_param))
-        return seq_execute
-
-    def print_command_closure(self, general_param):
-        def print_command(task):
-            print (' '.join(self.generate_commands(task, general_param)))
-        return print_command
-
-    def generate_commands(self, task, general_param):
-
-        commands = ["dsub"] + general_param.split() + task.resource_param.split() + \
+        commands = ["dsub"] + self.general_param.split() + task.resource_param.split() + \
                      ["--logging", task.log_dir, "--script", task.script_file, \
                       "--image", task.image, "--tasks", task.task_file, "--wait"]
         return self.base_commands(commands)
 
-
 class Azmon_factory(Abstract_factory):
 
-    def execute_closure(self, general_param):
-        def execute(task):
-            subprocess.check_call(self.generate_commands(task, general_param))
-        return execute
+    def generate_commands(self, task):
 
-    def seq_execute_closure(self, general_param):
-        def seq_execute(tasks):
-            for task in tasks:
-                subprocess.check_call(self.generate_commands(task, general_param))
-        return seq_execute
-    
-    def print_command_closure(self, general_param):
-        def print_command(task):
-            print (' '.join(self.generate_commands(task, general_param)))
-        return print_command
-
-    def generate_commands(self, task, general_param):
-
-        commands = ["azurebatchmon"] + general_param.split() + task.resource_param.split() + \
+        commands = ["azurebatchmon"] + self.general_param.split() + task.resource_param.split() + \
                      ["--script", task.script_file, "--image", task.image, "--tasks", task.task_file]
 
         return self.base_commands(commands)
 
-
 class Awsub_factory(Abstract_factory):
 
-    def execute_closure(self, general_param):
-        def execute(task):
-            subprocess.check_call(self.generate_commands(task, general_param))
-        return execute
+    def generate_commands(self, task):
 
-    def seq_execute_closure(self, general_param):
-        def seq_execute(tasks):
-            for task in tasks:
-                subprocess.check_call(self.generate_commands(task, general_param))
-        return seq_execute
-    
-    def print_command_closure(self, general_param):
-        def print_command(task):
-            print (' '.join(self.generate_commands(task, general_param)))
-        return print_command
-
-    def generate_commands(self, task, general_param):
-
-        commands = ["awsub"] + general_param.split() + task.resource_param.split() + \
+        commands = ["awsub"] + self.general_param.split() + task.resource_param.split() + \
                      ["--script", task.script_file, "--image", task.image, "--tasks", task.task_file]
 
         return self.base_commands(commands)
@@ -107,25 +74,10 @@ class Ecsub_factory(Abstract_factory):
     
     s3_wdir = ""
     wdir = "/tmp/ecsub"
-    
-    def execute_closure(self, general_param):
-        def execute(task):
-            subprocess.check_call(self.generate_commands(task, general_param))
-        return execute
 
-    def seq_execute_closure(self, general_param):
-        def seq_execute(tasks):
-            for task in tasks:
-                subprocess.check_call(self.generate_commands(task, general_param))
-        return seq_execute
-    
-    def print_command_closure(self, general_param):
-        def print_command(task):
-            print (' '.join(self.generate_commands(task, general_param)))
-        return print_command
-
-    def generate_commands(self, task, general_param):
-        commands = ["ecsub", "submit"] + general_param.split() + task.resource_param.split() + \
+    def generate_commands(self, task):
+        
+        commands = ["ecsub", "submit"] + self.general_param.split() + task.resource_param.split() + \
                      ["--script", task.script_file, "--image", task.image, "--tasks", task.task_file] + \
                      ["--aws-s3-bucket", self.s3_wdir, "--wdir", self.wdir]
         import re
@@ -189,12 +141,3 @@ class Ecsub_factory(Abstract_factory):
                 t += "%s," % (j[k])
             t += "\n"
         open(log_file, "w").write(t)
-        
-class Batch_engine(object):
-
-    def __init__(self, factory, general_param):
-        self.execute = factory.execute_closure(general_param)
-        self.seq_execute = factory.seq_execute_closure(general_param)
-        self.print_command = factory.print_command_closure(general_param)
-
-
