@@ -31,15 +31,15 @@ def run(args):
                         
     # tmp_dir = tempfile.mkdtemp()
     # temporary procedure
-    tmp_dir = os.getcwd() + "/tmp"
+    tmp_dir = "%s/tmp/%s" % (os.getcwd(), run_conf.analysis_timestamp)
     if not os.path.exists(tmp_dir):
         os.makedirs(tmp_dir)
         print ("Creating temporary directory: " +  tmp_dir)
 
-    log_dir = os.getcwd() + "/log"
-    if not os.path.exists(log_dir):
-        os.makedirs(log_dir)
-        print ("Creating log directory: " +  log_dir)
+    cost_dir = tmp_dir + "/cost"
+    if not os.path.exists(cost_dir):
+        os.makedirs(cost_dir)
+        print ("Creating log directory: " +  cost_dir)
         
     # preparing batch job engine
     if args.engine == "dsub":
@@ -73,6 +73,7 @@ def run(args):
         import gcat_workflow_cloud.tasks.gridss as gridss
         import gcat_workflow_cloud.tasks.manta as manta
         import gcat_workflow_cloud.tasks.melt as melt
+        import gcat_workflow_cloud.tasks.fastqc as fastqc
 
         fq2cram_task = fq2cram.Task(args.output_dir, tmp_dir, sample_conf, param_conf, run_conf)
         haploypecaller_task = haploypecaller.Task(args.output_dir, tmp_dir, sample_conf, param_conf, run_conf)
@@ -81,11 +82,14 @@ def run(args):
         gridss_task = gridss.Task(args.output_dir, tmp_dir, sample_conf, param_conf, run_conf)
         manta_task = manta.Task(args.output_dir, tmp_dir, sample_conf, param_conf, run_conf)
         melt_task = melt.Task(args.output_dir, tmp_dir, sample_conf, param_conf, run_conf)
+        fastqc_task = fastqc.Task(args.output_dir, tmp_dir, sample_conf, param_conf, run_conf)
 
         p_fq2cram = multiprocessing.Process(target = batch_engine.execute, args = (fq2cram_task,))
-        
+        p_fastqc = multiprocessing.Process(target = batch_engine.execute, args = (fastqc_task,))
+
         try:
             p_fq2cram.start()
+            p_fastqc.start()
             p_fq2cram.join()
         except KeyboardInterrupt:
             pass
@@ -114,6 +118,7 @@ def run(args):
             p_gridss.join()
             p_manta.join()
             p_melt.join()
+            p_fastqc.join()
 
         except KeyboardInterrupt:
             pass
@@ -136,5 +141,14 @@ def run(args):
         if p_melt.exitcode != 0:
             raise JobError(JobError.error_text(melt_task.TASK_NAME, p_melt.exitcode))
         
+        if p_fastqc.exitcode != 0:
+            raise JobError(JobError.error_text(fastqc_task.TASK_NAME, p_fastqc.exitcode))
+        
     if args.engine == "ecsub":
-        batch_engine.print_summary(run_conf, log_dir)
+        cost_file = cost_dir + "/cost/cost.csv"
+        batch_engine.print_summary(run_conf, cost_file)
+        storage.upload(cost_file, args.output_dir.rstrip("/") + "/cost/cost.csv", create_bucket = True)
+        files = batch_engine.print_metrics(run_conf)
+        for f in files:
+            storage.upload(f, "%s/%s" % (args.output_dir.rstrip("/") + f.split("/")[-1]), create_bucket = True)
+

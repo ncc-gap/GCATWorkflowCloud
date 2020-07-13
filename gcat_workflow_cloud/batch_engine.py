@@ -86,7 +86,7 @@ class Ecsub_factory(Abstract_factory):
 
         return self.base_commands(commands)
     
-    def print_summary(self, run_conf, log_dir):
+    def print_summary(self, log_file):
         def accessor(obj, key):
             if key in obj:
                 return obj[key]
@@ -98,7 +98,7 @@ class Ecsub_factory(Abstract_factory):
         import glob
         import json
         
-        dirs = glob.glob("%s/*%s*" % (self.wdir, run_conf.analysis_timestamp))
+        dirs = glob.glob(self.wdir + "%s/ecsub/*")
         
         sim_cost = 0.0
         od_cost = 0.0
@@ -130,7 +130,6 @@ class Ecsub_factory(Abstract_factory):
                     sim_cost += job["WorkHours*Price"]
                     od_cost += accessor(j, "WorkHours") * accessor(j, "OdPrice")
         
-        log_file = "%s/summary-%s.csv" % (log_dir, run_conf.analysis_timestamp)
         print ("Total cost of this instance usage is %.3f USD. See detail, %s" % (sim_cost, log_file))
         
         t = "TotalInstanceCost,%.3f\n" % (sim_cost)
@@ -141,3 +140,41 @@ class Ecsub_factory(Abstract_factory):
                 t += "%s," % (j[k])
             t += "\n"
         open(log_file, "w").write(t)
+
+    def print_metrics(self, log_file):
+        
+        import glob
+        files = glob.glob(self.wdir + "%s/ecsub/*/metrics/*.txt")
+        
+        jobs = {}
+        header = ""
+        for f in sorted(files):
+            header = True
+            data = []
+            
+            for row in open(f).readlines():
+                if header:
+                    header = False
+                    continue
+                if row.rstrip() == "":
+                    continue
+                data.append(row.split("\t")[2])
+
+            job_name = f.split("/")[-3]
+            metrics_name = f.split("/")[-1].replace(".txt", "")
+            if not job_name in jobs:
+                jobs[job_name] = {}
+            jobs[job_name][metrics_name] = max(data)
+        
+        metrics_keys = sorted(jobs[0].keys())
+        print("MaxMetrics (%)")
+        print("JobName\t" + "\t".join(metrics_keys))
+        for j in jobs:
+            text = j
+            for m in metrics_keys:
+                text += "\t" + jobs[j][m]
+            print(text)
+
+        json.dump(jobs, open(log_file, "w"), indent=4, sort_keys=True, separators=(',', ': '))
+        return files
+

@@ -11,7 +11,8 @@ class Sample_conf(abc.Sample_conf_abc):
     SECTION_GRIDSS = "gridss"
     SECTION_MANTA = "manta"
     SECTION_MELT = "melt"
-    
+    SECTION_FASTQ = "fastq"
+
     def __init__(self, sample_conf_file, exist_check = True):
 
         self.fastq = {}
@@ -26,6 +27,8 @@ class Sample_conf(abc.Sample_conf_abc):
         self.gridss = []
         self.manta = []
         self.melt = []
+        self.fastqc = []
+
         self.exist_check = exist_check
         
         self.parse_file(sample_conf_file)
@@ -69,4 +72,7 @@ class Sample_conf(abc.Sample_conf_abc):
         
         if self.SECTION_MELT in splited:
             self.melt += self.parse_data_general(splited[self.SECTION_MELT])
+        
+        if self.SECTION_FASTQC in splited:
+            self.fastqc += self.parse_data_general(splited[self.SECTION_FASTQC])
         

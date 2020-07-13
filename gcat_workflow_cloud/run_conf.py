@@ -47,11 +47,11 @@ class Run_conf(object):
         self.pipeline_version = ini.__version__
         
         # path to upload
-        [name, ext] = os.path.splitext(os.path.basename(sample_conf_file))
-        self.sample_conf_storage_path = "%s/config/%s-%s%s" % (output_dir.rstrip("/"), name, self.analysis_timestamp, ext)
-        [name, ext] = os.path.splitext(os.path.basename(param_conf_file))
-        self.param_conf_storage_path = "%s/config/%s-%s%s" % (output_dir.rstrip("/"), name, self.analysis_timestamp, ext)
-        
+        self.sample_conf_storage_path = "%s/config/%s" % (output_dir.rstrip("/"), os.path.basename(sample_conf_file))
+        self.param_conf_storage_path = "%s/config/%s" % (output_dir.rstrip("/"), os.path.basename(param_conf_file))
+
+        self.project_name = "%s-%s" % (name, self.analysis_timestamp)
+
     def get_meta_info(self, image):
         #import pwd
         #return "# Docker Image: %s\n# Analysis Date: %s\n# User: %s" % (

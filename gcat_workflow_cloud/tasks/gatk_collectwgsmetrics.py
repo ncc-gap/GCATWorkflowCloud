@@ -19,7 +19,7 @@ class Task(abstract_task.Abstract_task):
 
     def task_file_generation(self, output_dir, task_dir, sample_conf, param_conf, run_conf):
 
-        task_file = "{}/{}-tasks-{}-{}.tsv".format(task_dir, self.TASK_NAME, run_conf.get_owner_info(), run_conf.analysis_timestamp)
+        task_file = "{}/{}-tasks-{}.tsv".format(task_dir, self.TASK_NAME, run_conf.project_name)
         with open(task_file, 'w') as hout:
             
             hout.write(

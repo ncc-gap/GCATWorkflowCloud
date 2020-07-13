@@ -3,13 +3,13 @@
 import gcat_workflow_cloud.abstract_task as abstract_task
 
 class Task(abstract_task.Abstract_task):
-    CONF_SECTION = "gridss"
+    CONF_SECTION = "fastqc"
     TASK_NAME = CONF_SECTION
 
     def __init__(self, output_dir, task_dir, sample_conf, param_conf, run_conf):
 
         super(Task, self).__init__(
-            "gridss-germline.sh",
+            "fastqc.sh",
             param_conf.get(self.CONF_SECTION, "image"),
             param_conf.get(self.CONF_SECTION, "resource"),
             output_dir + "/logging"
@@ -24,27 +24,23 @@ class Task(abstract_task.Abstract_task):
             
             hout.write(
                 '\t'.join([
+                    "--input INPUT_FASTQ_R1",
+                    "--input INPUT_FASTQ_R2",
                     "--output-recursive OUTPUT_DIR",
-                    "--env VCF",
-                    "--env ASSEMBLE",
-                    "--input-recursive REFERENCE_DIR",
-                    "--env REFERENCE_FILE",
-                    "--input INPUT_CRAM",
-                    "--input INPUT_CRAI",
-                    "--env GRIDSS_JAR",
+                    "--env FASTQC_PARAMS",
                 ]) + "\n"
             )
-            for sample in sample_conf.gridss:
+            for sample in sample_conf.fastqc:
+                if not sample in sample_conf.fastq:
+                    err_msg = "[fastqc] section, %s is not defined in [fastq] section" % (sample)
+                    raise ValueError(err_msg)
+
                 hout.write(
                     '\t'.join([
-                        "%s/gridss/%s" % (output_dir, sample),
-                        "%s_gridss-result.vcf" % (sample),
-                        "%s_gridss-assembly.bam" % (sample),
-                        param_conf.get(self.CONF_SECTION, "reference_dir"),
-                        param_conf.get(self.CONF_SECTION, "reference_file"),
-                        "%s/cram/%s/%s.markdup.cram" % (output_dir, sample, sample),
-                        "%s/cram/%s/%s.markdup.cram.crai" % (output_dir, sample, sample),
-                        param_conf.get(self.CONF_SECTION, "gridss_jar"),
+                        ' '.join(sample_conf.fastqc[sample][0]),
+                        ' '.join(sample_conf.fastqc[sample][1]),
+                        "%s/fastqc/%s" % (output_dir, sample),
+                        param_conf.get(self.CONF_SECTION, "fastqc_option"),
                     ]) + "\n"
                 )
 

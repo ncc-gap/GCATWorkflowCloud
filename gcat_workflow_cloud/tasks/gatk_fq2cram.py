@@ -19,7 +19,7 @@ class Task(abstract_task.Abstract_task):
 
     def task_file_generation(self, output_dir, task_dir, sample_conf, param_conf, run_conf):
 
-        task_file = "{}/{}-tasks-{}-{}.tsv".format(task_dir, self.TASK_NAME, run_conf.get_owner_info(), run_conf.analysis_timestamp)
+        task_file = "{}/{}-tasks-{}.tsv".format(task_dir, self.TASK_NAME, run_conf.project_name)
         with open(task_file, 'w') as hout:
             hout.write(
                 '\t'.join([
@@ -34,13 +34,24 @@ class Task(abstract_task.Abstract_task):
                 ]) + "\n"
             )
             for sample in sample_conf.fastq:
+                        
+                if len(sample_conf.fastq[sample][0]) == 1:
+                    fastq1 = sample_conf.fastq[sample][0][0]
+                else:
+                    fastq1 = "'<cat %s'" % (" ".join(sample_conf.fastq[sample][0]))
+
+                if len(sample_conf.fastq[sample][1]) == 1:
+                    fastq2 = sample_conf.fastq[sample][1][0]
+                else:
+                    fastq2 = "'<cat %s'" % (" ".join(sample_conf.fastq[sample][1]))
+
                 hout.write(
                     '\t'.join([
                         param_conf.get(self.CONF_SECTION, "reference_dir"),
                         param_conf.get(self.CONF_SECTION, "reference_file"),
                         sample,
-                        sample_conf.fastq[sample][0][0],
-                        sample_conf.fastq[sample][1][0],
+                        fastq1,
+                        fastq2,
                         "%s/cram/%s/%s.markdup.cram" % (output_dir, sample, sample),
                         "%s/cram/%s/%s.markdup.cram.crai" % (output_dir, sample, sample),
                         "%s/cram/%s/%s.markdup.metrics" % (output_dir, sample, sample),
