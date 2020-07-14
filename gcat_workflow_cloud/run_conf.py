@@ -22,6 +22,7 @@ class Run_conf(object):
         self.sample_conf_name = os.path.splitext(os.path.basename(sample_conf_file))[0]
         self.param_conf_file = param_conf_file
         self.analysis_type = analysis_type
+        self.output_dir = output_dir.rstrip("/")
         
         now = datetime.datetime.now()
         # format "YYYY-mm-dd HH:MM:SS"
@@ -47,9 +48,10 @@ class Run_conf(object):
         self.pipeline_version = ini.__version__
         
         # path to upload
-        self.sample_conf_storage_path = "%s/config/%s" % (output_dir.rstrip("/"), os.path.basename(sample_conf_file))
-        self.param_conf_storage_path = "%s/config/%s" % (output_dir.rstrip("/"), os.path.basename(param_conf_file))
+        self.sample_conf_storage_path = "%s/config/%s" % (self.output_dir, os.path.basename(sample_conf_file))
+        self.param_conf_storage_path = "%s/config/%s" % (self.output_dir, os.path.basename(param_conf_file))
 
+        (name, ext) = os.path.splitext(os.path.basename(sample_conf_file))
         self.project_name = "%s-%s" % (name, self.analysis_timestamp)
 
     def get_meta_info(self, image):

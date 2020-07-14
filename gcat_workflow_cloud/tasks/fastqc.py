@@ -6,18 +6,18 @@ class Task(abstract_task.Abstract_task):
     CONF_SECTION = "fastqc"
     TASK_NAME = CONF_SECTION
 
-    def __init__(self, output_dir, task_dir, sample_conf, param_conf, run_conf):
+    def __init__(self, task_dir, sample_conf, param_conf, run_conf):
 
         super(Task, self).__init__(
             "fastqc.sh",
             param_conf.get(self.CONF_SECTION, "image"),
             param_conf.get(self.CONF_SECTION, "resource"),
-            output_dir + "/logging"
+            run_conf.output_dir + "/logging"
         )
         
-        self.task_file = self.task_file_generation(output_dir, task_dir, sample_conf, param_conf, run_conf)
+        self.task_file = self.task_file_generation(task_dir, sample_conf, param_conf, run_conf)
 
-    def task_file_generation(self, output_dir, task_dir, sample_conf, param_conf, run_conf):
+    def task_file_generation(self, task_dir, sample_conf, param_conf, run_conf):
 
         task_file = "{}/{}-tasks-{}.tsv".format(task_dir, self.TASK_NAME, run_conf.project_name)
         with open(task_file, 'w') as hout:
@@ -37,9 +37,9 @@ class Task(abstract_task.Abstract_task):
 
                 hout.write(
                     '\t'.join([
-                        ' '.join(sample_conf.fastqc[sample][0]),
-                        ' '.join(sample_conf.fastqc[sample][1]),
-                        "%s/fastqc/%s" % (output_dir, sample),
+                        ' '.join(sample_conf.fastq[sample][0]),
+                        ' '.join(sample_conf.fastq[sample][1]),
+                        "%s/fastqc/%s" % (run_conf.output_dir, sample),
                         param_conf.get(self.CONF_SECTION, "fastqc_option"),
                     ]) + "\n"
                 )

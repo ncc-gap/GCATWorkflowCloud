@@ -19,10 +19,7 @@ class Storage(object):
 
     def upload(self, local_file_path, storage_path, create_bucket = False):
         print ("=== Storage upload ===")
-        print ("local_file_path: %s" % (local_file_path))
-        print ("storage_path: %s" % (storage_path))
-        print ("create_bucket: %s" % (create_bucket))
-        
+        print ("local_file_path: %s, storage_path: %s" % (local_file_path, storage_path))
         if self.dryrun:
             return
             
@@ -46,7 +43,7 @@ class Storage(object):
 
     def __print_error (self, message):
         if sys.version_info.major == 2:
-            print >> sys.stderr, message    
+            print (message, file = sys.stderr)
         else:
             #print (message, file = sys.stderr)
             print (message)

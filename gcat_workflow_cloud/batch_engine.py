@@ -98,7 +98,7 @@ class Ecsub_factory(Abstract_factory):
         import glob
         import json
         
-        dirs = glob.glob(self.wdir + "%s/ecsub/*")
+        dirs = glob.glob(self.wdir + "/*")
         
         sim_cost = 0.0
         od_cost = 0.0
@@ -137,14 +137,19 @@ class Ecsub_factory(Abstract_factory):
         t += "%s\n" % (header)
         for j in jobs:
             for k in sorted(j.keys()):
-                t += "%s," % (j[k])
+                if type(j[k]) == type(0.0):
+                    t += "%.3f," % (j[k])
+                else:
+                    t += "%s," % (j[k])
             t += "\n"
         open(log_file, "w").write(t)
 
     def print_metrics(self, log_file):
         
         import glob
-        files = glob.glob(self.wdir + "%s/ecsub/*/metrics/*.txt")
+        import json
+        
+        files = glob.glob(self.wdir + "/*/metrics/*.txt")
         
         jobs = {}
         header = ""
@@ -166,14 +171,16 @@ class Ecsub_factory(Abstract_factory):
                 jobs[job_name] = {}
             jobs[job_name][metrics_name] = max(data)
         
-        metrics_keys = sorted(jobs[0].keys())
-        print("MaxMetrics (%)")
-        print("JobName\t" + "\t".join(metrics_keys))
-        for j in jobs:
-            text = j
-            for m in metrics_keys:
-                text += "\t" + jobs[j][m]
-            print(text)
+        if len(jobs) > 0:
+            metrics_keys = sorted(list(jobs[list(jobs.keys())[0]].keys()))
+            print("MaxMetrics (%)")
+            print("\t".join(metrics_keys) + "\tJobName")
+            for j in jobs:
+                text = []
+                for m in metrics_keys:
+                    text.append(jobs[j][m])
+                text.append(j)
+                print("\t".join(text))
 
         json.dump(jobs, open(log_file, "w"), indent=4, sort_keys=True, separators=(',', ': '))
         return files

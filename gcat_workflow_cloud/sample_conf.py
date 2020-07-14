@@ -11,7 +11,7 @@ class Sample_conf(abc.Sample_conf_abc):
     SECTION_GRIDSS = "gridss"
     SECTION_MANTA = "manta"
     SECTION_MELT = "melt"
-    SECTION_FASTQ = "fastq"
+    SECTION_FASTQC = "fastqc"
 
     def __init__(self, sample_conf_file, exist_check = True):
 
@@ -36,7 +36,11 @@ class Sample_conf(abc.Sample_conf_abc):
     def parse_data(self, _data):
         
         input_sections = [self.SECTION_FASTQ, self.SECTION_BAM_IMPORT, self.SECTION_BAM_TOFASTQ]
-        analysis_sections = [self.SECTION_HTCALL, self.SECTION_WGS_METRICS, self.SECTION_MULTIPLE_METRICS, self.SECTION_GRIDSS, self.SECTION_MANTA, self.SECTION_MELT]
+        analysis_sections = [
+            self.SECTION_HTCALL, self.SECTION_WGS_METRICS, self.SECTION_MULTIPLE_METRICS, 
+            self.SECTION_GRIDSS, self.SECTION_MANTA, self.SECTION_MELT,
+            self.SECTION_FASTQC, 
+        ]
         controlpanel_sections = []
         splited = self.split_section_data(_data, input_sections, analysis_sections, controlpanel_sections)
         

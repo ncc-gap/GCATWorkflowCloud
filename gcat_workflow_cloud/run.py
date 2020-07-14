@@ -36,11 +36,6 @@ def run(args):
         os.makedirs(tmp_dir)
         print ("Creating temporary directory: " +  tmp_dir)
 
-    cost_dir = tmp_dir + "/cost"
-    if not os.path.exists(cost_dir):
-        os.makedirs(cost_dir)
-        print ("Creating log directory: " +  cost_dir)
-        
     # preparing batch job engine
     if args.engine == "dsub":
         batch_engine = be.Dsub_factory()
@@ -48,7 +43,7 @@ def run(args):
         batch_engine = be.Azmon_factory()
     elif args.engine == "ecsub":
         batch_engine = be.Ecsub_factory()
-        batch_engine.s3_wdir = args.output_dir + "/ecsub"
+        batch_engine.s3_wdir = run_conf.output_dir + "/ecsub"
         batch_engine.wdir = tmp_dir + "/ecsub"
     else:
         batch_engine = be.Awsub_factory()
@@ -75,14 +70,14 @@ def run(args):
         import gcat_workflow_cloud.tasks.melt as melt
         import gcat_workflow_cloud.tasks.fastqc as fastqc
 
-        fq2cram_task = fq2cram.Task(args.output_dir, tmp_dir, sample_conf, param_conf, run_conf)
-        haploypecaller_task = haploypecaller.Task(args.output_dir, tmp_dir, sample_conf, param_conf, run_conf)
-        collectwgsmetrics_task = collectwgsmetrics.Task(args.output_dir, tmp_dir, sample_conf, param_conf, run_conf)
-        collectmultiplemetrics_task = collectmultiplemetrics.Task(args.output_dir, tmp_dir, sample_conf, param_conf, run_conf)
-        gridss_task = gridss.Task(args.output_dir, tmp_dir, sample_conf, param_conf, run_conf)
-        manta_task = manta.Task(args.output_dir, tmp_dir, sample_conf, param_conf, run_conf)
-        melt_task = melt.Task(args.output_dir, tmp_dir, sample_conf, param_conf, run_conf)
-        fastqc_task = fastqc.Task(args.output_dir, tmp_dir, sample_conf, param_conf, run_conf)
+        fq2cram_task = fq2cram.Task(tmp_dir, sample_conf, param_conf, run_conf)
+        haploypecaller_task = haploypecaller.Task(tmp_dir, sample_conf, param_conf, run_conf)
+        collectwgsmetrics_task = collectwgsmetrics.Task(tmp_dir, sample_conf, param_conf, run_conf)
+        collectmultiplemetrics_task = collectmultiplemetrics.Task(tmp_dir, sample_conf, param_conf, run_conf)
+        gridss_task = gridss.Task(tmp_dir, sample_conf, param_conf, run_conf)
+        manta_task = manta.Task(tmp_dir, sample_conf, param_conf, run_conf)
+        melt_task = melt.Task(tmp_dir, sample_conf, param_conf, run_conf)
+        fastqc_task = fastqc.Task(tmp_dir, sample_conf, param_conf, run_conf)
 
         p_fq2cram = multiprocessing.Process(target = batch_engine.execute, args = (fq2cram_task,))
         p_fastqc = multiprocessing.Process(target = batch_engine.execute, args = (fastqc_task,))
@@ -145,10 +140,16 @@ def run(args):
             raise JobError(JobError.error_text(fastqc_task.TASK_NAME, p_fastqc.exitcode))
         
     if args.engine == "ecsub":
-        cost_file = cost_dir + "/cost/cost.csv"
-        batch_engine.print_summary(run_conf, cost_file)
-        storage.upload(cost_file, args.output_dir.rstrip("/") + "/cost/cost.csv", create_bucket = True)
-        files = batch_engine.print_metrics(run_conf)
+        metrics_dir = tmp_dir + "/metrics"
+        os.makedirs(metrics_dir, exist_ok=True)
+        
+        metrics_file = metrics_dir + "/summary.json"
+        files = batch_engine.print_metrics(metrics_file)
+        storage.upload(metrics_file, run_conf.output_dir + "/metrics/metrics.json")
         for f in files:
-            storage.upload(f, "%s/%s" % (args.output_dir.rstrip("/") + f.split("/")[-1]), create_bucket = True)
+            storage.upload(f, "%s/%s" % (run_conf.output_dir, f.split("/")[-1]))
 
+        cost_file = metrics_dir + "/cost.csv"
+        batch_engine.print_summary(cost_file)
+        storage.upload(cost_file, run_conf.output_dir + "/metrics/cost.csv")
+        
