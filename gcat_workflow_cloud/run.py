@@ -57,6 +57,16 @@ def run(args):
     storage.upload(args.sample_conf_file, run_conf.sample_conf_storage_path, create_bucket = True)
     storage.upload(args.param_conf_file, run_conf.param_conf_storage_path, create_bucket = True)
     
+    # download metadata files
+    sample_conf.readgroup_local = {}
+    readgroup_dir = tmp_dir + "/readgroup"
+    os.makedirs(readgroup_dir, exist_ok=True)
+    for sample in sample_conf.readgroup:
+        local_path = "%s/%s.txt" % (readgroup_dir, sample)
+        storage.download(local_path, sample_conf.readgroup[sample])
+        sample_conf.readgroup_local[sample] = local_path
+
+
     ##########
     # germline
     if args.analysis_type == "germline":

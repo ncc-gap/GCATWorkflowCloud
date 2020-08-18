@@ -18,3 +18,7 @@
 
 [fastqc]
 5929_tumor
+
+[readgroup]
+5929_tumor,s3://aokad-ana-virginia/gcat_workflow_cloud_test/5929tumor.metadata.txt
+

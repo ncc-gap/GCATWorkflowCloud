@@ -8,34 +8,49 @@ set -o pipefail
 
 work_dir=$(dirname ${OUTPUT_CRAM})
 
-/tools/bwa-0.7.15/bwa mem \
-    -t $(nproc) \
-    -K 10000000 \
-    -T 0 \
-    -R "@RG\tID:${SAMPLE_NAME}\tPL:na\tLB:na\tSM:${SAMPLE_NAME}\tPU:${SAMPLE_NAME}" \
-    ${REFERENCE_DIR}/${REFERENCE_FASTA} \
-    ${INPUT_FASTQ_1} \
-    ${INPUT_FASTQ_2} \
-| /usr/bin/java \
-    -XX:-UseContainerSupport \
-    -Xmx30g \
-    -jar /tools/gatk-4.0.4.0/gatk-package-4.0.4.0-local.jar SortSam \
-    --MAX_RECORDS_IN_RAM=5000000 \
-    -I=/dev/stdin \
-    -O=${work_dir}/${SAMPLE_NAME}.bam \
-    --SORT_ORDER=coordinate \
-    --TMP_DIR=${work_dir}
+array_rg=(${ARRAY_RG})
+
+SORTED_BAMS=
+REMOVE_BAMS=
+
+for NUM in `seq 0 ${SAMPLE_MAX_INDEX}`
+do
+    INPUT_FASTQ_1="INPUT_FASTQ_1_${NUM}"
+    INPUT_FASTQ_2="INPUT_FASTQ_2_${NUM}"
+    RG=${array_rg[$NUM]}
+
+    /tools/bwa-0.7.15/bwa mem \
+        -t $(nproc) \
+        -K 10000000 \
+        -T 0 \
+        -R "${RG}" \
+        ${REFERENCE_DIR}/${REFERENCE_FASTA} \
+        ${!INPUT_FASTQ_1} \
+        ${!INPUT_FASTQ_2} \
+    | /usr/bin/java \
+        -XX:-UseContainerSupport \
+        -Xmx30g \
+        -jar ${GATK_JAR} SortSam \
+        --MAX_RECORDS_IN_RAM=5000000 \
+        -I=/dev/stdin \
+        -O=${work_dir}/${SAMPLE_NAME}_${NUM}.bam \
+        --SORT_ORDER=coordinate \
+        --TMP_DIR=${work_dir}
+
+    SORTED_BAMS=$SORTED_BAMS" -I=${work_dir}/${SAMPLE_NAME}_${NUM}.bam"
+    REMOVE_BAMS=$REMOVE_BAMS" ${work_dir}/${SAMPLE_NAME}_${NUM}.bam"
+done
 
 /usr/bin/java \
     -XX:-UseContainerSupport \
     -Xmx30g \
-    -jar /tools/gatk-4.0.4.0/gatk-package-4.0.4.0-local.jar MarkDuplicates \
-    -I=${work_dir}/${SAMPLE_NAME}.bam \
+    -jar ${GATK_JAR} MarkDuplicates \
+    ${SORTED_BAMS} \
     -O=${work_dir}/${SAMPLE_NAME}.markdup.bam \
     -M=${OUTPUT_MARKDUP_METRICS} \
     --TMP_DIR=${work_dir}
 
-rm -f ${work_dir}/${SAMPLE_NAME}.bam
+rm -f ${REMOVE_BAMS}
 
 /tools/samtools-1.9/samtools view \
     -@ $(nproc) \

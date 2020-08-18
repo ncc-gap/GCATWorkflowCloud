@@ -30,6 +30,7 @@ class Task(abstract_task.Abstract_task):
                     "--input INPUT_CRAI",
                     "--output OUTPUT_VCF",
                     "--output OUTPUT_VCF_IDX",
+                    "--env GATK_JAR",
                 ]) + "\n"
             )
             for sample in sample_conf.haplotype_call:
@@ -41,6 +42,7 @@ class Task(abstract_task.Abstract_task):
                         "%s/cram/%s/%s.markdup.cram.crai" % (run_conf.output_dir, sample, sample),
                         "%s/haplotypecaller/%s/%s.haplotypecaller.vcf" % (run_conf.output_dir, sample, sample),
                         "%s/haplotypecaller/%s/%s.haplotypecaller.vcf.idx" % (run_conf.output_dir, sample, sample),
+                        param_conf.get(self.CONF_SECTION, "gatk_jar"),
                     ]) + "\n"
                 )
 

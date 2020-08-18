@@ -30,6 +30,18 @@ class Storage(object):
         else:
             raise ValueError ("Storage path should starts with 's3://' or 'gs://'.")
 
+    def download(self, local_file_path, storage_path):
+        print ("=== Storage download ===")
+        print ("local_file_path: %s, storage_path: %s" % (local_file_path, storage_path))
+        #if self.dryrun:
+        #    return
+            
+        if storage_path.startswith("s3://"):
+            self.__download_from_aws(local_file_path, storage_path)
+        elif storage_path.startswith("gs://"):
+            self.__download_from_gcs(local_file_path, storage_path)
+        else:
+            raise ValueError ("Storage path should starts with 's3://' or 'gs://'.")
 
     def __get_bucket_name_from_storage_path(self, storage_path):
 
@@ -93,6 +105,26 @@ class Storage(object):
 
         # Upload to the Google Cloud Storage
         proc = subprocess.Popen(["gsutil", "cp", local_file_path, storage_path], stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+        proc.communicate()
+
+    # #####################
+    # download
+    # #####################
+    def __download_from_aws(self, local_file_path, storage_path):
+
+        # Extract AWS S3 bucket name of the storage_path argument
+        target_bucket_name = self.__get_bucket_name_from_storage_path(storage_path)
+
+        # Download from the S3
+        import boto3
+        storage_file_name = '/'.join(re.sub(r'^s3://', '', storage_path).split('/')[1:])
+        boto3.client("s3").download_file(target_bucket_name, storage_file_name, local_file_path) 
+
+
+    def __download_from_gcs(self, local_file_path, storage_path):
+
+        # Download from the Google Cloud Storage
+        proc = subprocess.Popen(["gsutil", "cp", storage_path, local_file_path], stdout = subprocess.PIPE, stderr = subprocess.PIPE)
         proc.communicate()
 
 

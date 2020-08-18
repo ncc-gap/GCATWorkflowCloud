@@ -30,6 +30,7 @@ class Task(abstract_task.Abstract_task):
                     "--input INPUT_CRAI",
                     "--output-recursive OUTPUT_DIR",
                     "--env SAMPLE_NAME",
+                    "--env GATK_JAR",
                 ]) + "\n"
             )
             for sample in sample_conf.wgs_metrics:
@@ -41,6 +42,7 @@ class Task(abstract_task.Abstract_task):
                         "%s/cram/%s/%s.markdup.cram.crai" % (run_conf.output_dir, sample, sample),
                         "%s/summary/%s/metrics" % (run_conf.output_dir, sample),
                         sample,
+                        param_conf.get(self.CONF_SECTION, "gatk_jar"),
                     ]) + "\n"
                 )
 
