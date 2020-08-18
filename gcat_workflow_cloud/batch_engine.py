@@ -165,8 +165,8 @@ class Ecsub_factory(Abstract_factory):
                     continue
                 data.append(row.split("\t")[2])
 
-            job_name = f.split("/")[-3]
-            metrics_name = f.split("/")[-1].replace(".txt", "")
+            (idx, metrics_name) = f.split("/")[-1].replace(".txt", "").split("-")
+            job_name = f.split("/")[-3] + "." + idx
             if not job_name in jobs:
                 jobs[job_name] = {}
             jobs[job_name][metrics_name] = max(data)
@@ -185,3 +185,5 @@ class Ecsub_factory(Abstract_factory):
         json.dump(jobs, open(log_file, "w"), indent=4, sort_keys=True, separators=(',', ': '))
         return files
 
+if __name__ == "__main__":
+    pass
