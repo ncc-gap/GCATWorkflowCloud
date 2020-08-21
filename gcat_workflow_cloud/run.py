@@ -157,7 +157,7 @@ def run(args):
         files = batch_engine.print_metrics(metrics_file)
         storage.upload(metrics_file, run_conf.output_dir + "/metrics/metrics.json")
         for f in files:
-            storage.upload(f, "%s/%s" % (run_conf.output_dir, f.split("/")[-1]))
+            storage.upload(f, "%s/%s" % (batch_engine.s3_wdir, "/".join(f.split("/")[-3:])))
 
         cost_file = metrics_dir + "/cost.csv"
         batch_engine.print_summary(cost_file)
