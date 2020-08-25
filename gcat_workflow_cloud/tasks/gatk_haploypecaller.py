@@ -26,6 +26,7 @@ class Task(abstract_task.Abstract_task):
                 '\t'.join([
                     "--input-recursive REFERENCE_DIR",
                     "--env REFERENCE_FASTA",
+                    "--input INTERVALS",
                     "--input INPUT_CRAM",
                     "--input INPUT_CRAI",
                     "--output OUTPUT_VCF",
@@ -38,10 +39,11 @@ class Task(abstract_task.Abstract_task):
                     '\t'.join([
                         param_conf.get(self.CONF_SECTION, "reference_dir"),
                         param_conf.get(self.CONF_SECTION, "reference_file"),
+                        param_conf.get(self.CONF_SECTION, "interval_file"),
                         "%s/cram/%s/%s.markdup.cram" % (run_conf.output_dir, sample, sample),
                         "%s/cram/%s/%s.markdup.cram.crai" % (run_conf.output_dir, sample, sample),
-                        "%s/haplotypecaller/%s/%s.haplotypecaller.vcf" % (run_conf.output_dir, sample, sample),
-                        "%s/haplotypecaller/%s/%s.haplotypecaller.vcf.idx" % (run_conf.output_dir, sample, sample),
+                        "%s/haplotypecaller/%s/%s.haplotypecaller.g.vcf.gz" % (run_conf.output_dir, sample, sample),
+                        "%s/haplotypecaller/%s/%s.haplotypecaller.g.vcf.ga.idx" % (run_conf.output_dir, sample, sample),
                         param_conf.get(self.CONF_SECTION, "gatk_jar"),
                     ]) + "\n"
                 )

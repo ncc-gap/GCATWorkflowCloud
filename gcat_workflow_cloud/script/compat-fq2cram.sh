@@ -23,6 +23,7 @@ do
         -t $(nproc) \
         -K 10000000 \
         -T 0 \
+        -Y \
         -R "${RG}" \
         ${REFERENCE_DIR}/${REFERENCE_FASTA} \
         ${!INPUT_FASTQ_1} \
