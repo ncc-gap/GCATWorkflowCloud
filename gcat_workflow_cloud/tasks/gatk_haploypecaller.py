@@ -26,11 +26,14 @@ class Task(abstract_task.Abstract_task):
                 '\t'.join([
                     "--input-recursive REFERENCE_DIR",
                     "--env REFERENCE_FASTA",
-                    "--input INTERVALS",
+                    "--input INTERVAL_AUTOSOME",
+                    "--input INTERVAL_PAR",
+                    "--input INTERVAL_CHRX",
+                    "--input INTERVAL_CHRY",
                     "--input INPUT_CRAM",
                     "--input INPUT_CRAI",
-                    "--output OUTPUT_VCF",
-                    "--output OUTPUT_VCF_IDX",
+                    "--output-recursive OUTPUT_DIR",
+                    "--env SAMPLE",
                     "--env GATK_JAR",
                 ]) + "\n"
             )
@@ -39,11 +42,14 @@ class Task(abstract_task.Abstract_task):
                     '\t'.join([
                         param_conf.get(self.CONF_SECTION, "reference_dir"),
                         param_conf.get(self.CONF_SECTION, "reference_file"),
-                        param_conf.get(self.CONF_SECTION, "interval_file"),
+                        param_conf.get(self.CONF_SECTION, "interval_file_autosome"),
+                        param_conf.get(self.CONF_SECTION, "interval_file_par"),
+                        param_conf.get(self.CONF_SECTION, "interval_file_chrx"),
+                        param_conf.get(self.CONF_SECTION, "interval_file_chry"),
                         "%s/cram/%s/%s.markdup.cram" % (run_conf.output_dir, sample, sample),
                         "%s/cram/%s/%s.markdup.cram.crai" % (run_conf.output_dir, sample, sample),
-                        "%s/haplotypecaller/%s/%s.haplotypecaller.g.vcf" % (run_conf.output_dir, sample, sample),
-                        "%s/haplotypecaller/%s/%s.haplotypecaller.g.vcf.idx" % (run_conf.output_dir, sample, sample),
+                        "%s/haplotypecaller/%s" % (run_conf.output_dir, sample),
+                        "%s" % (sample),
                         param_conf.get(self.CONF_SECTION, "gatk_jar"),
                     ]) + "\n"
                 )
