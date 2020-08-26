@@ -42,8 +42,8 @@ class Task(abstract_task.Abstract_task):
                         param_conf.get(self.CONF_SECTION, "interval_file"),
                         "%s/cram/%s/%s.markdup.cram" % (run_conf.output_dir, sample, sample),
                         "%s/cram/%s/%s.markdup.cram.crai" % (run_conf.output_dir, sample, sample),
-                        "%s/haplotypecaller/%s/%s.haplotypecaller.g.vcf.gz" % (run_conf.output_dir, sample, sample),
-                        "%s/haplotypecaller/%s/%s.haplotypecaller.g.vcf.gz.idx" % (run_conf.output_dir, sample, sample),
+                        "%s/haplotypecaller/%s/%s.haplotypecaller.g.vcf" % (run_conf.output_dir, sample, sample),
+                        "%s/haplotypecaller/%s/%s.haplotypecaller.g.vcf.idx" % (run_conf.output_dir, sample, sample),
                         param_conf.get(self.CONF_SECTION, "gatk_jar"),
                     ]) + "\n"
                 )
