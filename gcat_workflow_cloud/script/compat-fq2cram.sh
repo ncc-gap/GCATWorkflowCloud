@@ -40,6 +40,7 @@ do
 
     SORTED_BAMS=$SORTED_BAMS" -I=${work_dir}/${SAMPLE_NAME}_${NUM}.bam"
     REMOVE_BAMS=$REMOVE_BAMS" ${work_dir}/${SAMPLE_NAME}_${NUM}.bam"
+    rm -f ${!INPUT_FASTQ_1} ${!INPUT_FASTQ_2}
 done
 
 /usr/bin/java \

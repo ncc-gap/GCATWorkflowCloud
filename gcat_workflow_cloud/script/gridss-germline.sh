@@ -4,7 +4,6 @@ set -o errexit
 set -o nounset
 
 mkdir -p ${OUTPUT_DIR}
-mkdir -p ${OUTPUT_DIR}_tmp
 export INPUT_BAM=${OUTPUT_DIR}/temp.bam
 
 /tools/samtools-1.9/samtools view \
@@ -25,7 +24,7 @@ bash gridss.sh \
     -r ${REFERENCE_DIR}/${REFERENCE_FILE}  \
     -j ${GRIDSS_JAR} \
     -t $(nproc) \
-    -w ${OUTPUT_DIR}_tmp \
+    -w ${OUTPUT_DIR} \
     --picardoptions VALIDATION_STRINGENCY=LENIENT \
     ${INPUT_BAM}
 
