@@ -23,6 +23,7 @@ do
         -t $(nproc) \
         -K 10000000 \
         -T 0 \
+        -Y \
         -R "${RG}" \
         ${REFERENCE_DIR}/${REFERENCE_FASTA} \
         ${!INPUT_FASTQ_1} \
@@ -39,6 +40,7 @@ do
 
     SORTED_BAMS=$SORTED_BAMS" -I=${work_dir}/${SAMPLE_NAME}_${NUM}.bam"
     REMOVE_BAMS=$REMOVE_BAMS" ${work_dir}/${SAMPLE_NAME}_${NUM}.bam"
+    rm -f ${!INPUT_FASTQ_1} ${!INPUT_FASTQ_2}
 done
 
 /usr/bin/java \
