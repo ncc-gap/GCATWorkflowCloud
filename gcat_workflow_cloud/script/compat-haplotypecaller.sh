@@ -26,7 +26,7 @@ fi
     --sample-ploidy 2 \
     --tmp-dir=${OUTPUT_DIR}_tmp
 
-bgzip ${OUTPUT_DIR}/${SAMPLE}.autosome.g.vcf
+bgzip -@ $(nproc) ${OUTPUT_DIR}/${SAMPLE}.autosome.g.vcf
 tabix -p vcf ${OUTPUT_DIR}/${SAMPLE}.autosome.g.vcf.gz
 rm -f ${OUTPUT_DIR}/${SAMPLE}.autosome.g.vcf.idx
 
@@ -43,7 +43,7 @@ rm -f ${OUTPUT_DIR}/${SAMPLE}.autosome.g.vcf.idx
     --sample-ploidy 2 \
     --tmp-dir=${OUTPUT_DIR}_tmp
 
-bgzip ${OUTPUT_DIR}/${SAMPLE}.PAR.g.vcf
+bgzip -@ $(nproc) ${OUTPUT_DIR}/${SAMPLE}.PAR.g.vcf
 tabix -p vcf ${OUTPUT_DIR}/${SAMPLE}.PAR.g.vcf.gz
 rm -f ${OUTPUT_DIR}/${SAMPLE}.PAR.g.vcf.idx
 
@@ -60,7 +60,7 @@ rm -f ${OUTPUT_DIR}/${SAMPLE}.PAR.g.vcf.idx
     --sample-ploidy 2 \
     --tmp-dir=${OUTPUT_DIR}_tmp
 
-bgzip ${OUTPUT_DIR}/${SAMPLE}.chrX.female.g.vcf
+bgzip -@ $(nproc) ${OUTPUT_DIR}/${SAMPLE}.chrX.female.g.vcf
 tabix -p vcf ${OUTPUT_DIR}/${SAMPLE}.chrX.female.g.vcf.gz
 rm -f ${OUTPUT_DIR}/${SAMPLE}.chrX.female.g.vcf.idx
 
@@ -77,7 +77,7 @@ rm -f ${OUTPUT_DIR}/${SAMPLE}.chrX.female.g.vcf.idx
     --sample-ploidy 1 \
     --tmp-dir=${OUTPUT_DIR}_tmp
 
-bgzip ${OUTPUT_DIR}/${SAMPLE}.chrX.male.g.vcf
+bgzip -@ $(nproc) ${OUTPUT_DIR}/${SAMPLE}.chrX.male.g.vcf
 tabix -p vcf ${OUTPUT_DIR}/${SAMPLE}.chrX.male.g.vcf.gz
 rm -f ${OUTPUT_DIR}/${SAMPLE}.chrX.male.g.vcf.idx
 
@@ -94,7 +94,7 @@ rm -f ${OUTPUT_DIR}/${SAMPLE}.chrX.male.g.vcf.idx
     --sample-ploidy 1 \
     --tmp-dir=${OUTPUT_DIR}_tmp
 
-bgzip ${OUTPUT_DIR}/${SAMPLE}.chrY.male.g.vcf
+bgzip -@ $(nproc) ${OUTPUT_DIR}/${SAMPLE}.chrY.male.g.vcf
 tabix -p vcf ${OUTPUT_DIR}/${SAMPLE}.chrY.male.g.vcf.gz
 rm -f ${OUTPUT_DIR}/${SAMPLE}.chrY.male.g.vcf.idx
 
