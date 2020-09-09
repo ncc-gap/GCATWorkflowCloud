@@ -1,14 +1,7 @@
 #!/usr/bin/env python
 
 from setuptools import setup, find_packages
-from codecs import open
-from os import path
 from gcat_workflow_cloud import __version__
-
-here = path.abspath(path.dirname(__file__))
-
-with open(path.join(here, 'README.md'), encoding='utf-8') as f:
-    long_description = f.read()
 
 setup(
     name = 'gcat_workflow_cloud',
@@ -33,7 +26,8 @@ setup(
     package_data={'gcat_workflow_cloud': ['script/*']},
     # install_requires = ['dsub'],
 
-    entry_points = {'console_scripts': ['gcat_workflow_cloud = gcat_workflow_cloud:main']}
+    entry_points = {'console_scripts': ['gcat_workflow_cloud = gcat_workflow_cloud:main']},
+    test_suite = 'tests'
 
 )
 
