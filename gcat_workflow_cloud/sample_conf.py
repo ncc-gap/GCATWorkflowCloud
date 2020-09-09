@@ -28,7 +28,6 @@ class Sample_conf(abc.Sample_conf_abc):
         "chr20": "haplotypecaller_parabricks_chr20",
         "chr21": "haplotypecaller_parabricks_chr21",
         "chr22": "haplotypecaller_parabricks_chr22",
-        "chr23": "haplotypecaller_parabricks_chr23",
         "chrx_female": "haplotypecaller_parabricks_chrx_female",
         "chrx_male": "haplotypecaller_parabricks_chrx_male",
         "chry_male": "haplotypecaller_parabricks_chry_male",
@@ -73,7 +72,6 @@ class Sample_conf(abc.Sample_conf_abc):
         self.haplotype_call_chr20 = []
         self.haplotype_call_chr21 = []
         self.haplotype_call_chr22 = []
-        self.haplotype_call_chr23 = []
         self.haplotype_call_chrx_female = []
         self.haplotype_call_chrx_male = []
         self.haplotype_call_chry_male = []
