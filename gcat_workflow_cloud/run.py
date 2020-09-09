@@ -81,7 +81,9 @@ def run(args):
         import gcat_workflow_cloud.tasks.fastqc as fastqc
 
         fq2cram_task = fq2cram.Task(tmp_dir, sample_conf, param_conf, run_conf)
-        haploypecaller_task = haploypecaller.Task(tmp_dir, sample_conf, param_conf, run_conf)
+        haploypecaller_task_list = []
+        for key in sorted(haploypecaller.TAGS.keys()):
+            haploypecaller_task_list.append(haploypecaller.Task(tmp_dir, sample_conf, param_conf, run_conf, key))
         collectwgsmetrics_task = collectwgsmetrics.Task(tmp_dir, sample_conf, param_conf, run_conf)
         collectmultiplemetrics_task = collectmultiplemetrics.Task(tmp_dir, sample_conf, param_conf, run_conf)
         gridss_task = gridss.Task(tmp_dir, sample_conf, param_conf, run_conf)
@@ -102,7 +104,7 @@ def run(args):
         if p_fq2cram.exitcode != 0:
             raise JobError(JobError.error_text(fq2cram_task.TASK_NAME, p_fq2cram.exitcode))
 
-        p_haploypecaller = multiprocessing.Process(target = batch_engine.execute, args = (haploypecaller_task,))
+        p_haploypecaller = multiprocessing.Process(target = batch_engine.seq_execute, args = (haploypecaller_task_list, ))
         p_collectwgsmetrics = multiprocessing.Process(target = batch_engine.execute, args = (collectwgsmetrics_task,))
         p_collectmultiplemetrics = multiprocessing.Process(target = batch_engine.execute, args = (collectmultiplemetrics_task,))
         p_gridss = multiprocessing.Process(target = batch_engine.execute, args = (gridss_task,))
@@ -129,7 +131,7 @@ def run(args):
             pass
 
         if p_haploypecaller.exitcode != 0:
-            raise JobError(JobError.error_text(haploypecaller_task.TASK_NAME, p_haploypecaller.exitcode))
+            raise JobError(JobError.error_text(haploypecaller_task_list[p_haploypecaller.exitcode-1].TASK_NAME, p_haploypecaller.exitcode))
         
         if p_collectwgsmetrics.exitcode != 0:
             raise JobError(JobError.error_text(collectwgsmetrics_task.TASK_NAME, p_collectwgsmetrics.exitcode))

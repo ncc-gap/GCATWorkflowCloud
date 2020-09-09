@@ -33,9 +33,9 @@ class Abstract_factory(object):
         exit(self._execute(task))
 
     def seq_execute(self, tasks):
-        for task in tasks:
+        for i,task in enumerate(tasks):
             if self._execute(task) != 0:
-                exit(1)
+                exit(1 + i)
         exit(0)
         
     def base_commands(self, commands):

@@ -5,7 +5,36 @@ class Sample_conf(abc.Sample_conf_abc):
     SECTION_FASTQ = "fastq"
     SECTION_BAM_IMPORT = "bam_import"
     SECTION_BAM_TOFASTQ = "bam_tofastq"
-    SECTION_HTCALL = "haplotypecaller_parabricks"
+    SECTION_HTCALL = {
+        "chr1": "haplotypecaller_parabricks_chr1",
+        "chr2": "haplotypecaller_parabricks_chr2",
+        "chr3": "haplotypecaller_parabricks_chr3",
+        "chr4": "haplotypecaller_parabricks_chr4",
+        "chr5": "haplotypecaller_parabricks_chr5",
+        "chr6": "haplotypecaller_parabricks_chr6",
+        "chr7": "haplotypecaller_parabricks_chr7",
+        "chr8": "haplotypecaller_parabricks_chr8",
+        "chr9": "haplotypecaller_parabricks_chr9",
+        "chr10": "haplotypecaller_parabricks_chr10",
+        "chr11": "haplotypecaller_parabricks_chr11",
+        "chr12": "haplotypecaller_parabricks_chr12",
+        "chr13": "haplotypecaller_parabricks_chr13",
+        "chr14": "haplotypecaller_parabricks_chr14",
+        "chr15": "haplotypecaller_parabricks_chr15",
+        "chr16": "haplotypecaller_parabricks_chr16",
+        "chr17": "haplotypecaller_parabricks_chr17",
+        "chr18": "haplotypecaller_parabricks_chr18",
+        "chr19": "haplotypecaller_parabricks_chr19",
+        "chr20": "haplotypecaller_parabricks_chr20",
+        "chr21": "haplotypecaller_parabricks_chr21",
+        "chr22": "haplotypecaller_parabricks_chr22",
+        "chr23": "haplotypecaller_parabricks_chr23",
+        "chrx_female": "haplotypecaller_parabricks_chrx_female",
+        "chrx_male": "haplotypecaller_parabricks_chrx_male",
+        "chry_male": "haplotypecaller_parabricks_chry_male",
+        "par": "haplotypecaller_parabricks_par",
+    }
+    PAR = "haplotypecaller_parabricks_par"
     SECTION_WGS_METRICS = "collect_wgs_metrics"
     SECTION_MULTIPLE_METRICS = "collect_multiple_metrics"
     SECTION_GRIDSS = "gridss"
@@ -22,7 +51,33 @@ class Sample_conf(abc.Sample_conf_abc):
         self.bam_tofastq_src = {}
         self.bam_import = {}
         self.bam_import_src = {}
-        self.haplotype_call = []
+        self.haplotype_call_chr1 = []
+        self.haplotype_call_chr2 = []
+        self.haplotype_call_chr3 = []
+        self.haplotype_call_chr4 = []
+        self.haplotype_call_chr5 = []
+        self.haplotype_call_chr6 = []
+        self.haplotype_call_chr7 = []
+        self.haplotype_call_chr8 = []
+        self.haplotype_call_chr9 = []
+        self.haplotype_call_chr10 = []
+        self.haplotype_call_chr11 = []
+        self.haplotype_call_chr12 = []
+        self.haplotype_call_chr13 = []
+        self.haplotype_call_chr14 = []
+        self.haplotype_call_chr15 = []
+        self.haplotype_call_chr16 = []
+        self.haplotype_call_chr17 = []
+        self.haplotype_call_chr18 = []
+        self.haplotype_call_chr19 = []
+        self.haplotype_call_chr20 = []
+        self.haplotype_call_chr21 = []
+        self.haplotype_call_chr22 = []
+        self.haplotype_call_chr23 = []
+        self.haplotype_call_chrx_female = []
+        self.haplotype_call_chrx_male = []
+        self.haplotype_call_chry_male = []
+        self.haplotype_call_par = []
         self.wgs_metrics = []
         self.multiple_metrics = []
         self.gridss = []
@@ -39,10 +94,13 @@ class Sample_conf(abc.Sample_conf_abc):
         
         input_sections = [self.SECTION_FASTQ, self.SECTION_BAM_IMPORT, self.SECTION_BAM_TOFASTQ]
         analysis_sections = [
-            self.SECTION_HTCALL, self.SECTION_WGS_METRICS, self.SECTION_MULTIPLE_METRICS, 
+            self.SECTION_WGS_METRICS, self.SECTION_MULTIPLE_METRICS, 
             self.SECTION_GRIDSS, self.SECTION_MANTA, self.SECTION_MELT,
             self.SECTION_FASTQC, 
         ]
+        for key in self.SECTION_HTCALL:
+           analysis_sections.append(self.SECTION_HTCALL[key])
+
         controlpanel_sections = []
         extend_sections = [self.SECTION_READGROUP]
         splited = self.split_section_data(_data, input_sections, analysis_sections, controlpanel_sections, extend_sections)
@@ -65,8 +123,9 @@ class Sample_conf(abc.Sample_conf_abc):
             self.bam_import.update(parsed_bam_import["bam_import"])
             self.bam_import_src.update(parsed_bam_import["bam_import_src"])
             
-        if self.SECTION_HTCALL in splited:
-            self.haplotype_call += self.parse_data_general(splited[self.SECTION_HTCALL])
+        for key in self.SECTION_HTCALL:
+            if self.SECTION_HTCALL[key] in splited:
+                self.__dict__["haplotype_call_" + key] += self.parse_data_general(splited[self.SECTION_HTCALL[key]])
 
         if self.SECTION_WGS_METRICS in splited:
             self.wgs_metrics += self.parse_data_general(splited[self.SECTION_WGS_METRICS])
