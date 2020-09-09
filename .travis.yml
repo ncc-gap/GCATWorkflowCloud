@@ -28,7 +28,7 @@ before_script:
 
 script:
   - python setup.py build install
-  - if [ ${MODE} == "germline" ]; then gcat_workflow_cloud germline test/germline_sample.csv ${AWS_S3_BUCKET}/germline test/germline_gcat_ecsub.cfg --dryrun; fi
+  - if [ ${MODE} == "germline" ]; then gcat_workflow_cloud germline test/germline_sample.csv ${AWS_S3_BUCKET}/germline test/germline_gcat_ecsub.cfg --work_dir /tmp --dryrun; fi
 
 notifications:
   emails:

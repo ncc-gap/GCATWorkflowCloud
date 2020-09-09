@@ -29,9 +29,12 @@ def run(args):
                         analysis_type = args.analysis_type,
                         output_dir = args.output_dir)
                         
-    # tmp_dir = tempfile.mkdtemp()
     # temporary procedure
-    tmp_dir = "%s/tmp/%s" % (os.getcwd(), run_conf.analysis_timestamp)
+    if args.work_dir == "":
+        tmp_dir = "%s/tmp/%s" % (os.getcwd(), run_conf.analysis_timestamp)
+    else:
+        tmp_dir = "%s/%s" % (args.work_dir, run_conf.analysis_timestamp)
+
     if not os.path.exists(tmp_dir):
         os.makedirs(tmp_dir)
         print ("Creating temporary directory: " +  tmp_dir)
