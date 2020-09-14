@@ -24,7 +24,7 @@ TAGS = {
     "chr19":       {"ploidy": "2", "interval": "interval_file_autosome_chr19", "label": "autosome.chr19"},
     "chr20":       {"ploidy": "2", "interval": "interval_file_autosome_chr20", "label": "autosome.chr20"},
     "chr21":       {"ploidy": "2", "interval": "interval_file_autosome_chr21", "label": "autosome.chr21"},
-    "chr22":       {"ploidy": "2", "interval": "interval_file_autosome_chr22", "label": "autosome.chr21"},
+    "chr22":       {"ploidy": "2", "interval": "interval_file_autosome_chr22", "label": "autosome.chr22"},
     "chrx_female": {"ploidy": "2", "interval": "interval_file_chrx", "label": "chrX.female"},
     "chrx_male":   {"ploidy": "1", "interval": "interval_file_chrx", "label": "chrX.male"},
     "chry_male":   {"ploidy": "1", "interval": "interval_file_chry", "label": "chrY.male"},
