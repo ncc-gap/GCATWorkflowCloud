@@ -15,7 +15,7 @@ fi
 
 /usr/bin/java \
     -XX:-UseContainerSupport \
-    -Xmx30g \
+    -Xmx14g \
     -jar ${GATK_JAR} HaplotypeCaller \
     -ERC GVCF \
     -L=${INTERVAL} \
@@ -29,3 +29,4 @@ fi
 bgzip -@ $(nproc) ${OUTPUT_DIR}/${SAMPLE}.${TAG}.g.vcf
 tabix -p vcf ${OUTPUT_DIR}/${SAMPLE}.${TAG}.g.vcf.gz
 rm -f ${OUTPUT_DIR}/${SAMPLE}.${TAG}.g.vcf.idx
+
