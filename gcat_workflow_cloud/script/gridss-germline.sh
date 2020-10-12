@@ -28,5 +28,8 @@ bash gridss.sh \
     --picardoptions VALIDATION_STRINGENCY=LENIENT \
     ${INPUT_BAM}
 
+rm -f ${OUTPUT_DIR}/temp.bam.gridss.working/temp.bam.sv.bam
+rm -f ${OUTPUT_DIR}/temp.bam.gridss.working/temp.bam.sv.bam.bai
 rm -f ${INPUT_BAM}
 rm -f ${INPUT_BAM}.bai
+
