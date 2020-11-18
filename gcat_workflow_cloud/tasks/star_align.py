@@ -52,9 +52,11 @@ class Task(abstract_task.Abstract_task):
             )
             for sample in sample_conf.fastq:
                 fq1 = (sample_conf.fastq[sample][0] + [""] * max_len_fq1)[0:max_len_fq1]
-                fq2 = [""] * max_len_fq2
+                fq2_empty = [""] * max_len_fq2
                 if len(sample_conf.fastq[sample]) > 1:
-                    fq2 = (sample_conf.fastq[sample][1] + fq2)[0:max_len_fq2]
+                    fq2 = (sample_conf.fastq[sample][1] + fq2_empty)[0:max_len_fq2]
+                else:
+                    fq2 = (["UNDEF"] + fq2_empty)[0:max_len_fq2]
 
                 hout.write(
                     '\t'.join(fq1 + fq2 + [

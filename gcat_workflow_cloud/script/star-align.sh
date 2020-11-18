@@ -19,7 +19,7 @@ mkdir -p ${OUTPUT_DIR}
 cat $(printenv | grep FASTQ1_ | egrep -v S3_ | cut -f 2 -d =) > ${OUTPUT_DIR}/temp1.fastq
 
 # STAR
-if [ -e ${FASTQ2_1} ]; then
+if [ ${FASTQ2_1} != "UNDEF" ]; then
   cat $(printenv | grep FASTQ2_ | egrep -v S3_ | cut -f 2 -d =) > ${OUTPUT_DIR}/temp2.fastq
 
   /usr/local/bin/STAR \
