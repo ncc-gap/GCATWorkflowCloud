@@ -32,12 +32,22 @@ class ConfigureTest(unittest.TestCase):
     def test1_01_version(self):
         subprocess.check_call(['gcat_workflow_cloud', '--version'])
     
-    def test2_01_configure_drmaa_nogpu(self):
+    def test2_01_configure(self):
         options = [
             "germline",
             "./tests/germline_sample.csv",
             "s3://travisci-work",
             "./tests/germline_gcat_ecsub.cfg",
+            "--dryrun",
+        ]
+        subprocess.check_call(['gcat_workflow_cloud'] + options)
+
+    def test2_02_configure(self):
+        options = [
+            "rna",
+            "./tests/rna_sample.csv",
+            "s3://travisci-work",
+            "./tests/rna_gcat_ecsub.cfg",
             "--dryrun",
         ]
         subprocess.check_call(['gcat_workflow_cloud'] + options)

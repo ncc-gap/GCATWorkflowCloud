@@ -1,0 +1,8 @@
+[fastq]
+MCF-7,s3://aokad-ana-virginia/samples/testMCF-7/test1.fastq,s3://aokad-ana-virginia/samples/testMCF-7/test2.fastq
+
+[expression]
+MCF-7
+
+[intron_retention]
+MCF-7
