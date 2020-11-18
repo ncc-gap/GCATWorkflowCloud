@@ -48,16 +48,16 @@ class Task(abstract_task.Abstract_task):
                     "--input REFERENCE_INDEX",
                     "--env STAR_OPTION",
                     "--env SAMPLE",
+                    "--env FQ_TYPE",
                 ]) + "\n"
             )
             for sample in sample_conf.fastq:
                 fq1 = (sample_conf.fastq[sample][0] + [""] * max_len_fq1)[0:max_len_fq1]
                 fq2_empty = [""] * max_len_fq2
+                fq_type = "single"
                 if len(sample_conf.fastq[sample]) > 1:
                     fq2 = (sample_conf.fastq[sample][1] + fq2_empty)[0:max_len_fq2]
-                else:
-                    fq2 = (["UNDEF"] + fq2_empty)[0:max_len_fq2]
-
+                    fq_type = "pair"
                 hout.write(
                     '\t'.join(fq1 + fq2 + [
                         "%s/cram/%s" % (run_conf.output_dir, sample),
@@ -66,6 +66,7 @@ class Task(abstract_task.Abstract_task):
                         param_conf.get(self.CONF_SECTION, "reference_index"),
                         param_conf.get(self.CONF_SECTION, "star_option"),
                         sample,
+                        fq_type,
                     ]) + "\n"
                 )
         return task_file
