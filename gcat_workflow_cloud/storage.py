@@ -54,11 +54,7 @@ class Storage(object):
 
 
     def __print_error (self, message):
-        if sys.version_info.major == 2:
-            print (message, file = sys.stderr)
-        else:
-            #print (message, file = sys.stderr)
-            print (message)
+        print (message)
             
     # #####################
     # upload

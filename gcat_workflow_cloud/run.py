@@ -1,27 +1,26 @@
 #! /usr/bin/env python
 
-import sys, os, multiprocessing
-   
+import os, multiprocessing, configparser
 import gcat_workflow_cloud.batch_engine as be
-import gcat_workflow_cloud.sample_conf as sc
 import gcat_workflow_cloud.run_conf as rc
 import gcat_workflow_cloud.storage as st
-
-if sys.version_info.major == 2:
-    import ConfigParser as cp
-else:
-    import configparser as cp
 
 class JobError(Exception):
     def error_text(name, code):
         return "[%s] Failure job execution with exit_code (%s)" % (name, str(code))
 
 def run(args):
+
+    if args.analysis_type == "germline":
+        import gcat_workflow_cloud.sample_conf_germline as sc
+    elif args.analysis_type == "rna":
+        import gcat_workflow_cloud.sample_conf_rna as sc
+
     args.output_dir = args.output_dir.rstrip("/")
     
     sample_conf = sc.Sample_conf(args.sample_conf_file, exist_check = False)
     
-    param_conf = cp.ConfigParser()
+    param_conf = configparser.ConfigParser()
     param_conf.read(args.param_conf_file)
 
     run_conf = rc.Run_conf(sample_conf_file = args.sample_conf_file, 
@@ -54,26 +53,24 @@ def run(args):
     batch_engine.dryrun = args.dryrun
     batch_engine.general_param = param_conf.get("general", "instance_option")
     
-    
     # upload config files
     storage = st.Storage(dryrun = args.dryrun)
     storage.upload(args.sample_conf_file, run_conf.sample_conf_storage_path, create_bucket = True)
     storage.upload(args.param_conf_file, run_conf.param_conf_storage_path, create_bucket = True)
-    
-    # download metadata files
-    sample_conf.readgroup_local = {}
-    readgroup_dir = tmp_dir + "/readgroup"
-    os.makedirs(readgroup_dir, exist_ok=True)
-    for sample in sample_conf.readgroup:
-        local_path = "%s/%s.txt" % (readgroup_dir, sample)
-        storage.download(local_path, sample_conf.readgroup[sample])
-        sample_conf.readgroup_local[sample] = local_path
-
 
     ##########
     # germline
     if args.analysis_type == "germline":
-
+        
+        # download metadata files
+        sample_conf.readgroup_local = {}
+        readgroup_dir = tmp_dir + "/readgroup"
+        os.makedirs(readgroup_dir, exist_ok=True)
+        for sample in sample_conf.readgroup:
+            local_path = "%s/%s.txt" % (readgroup_dir, sample)
+            storage.download(local_path, sample_conf.readgroup[sample])
+            sample_conf.readgroup_local[sample] = local_path
+            
         import gcat_workflow_cloud.tasks.gatk_fq2cram as fq2cram
         import gcat_workflow_cloud.tasks.gatk_haploypecaller as haploypecaller
         import gcat_workflow_cloud.tasks.gatk_collectwgsmetrics as collectwgsmetrics
@@ -153,6 +150,48 @@ def run(args):
         
         if p_fastqc.exitcode != 0:
             raise JobError(JobError.error_text(fastqc_task.TASK_NAME, p_fastqc.exitcode))
+        
+    ##########
+    # rna
+    elif args.analysis_type == "rna":
+
+        import gcat_workflow_cloud.tasks.star_align as star_align
+        import gcat_workflow_cloud.tasks.expression as expression
+        import gcat_workflow_cloud.tasks.intron_retention as intron_retention
+
+        star_align_task = star_align.Task(tmp_dir, sample_conf, param_conf, run_conf)
+        expression_task = expression.Task(tmp_dir, sample_conf, param_conf, run_conf)
+        intron_retention_task = intron_retention.Task(tmp_dir, sample_conf, param_conf, run_conf)
+
+        p_star_align = multiprocessing.Process(target = batch_engine.execute, args = (star_align_task,))
+
+        try:
+            p_star_align.start()
+            p_star_align.join()
+        except KeyboardInterrupt:
+            pass
+        
+        if p_star_align.exitcode != 0:
+            raise JobError(JobError.error_text(star_align_task.TASK_NAME, p_star_align.exitcode))
+
+        p_expression = multiprocessing.Process(target = batch_engine.execute, args = (expression_task,))
+        p_intron_retention = multiprocessing.Process(target = batch_engine.execute, args = (intron_retention_task,))
+
+        try:
+            p_expression.start()
+            p_intron_retention.start()
+
+            p_expression.join()
+            p_intron_retention.join()
+
+        except KeyboardInterrupt:
+            pass
+        
+        if p_expression.exitcode != 0:
+            raise JobError(JobError.error_text(expression_task.TASK_NAME, p_expression.exitcode))
+        
+        if p_intron_retention.exitcode != 0:
+            raise JobError(JobError.error_text(intron_retention_task.TASK_NAME, p_intron_retention.exitcode))
         
     if args.engine == "ecsub":
         metrics_dir = tmp_dir + "/metrics"

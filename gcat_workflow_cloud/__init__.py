@@ -1,4 +1,4 @@
-__version__ = '0.0.8'
+__version__ = '0.1.0'
 
 import argparse
 import gcat_workflow_cloud.run
@@ -7,7 +7,7 @@ def main():
 
     aparser = argparse.ArgumentParser(prog = "gcat_workflow_cloud")
     aparser.add_argument("--version", action = "version", version = "gcat_workflow_cloud-" + __version__ )
-    aparser.add_argument('analysis_type', choices=['germline'], help = "analysis type")
+    aparser.add_argument('analysis_type', choices=['germline', 'rna'], help = "analysis type")
     aparser.add_argument("sample_conf_file", default = None, type = str, help = "Sample config file")
     aparser.add_argument("output_dir", default = None, type = str,
                          help = "Output directory for Google Cloud Storage or AWS S3 bucket")
