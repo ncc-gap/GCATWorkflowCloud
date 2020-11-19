@@ -8,7 +8,6 @@ pwd                     # print current working directory
 hostname                # print hostname
 date                    # print date
 set -o errexit
-set -o nounset
 set -o pipefail
 set -x
 
