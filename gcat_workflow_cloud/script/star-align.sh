@@ -15,32 +15,32 @@ OUTPUT_PREF=${OUTPUT_DIR}/${SAMPLE}
 mkdir -p ${OUTPUT_DIR}
 
 # cat fastq
-cat $(printenv | grep FASTQ1_ | egrep -v S3_ | cut -f 2 -d = | sort) > ${OUTPUT_DIR}/temp1.fastq
+cat $(printenv | grep FASTQ1_ | egrep -v S3_ | cut -f 2 -d = | sort) > ${OUTPUT_DIR}/temp1
 rm $(printenv | grep FASTQ1_ | egrep -v S3_ | cut -f 2 -d =)
 
 # STAR
 if [ ${FQ_TYPE} = "pair" ]; then
-  cat $(printenv | grep FASTQ2_ | egrep -v S3_ | cut -f 2 -d = | sort) > ${OUTPUT_DIR}/temp2.fastq
+  cat $(printenv | grep FASTQ2_ | egrep -v S3_ | cut -f 2 -d = | sort) > ${OUTPUT_DIR}/temp2
   rm $(printenv | grep FASTQ2_ | egrep -v S3_ | cut -f 2 -d =)
 
   /usr/local/bin/STAR \
     --genomeDir ${STAR_REFERENCE} \
-    --readFilesIn ${OUTPUT_DIR}/temp1.fastq ${OUTPUT_DIR}/temp2.fastq \
+    --readFilesIn ${OUTPUT_DIR}/temp1 ${OUTPUT_DIR}/temp2 \
     --outFileNamePrefix ${OUTPUT_PREF}. \
     ${STAR_OPTION}
 
-  rm ${OUTPUT_DIR}/temp2.fastq
+  rm ${OUTPUT_DIR}/temp2
 
 else
   /usr/local/bin/STAR \
     --genomeDir ${STAR_REFERENCE} \
-    --readFilesIn ${OUTPUT_DIR}/temp1.fastq \
+    --readFilesIn ${OUTPUT_DIR}/temp1 \
     --outFileNamePrefix ${OUTPUT_PREF}. \
     ${STAR_OPTION}
 fi
 
 # remove fastq
-rm ${OUTPUT_DIR}/temp1.fastq
+rm ${OUTPUT_DIR}/temp1
 
 # sort
 /usr/local/bin/samtools sort \
