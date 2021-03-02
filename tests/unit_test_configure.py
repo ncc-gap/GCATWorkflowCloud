@@ -52,5 +52,15 @@ class ConfigureTest(unittest.TestCase):
         ]
         subprocess.check_call(['gcat_workflow_cloud'] + options)
 
+    def test2_03_configure(self):
+        options = [
+            "somatic",
+            "./tests/somatic_sample.csv",
+            "s3://travisci-work",
+            "./tests/somatic_gcat_ecsub.cfg",
+            "--dryrun",
+        ]
+        subprocess.check_call(['gcat_workflow_cloud'] + options)
+
 if __name__ == '__main__':
     unittest.main()

@@ -1,0 +1,22 @@
+aln_samples:
+  sampleR: fastq/sampleR/pass.txt
+bam_import: {}
+bam_tofastq: {}
+expression_samples:
+  sampleR: star/sampleR/sampleR.Aligned.sortedByCoord.out.bam
+fastq_r1: {}
+fastq_r2: {}
+ir_count_samples:
+  sampleR: star/sampleR/sampleR.Aligned.sortedByCoord.out.bam
+join:
+- join/sampleR/join.txt
+output_files:
+  sampleR:
+  - star/sampleR/sampleR.Aligned.sortedByCoord.out.bam
+  - star/sampleR/sampleR.Aligned.sortedByCoord.out.bam.bai
+  - star/sampleR/sampleR.Chimeric.out.junction
+  - star/sampleR/sampleR.Aligned.sortedByCoord.out.bam
+  - ir_count/sampleR/sampleR.ir_simple_count.txt.gz.tbi
+  - expression/sampleR/sampleR.txt.fpkm
+sra_fastq_dump:
+  sampleR: sra_fastq_dump/sampleR/sampleR.txt

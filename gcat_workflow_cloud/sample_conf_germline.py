@@ -150,4 +150,3 @@ class Sample_conf(abc.Sample_conf_abc):
             parsed_bam_tofastq = self.parse_data_readgroup(splited[self.SECTION_READGROUP], bwa_samples, self.SECTION_READGROUP)
             self.readgroup.update(parsed_bam_tofastq["metadata"])
             self.readgroup_src.update(parsed_bam_tofastq["metadata_src"])
-                

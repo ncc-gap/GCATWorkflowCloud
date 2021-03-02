@@ -1,0 +1,57 @@
+aln_samples:
+  A_control: fastq/A_control/pass.txt
+  A_tumor: fastq/A_tumor/pass.txt
+bam_import: {}
+bam_tofastq: {}
+collect_multiple_metrics_samples:
+  A_tumor: cram/A_tumor/A_tumor.markdup.cram
+  A_control: cram/A_control/A_control.markdup.cram
+collect_wgs_metrics_samples:
+  A_tumor: cram/A_tumor/A_tumor.markdup.cram
+  A_control: cram/A_control/A_control.markdup.cram
+fastq_r1:
+  A_control:
+  - /tmp/temp-test/gcat_test_somatic_configure/samples/B1.fq
+  A_tumor:
+  - /tmp/temp-test/gcat_test_somatic_configure/samples/A1.fastq
+fastq_r2:
+  A_control:
+  - /tmp/temp-test/gcat_test_somatic_configure/samples/B2.fq
+  A_tumor:
+  - /tmp/temp-test/gcat_test_somatic_configure/samples/A2.fastq
+genomon_mutation_call_samples:
+  A_tumor:
+  - cram/A_tumor/A_tumor.markdup.cram
+  - cram/A_control/A_control.markdup.cram
+genomonsv_filt_samples:
+  A_tumor:
+  - genomonsv/A_tumor/A_tumor.junction.clustered.bedpe.gz.tbi
+  - genomonsv/A_control/A_control.junction.clustered.bedpe.gz.tbi
+genomonsv_merge_samples: {}
+genomonsv_parse_samples:
+  A_control: cram/A_control/A_control.markdup.cram
+  A_tumor: cram/A_tumor/A_tumor.markdup.cram
+gridss_samples:
+  A_tumor:
+  - cram/A_tumor/A_tumor.markdup.cram
+  - cram/A_control/A_control.markdup.cram
+manta_samples:
+  A_tumor:
+  - cram/A_tumor/A_tumor.markdup.cram
+  - cram/A_control/A_control.markdup.cram
+mutectcaller_samples:
+  A_tumor:
+  - cram/A_tumor/A_tumor.markdup.cram
+  - cram/A_control/A_control.markdup.cram
+output_files:
+- cram/A_tumor/A_tumor.markdup.cram
+- cram/A_control/A_control.markdup.cram
+- mutectcaller/A_tumor/A_tumor.mutectcaller.vcf
+- summary/A_tumor/A_tumor.collect_wgs_metrics.txt
+- summary/A_tumor/A_tumor.collect_multiple_metrics.gc_bias.pdf
+- summary/A_control/A_control.collect_wgs_metrics.txt
+- summary/A_control/A_control.collect_multiple_metrics.gc_bias.pdf
+- gridss/A_tumor/A_tumor.gridss.vcf
+- manta/A_tumor/results/variants/candidateSV.vcf.gz
+- genomon_mutation_call/A_tumor/A_tumor.genomon_mutation.result.filt.txt
+- genomonsv/A_tumor/A_tumor.genomonSV.result.filt.txt

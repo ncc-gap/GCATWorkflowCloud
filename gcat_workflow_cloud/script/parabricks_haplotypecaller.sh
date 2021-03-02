@@ -12,8 +12,9 @@ reference_fasta=${3}
 output_dir=${4}
 tmp_dir=${5}
 num_gpus=${6}
+pbrun=${7}
 
-/opt/pkg/parabricks/v2.5.0/pbrun haplotypecaller \
+${pbrun} haplotypecaller \
     --ref ${reference_fasta} \
     --in-bam ${input_bam} \
     --out-variants ${output_dir}/${sample_name}.pbrun-haplotypecaller.vcf \

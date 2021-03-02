@@ -61,11 +61,15 @@ class Task(abstract_task.Abstract_task):
                     "--output-recursive OUTPUT_DIR",
                     "--env SAMPLE",
                     "--env GATK_JAR",
+                    "--env HAPLOTYPE_JAVA_OPTION",
+                    "--env HAPLOTYPE_OPTION",
+                    "--env NPROC",
                     "--env PLOIDY",
                     "--env TAG",
                 ]) + "\n"
             )
             for sample in sample_conf.__dict__["haplotype_call_" + key]:
+                
                 hout.write(
                     '\t'.join([
                         param_conf.get(self.CONF_SECTION, "reference_dir"),
@@ -76,6 +80,9 @@ class Task(abstract_task.Abstract_task):
                         "%s/haplotypecaller/%s" % (run_conf.output_dir, sample),
                         "%s" % (sample),
                         param_conf.get(self.CONF_SECTION, "gatk_jar"),
+                        param_conf.get(self.CONF_SECTION, "haplotype_java_option"),
+                        param_conf.get(self.CONF_SECTION, "haplotype_option"),
+                        param_conf.get(self.CONF_SECTION, "haplotype_threads_option"),
                         TAGS[key]["ploidy"],
                         TAGS[key]["label"],
                     ]) + "\n"

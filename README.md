@@ -30,3 +30,17 @@ gcat_workflow_cloud germline \
   ${YOUR_BUCKET}/gcat_workflow_cloud_test \
   example_conf/germline_gcat_ecsub.cfg
 ```
+
+# Pipelines
+
+## germline
+
+![](./doc/dag_germline.png)
+
+## somatic
+
+![](./doc/dag_somatic.png)
+
+## rna
+
+![](./doc/dag_rna.png)

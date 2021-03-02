@@ -13,6 +13,8 @@ def run(args):
 
     if args.analysis_type == "germline":
         import gcat_workflow_cloud.sample_conf_germline as sc
+    elif args.analysis_type == "somatic":
+        import gcat_workflow_cloud.sample_conf_somatic as sc
     elif args.analysis_type == "rna":
         import gcat_workflow_cloud.sample_conf_rna as sc
 
@@ -23,10 +25,12 @@ def run(args):
     param_conf = configparser.ConfigParser()
     param_conf.read(args.param_conf_file)
 
-    run_conf = rc.Run_conf(sample_conf_file = args.sample_conf_file, 
-                        param_conf_file = args.param_conf_file,
-                        analysis_type = args.analysis_type,
-                        output_dir = args.output_dir)
+    run_conf = rc.Run_conf(
+        sample_conf_file = args.sample_conf_file, 
+        param_conf_file = args.param_conf_file,
+        analysis_type = args.analysis_type,
+        output_dir = args.output_dir
+    )
                         
     # temporary procedure
     if args.work_dir == "":
@@ -150,6 +154,97 @@ def run(args):
         
         if p_fastqc.exitcode != 0:
             raise JobError(JobError.error_text(fastqc_task.TASK_NAME, p_fastqc.exitcode))
+
+    ##########
+    # somatic
+    if args.analysis_type == "somatic":
+        
+        # download metadata files
+        sample_conf.readgroup_local = {}
+        readgroup_dir = tmp_dir + "/readgroup"
+        os.makedirs(readgroup_dir, exist_ok=True)
+        for sample in sample_conf.readgroup:
+            local_path = "%s/%s.txt" % (readgroup_dir, sample)
+            storage.download(local_path, sample_conf.readgroup[sample])
+            sample_conf.readgroup_local[sample] = local_path
+            
+        import gcat_workflow_cloud.tasks.gatk_fq2cram as fq2cram
+        import gcat_workflow_cloud.tasks.gatk_mutectcaller as mutectcaller
+        import gcat_workflow_cloud.tasks.gatk_collectwgsmetrics as collectwgsmetrics
+        import gcat_workflow_cloud.tasks.gatk_collectmultiplemetrics as collectmultiplemetrics
+        import gcat_workflow_cloud.tasks.gridss as gridss
+        import gcat_workflow_cloud.tasks.manta as manta
+        import gcat_workflow_cloud.tasks.genomonsv as genomonsv
+        import gcat_workflow_cloud.tasks.genomon_mutation_call as genomon_mutation_call
+
+        fq2cram_task = fq2cram.Task(tmp_dir, sample_conf, param_conf, run_conf)
+        mutectcaller_task = mutectcaller.Task(tmp_dir, sample_conf, param_conf, run_conf)
+        collectwgsmetrics_task = collectwgsmetrics.Task(tmp_dir, sample_conf, param_conf, run_conf)
+        collectmultiplemetrics_task = collectmultiplemetrics.Task(tmp_dir, sample_conf, param_conf, run_conf)
+        gridss_task = gridss.Task(tmp_dir, sample_conf, param_conf, run_conf)
+        manta_task = manta.Task(tmp_dir, sample_conf, param_conf, run_conf)
+        genomonsv_task = genomonsv.Task(tmp_dir, sample_conf, param_conf, run_conf)
+        genomon_mutation_call_task = genomon_mutation_call.Task(tmp_dir, sample_conf, param_conf, run_conf)
+
+        p_fq2cram = multiprocessing.Process(target = batch_engine.execute, args = (fq2cram_task,))
+
+        try:
+            p_fq2cram.start()
+            p_fq2cram.join()
+        except KeyboardInterrupt:
+            pass
+        
+        if p_fq2cram.exitcode != 0:
+            raise JobError(JobError.error_text(fq2cram_task.TASK_NAME, p_fq2cram.exitcode))
+
+        p_mutectcaller = multiprocessing.Process(target = batch_engine.execute, args = (mutectcaller_task, ))
+        p_collectwgsmetrics = multiprocessing.Process(target = batch_engine.execute, args = (collectwgsmetrics_task,))
+        p_collectmultiplemetrics = multiprocessing.Process(target = batch_engine.execute, args = (collectmultiplemetrics_task,))
+        p_gridss = multiprocessing.Process(target = batch_engine.execute, args = (gridss_task,))
+        p_manta = multiprocessing.Process(target = batch_engine.execute, args = (manta_task,))
+        p_genomonsv = multiprocessing.Process(target = batch_engine.execute, args = (genomonsv_task,))
+        p_genomon_mutation_call = multiprocessing.Process(target = batch_engine.execute, args = (genomon_mutation_call_task,))
+
+        try:
+            p_mutectcaller.start()
+            p_collectwgsmetrics.start()
+            p_collectmultiplemetrics.start()
+            p_gridss.start()
+            p_manta.start()
+            p_genomonsv.start()
+            p_genomon_mutation_call.start()
+
+            p_mutectcaller.join()
+            p_collectwgsmetrics.join()
+            p_collectmultiplemetrics.join()
+            p_gridss.join()
+            p_manta.join()
+            p_genomonsv.join()
+            p_genomon_mutation_call.join()
+
+        except KeyboardInterrupt:
+            pass
+
+        if p_mutectcaller.exitcode != 0:
+            raise JobError(JobError.error_text(mutectcaller_task.TASK_NAME, p_mutectcaller.exitcode))
+        
+        if p_collectwgsmetrics.exitcode != 0:
+            raise JobError(JobError.error_text(collectwgsmetrics_task.TASK_NAME, p_collectwgsmetrics.exitcode))
+        
+        if p_collectmultiplemetrics.exitcode != 0:
+            raise JobError(JobError.error_text(collectmultiplemetrics_task.TASK_NAME, p_collectmultiplemetrics.exitcode))
+        
+        if p_gridss.exitcode != 0:
+            raise JobError(JobError.error_text(gridss_task.TASK_NAME, p_gridss.exitcode))
+        
+        if p_manta.exitcode != 0:
+            raise JobError(JobError.error_text(manta_task.TASK_NAME, p_manta.exitcode))
+        
+        if p_genomonsv.exitcode != 0:
+            raise JobError(JobError.error_text(genomonsv_task.TASK_NAME, p_genomonsv.exitcode))
+        
+        if p_genomon_mutation_call.exitcode != 0:
+            raise JobError(JobError.error_text(genomon_mutation_call_task.TASK_NAME, p_genomon_mutation_call.exitcode))
         
     ##########
     # rna

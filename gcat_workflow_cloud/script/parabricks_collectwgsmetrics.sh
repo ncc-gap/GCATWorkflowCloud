@@ -11,8 +11,9 @@ input_bam=${2}
 reference_fasta=${3}
 output_dir=${4}
 num_threads=${5}
+pbrun=${6}
 
-/opt/pkg/parabricks/v2.5.0/pbrun bammetrics \
+${pbrun} bammetrics \
     --ref ${reference_fasta} \
     --bam ${input_bam} \
     --out-metrics-file ${output_dir}/${sample_name}.pbrun-bammetrics.txt \

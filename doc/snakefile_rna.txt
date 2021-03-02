@@ -1,0 +1,154 @@
+configfile: "config_rna.yml"
+
+rule all:
+    input:
+        "join/all.txt"
+
+rule sra_fastq_dump:
+    input:
+        lambda wildcards: config["sra_fastq_dump"][wildcards.sample]
+    output:
+        "fastq/{sample}/pass.txt"
+    params:
+        script = "script/{sample}/singularity_sra_fastq_dump.sh",
+        yaml = "script/{sample}/conf_sra_fastq_dump.yml"
+    shell:
+        "gcat_runner {params.script} {params.yaml}"
+
+rule bam_tofastq:
+    input:
+        lambda wildcards: config["bam_tofastq"][wildcards.sample]
+    output:
+        "fastq/{sample}/pass.txt"
+    params:
+        script = "script/{sample}/singularity_bam_tofastq.sh",
+        yaml = "script/{sample}/conf_bam_tofastq.yml"
+    shell:
+        "gcat_runner {params.script} {params.yaml}"
+
+rule fastq:
+    input:
+        r1=lambda wildcards: config["fastq_r1"][wildcards.sample],
+        r2=lambda wildcards: config["fastq_r2"][wildcards.sample]
+    output:
+        "fastq/{sample}/pass.txt"
+    run:
+        sample = output[0].split("/")[1]
+        import os
+        link_dir = 'fastq/%s' % (sample)
+        os.makedirs(link_dir, exist_ok=True)
+        for (count, target_fastq) in enumerate(input.r1):
+            fastq_prefix, ext = os.path.splitext(target_fastq)
+            link = '%s/%d_%d%s' % (link_dir, count+1, 1, ext)
+            if not os.path.exists(link):
+                os.symlink(target_fastq, link)
+        for (count, target_fastq) in enumerate(input.r2):
+            fastq_prefix, ext = os.path.splitext(target_fastq)
+            link = '%s/%d_%d%s' % (link_dir, count+1, 2, ext)
+            if not os.path.exists(link):
+                os.symlink(target_fastq, link)
+        open(output[0], "w").close()
+
+rule bam_import:
+    input:
+        lambda wildcards: config["bam_import"][wildcards.sample]
+    output:
+        "star/{sample}/{sample}.Aligned.sortedByCoord.out.bam",
+        "star/{sample}/{sample}.Aligned.sortedByCoord.out.bam.bai",
+        "star/{sample}/{sample}.Chimeric.out.sam",
+        "star/{sample}/{sample}.Chimeric.out.junction",
+        "star/{sample}/{sample}.SJ.out.tab",
+    run:
+        bam_postfix = ".Aligned.sortedByCoord.out.bam"
+        bai_postfix = ".Aligned.sortedByCoord.out.bam.bai"
+        sam_postfix = ".Chimeric.out.sam"
+        junction_postfix = ".Chimeric.out.junction"
+        subdir = "star"
+        
+        import os
+        sample = output[0].split("/")[1]
+        link_dir = '%s/%s' % (subdir, sample)
+        os.makedirs(link_dir, exist_ok=True)
+        bam = str(input)
+        prefix, ext = os.path.splitext(bam)
+        if ext == ".bam":
+            bai = ".bai"
+        elif ext == ".cram":
+            bai = ".crai"
+        linked_bam = link_dir +'/'+ sample + bam_postfix
+        linked_bai = link_dir +'/'+ sample + bai_postfix
+        linked_sam = link_dir +'/'+ sample + sam_postfix
+        linked_junction = link_dir +'/'+ sample + junction_postfix
+        
+        if not os.path.exists(linked_bam):
+            os.symlink(bam, linked_bam)
+        if not os.path.exists(linked_bai):
+            if (os.path.exists(bam + bai)):
+                os.symlink(bam + bai, linked_bai)
+            elif (os.path.exists(prefix + bai)):
+                os.symlink(prefix + bai, linked_bai)
+        if not os.path.exists(linked_sam):
+            os.symlink(bam.replace(bam_postfix, sam_postfix), linked_sam)
+        if not os.path.exists(linked_junction):
+            os.symlink(bam.replace(bam_postfix, junction_postfix), linked_junction)
+
+rule star:
+    input:
+        lambda wildcards: config["aln_samples"][wildcards.sample],
+    output:
+        "star/{sample}/{sample}.Aligned.sortedByCoord.out.bam",
+        "star/{sample}/{sample}.Aligned.sortedByCoord.out.bam.bai",
+        "star/{sample}/{sample}.Chimeric.out.junction",
+        "star/{sample}/{sample}.Chimeric.out.sam",
+        "star/{sample}/{sample}.SJ.out.tab",
+    priority: 50
+    params:
+        script = "script/{sample}/singularity_star_alignment.sh",
+        yaml = "script/{sample}/conf_star_alignment.yml"
+    shell:
+        "gcat_runner {params.script} {params.yaml}"
+
+rule expression:
+    input:
+        lambda wildcards: config["expression_samples"][wildcards.sample],
+    output:
+        "expression/{sample}/{sample}.txt.fpkm"
+    priority: 80
+    params:
+        script = "script/{sample}/singularity_expression.sh",
+        yaml = "script/{sample}/conf_expression.yml"
+    shell:
+        "gcat_runner {params.script} {params.yaml}"
+
+rule intron_retention:
+    input:
+        lambda wildcards: config["ir_count_samples"][wildcards.sample],
+    output:
+        "ir_count/{sample}/{sample}.ir_simple_count.txt.gz.tbi"
+    priority: 80
+    params:
+        script = "script/{sample}/singularity_intron_retention.sh",
+        yaml = "script/{sample}/conf_intron_retention.yml"
+    shell:
+        "gcat_runner {params.script} {params.yaml}"
+
+rule join_sample:
+    input:
+        lambda wildcards: config["output_files"][wildcards.sample],
+    output:
+        "join/{sample}/join.txt"
+    priority: 100
+    params:
+        script = "script/{sample}/singularity_join.sh",
+        yaml = "script/{sample}/conf_join.yml"
+    shell:
+        "gcat_runner {params.script} {params.yaml}"
+
+rule join:
+    input:
+        config["join"]
+    output:
+        "join/all.txt"
+    shell:
+        "touch {output}"
+

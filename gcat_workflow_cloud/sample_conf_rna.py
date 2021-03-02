@@ -90,7 +90,8 @@ class Sample_conf(abc.Sample_conf_abc):
             self.fusionfusion += self.parse_data_tumor_controlpanel(
                 splited[self.SECTION_FUSIONFUSION], 
                 self.control_panel.keys(), 
-                self.SECTION_FUSIONFUSION
+                self.SECTION_FUSIONFUSION,
+                deny_none=True
             )
         
             

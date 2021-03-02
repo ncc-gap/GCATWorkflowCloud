@@ -1,0 +1,48 @@
+aln_samples:
+  A_tumor: fastq/A_tumor/pass.txt
+bam_import: {}
+bam_tofastq: {}
+collect_multiple_metrics_samples:
+  A_tumor: cram/A_tumor/A_tumor.markdup.cram
+collect_wgs_metrics_samples:
+  A_tumor: cram/A_tumor/A_tumor.markdup.cram
+fastq_r1:
+  A_tumor:
+  - /tmp/temp-test/gcat_test_germline_configure/samples/A1.fastq
+fastq_r2:
+  A_tumor:
+  - /tmp/temp-test/gcat_test_germline_configure/samples/A2.fastq
+gridss_samples:
+  A_tumor: cram/A_tumor/A_tumor.markdup.cram
+haplotypecaller_samples:
+  A_tumor: cram/A_tumor/A_tumor.markdup.cram
+manta_samples:
+  A_tumor: cram/A_tumor/A_tumor.markdup.cram
+melt_samples:
+  A_tumor: cram/A_tumor/A_tumor.markdup.cram
+output_files:
+- cram/A_tumor/A_tumor.markdup.cram
+- haplotypecaller/A_tumor/A_tumor.autosome.g.vcf.gz
+- haplotypecaller/A_tumor/A_tumor.autosome.g.vcf.gz.tbi
+- haplotypecaller/A_tumor/A_tumor.PAR.g.vcf.gz
+- haplotypecaller/A_tumor/A_tumor.PAR.g.vcf.gz.tbi
+- haplotypecaller/A_tumor/A_tumor.chrX.female.g.vcf.gz
+- haplotypecaller/A_tumor/A_tumor.chrX.female.g.vcf.gz.tbi
+- haplotypecaller/A_tumor/A_tumor.chrX.male.g.vcf.gz
+- haplotypecaller/A_tumor/A_tumor.chrX.male.g.vcf.gz.tbi
+- haplotypecaller/A_tumor/A_tumor.chrY.male.g.vcf.gz
+- haplotypecaller/A_tumor/A_tumor.chrY.male.g.vcf.gz.tbi
+- summary/A_tumor/A_tumor.collect_wgs_metrics.txt
+- summary/A_tumor/A_tumor.collect_multiple_metrics.base_distribution_by_cycle.pdf
+- summary/A_tumor/A_tumor.collect_multiple_metrics.gc_bias.pdf
+- summary/A_tumor/A_tumor.collect_multiple_metrics.insert_size_histogram.pdf
+- summary/A_tumor/A_tumor.collect_multiple_metrics.quality_by_cycle.pdf
+- summary/A_tumor/A_tumor.collect_multiple_metrics.quality_distribution.pdf
+- gridss/A_tumor/A_tumor.gridss.vcf
+- gridss/A_tumor/A_tumor.gridss.vcf.idx
+- manta/A_tumor/results/variants/candidateSV.vcf.gz
+- manta/A_tumor/results/variants/candidateSV.vcf.gz.tbi
+- melt/A_tumor/ALU.final_comp.vcf
+- melt/A_tumor/HERVK.final_comp.vcf
+- melt/A_tumor/LINE1.final_comp.vcf
+- melt/A_tumor/SVA.final_comp.vcf
