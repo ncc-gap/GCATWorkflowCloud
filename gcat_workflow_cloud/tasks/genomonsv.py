@@ -23,38 +23,51 @@ class Task(abstract_task.Abstract_task):
             
             hout.write(
                 '\t'.join([
-                    "--input-recursive REFERENCE_DIR",
-                    "--env REFERENCE_FASTA",
-                    "--input INPUT_TUMOR_CRAM",
-                    "--input INPUT_TUMOR_CRAI",
-                    "--input INPUT_NORMAL_CRAM",
-                    "--input INPUT_NORMAL_CRAI",
-                    "--output-recursive OUTPUT_DIR",
                     "--env TUMOR_SAMPLE",
                     "--env NORMAL_SAMPLE",
-                    "--env GATK_JAR",
-                    "--env MUTECT_JAVA_OPTION",
-                    "--env MUTECT_OPTION",
-                    "--env NPROC",
+                    "--env CONTROL_PANEL",
+                    "--input-recursive TUMOR_BAM_DIR",
+                    "--env TUMOR_BAM",
+                    "--input-recursive NORMAL_BAM_DIR",
+                    "--env NORMAL_BAM",
+                    "--input-recursive REFERENCE_DIR",
+                    "--env REFERENCE_FILE",
+                    "--input-recursive MERGED_JUNCTION",
+                    "--output-recursive TUMOR_OUTPUT_DIR",
+                    "--output-recursive NORMAL_OUTPUT_DIR",
+                    "--env GENOMONSV_PARSE_OPTION",
+                    "--env GENOMONSV_FILT_OPTION",
+                    "--env SV_UTILS_FILT_OPTION",
                 ]) + "\n"
             )
-            for (tumor, normal) in sample_conf.genomon_sv:
+            for (tumor, normal, controlpanel) in sample_conf.genomon_sv:
+                normal_sample = "None"
+                normal_bam_dir = ""
+                normal_bam = ""
+                normal_output_dir = ""
+                if normal != None:
+                    normal_sample = normal
+                    normal_bam_dir = "%s/cram/%s" % (run_conf.output_dir, normal)
+                    normal_bam = "%s.markdup.cram" % (normal)
+                    normal_output_dir = "%s/genomonsv/%s" % (run_conf.output_dir, normal),
                 
                 hout.write(
                     '\t'.join([
+                        tumor,
+                        normal_sample,
+                        "None",
+                        "%s/cram/%s" % (run_conf.output_dir, tumor),
+                        "%s.markdup.cram" % (tumor),
+                        normal_bam_dir,
+                        normal_bam,
                         param_conf.get(self.CONF_SECTION, "reference_dir"),
                         param_conf.get(self.CONF_SECTION, "reference_file"),
-                        "%s/cram/%s/%s.markdup.cram" % (run_conf.output_dir, tumor, tumor),
-                        "%s/cram/%s/%s.markdup.cram.crai" % (run_conf.output_dir, tumor, tumor),
-                        "%s/cram/%s/%s.markdup.cram" % (run_conf.output_dir, normal, normal),
-                        "%s/cram/%s/%s.markdup.cram.crai" % (run_conf.output_dir, normal, normal),
+                        "",
                         "%s/genomonsv/%s" % (run_conf.output_dir, tumor),
-                        "%s" % (tumor),
-                        "%s" % (normal),
-                        param_conf.get(self.CONF_SECTION, "gatk_jar"),
-                        param_conf.get(self.CONF_SECTION, "mutect_java_option"),
-                        param_conf.get(self.CONF_SECTION, "mutect_option"),
-                        param_conf.get(self.CONF_SECTION, "mutect_threads_option"),
+                        normal_output_dir,
+                        param_conf.get(self.CONF_SECTION, "genomonsv_parse_option"),
+                        param_conf.get(self.CONF_SECTION, "genomonsv_filt_option"),
+                        param_conf.get(self.CONF_SECTION, "sv_utils_filt_option"),
                     ]) + "\n"
                 )
 

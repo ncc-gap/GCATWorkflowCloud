@@ -56,7 +56,7 @@ class Task(abstract_task.Abstract_task):
                         normal_bam,
                         normal_bai,
                         "%s/mutectcaller/%s" % (run_conf.output_dir, tumor),
-                        "%s" % (tumor),
+                        tumor,
                         normal_sample,
                         param_conf.get(self.CONF_SECTION, "gatk_jar"),
                         param_conf.get(self.CONF_SECTION, "mutect_java_option"),

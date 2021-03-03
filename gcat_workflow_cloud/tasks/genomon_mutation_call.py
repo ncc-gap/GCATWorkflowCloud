@@ -32,13 +32,40 @@ class Task(abstract_task.Abstract_task):
                     "--output-recursive OUTPUT_DIR",
                     "--env TUMOR_SAMPLE",
                     "--env NORMAL_SAMPLE",
-                    "--env GATK_JAR",
-                    "--env MUTECT_JAVA_OPTION",
-                    "--env MUTECT_OPTION",
-                    "--env NPROC",
                 ]) + "\n"
             )
-            for (tumor, normal) in sample_conf.genomon_mutation_call:
+"""
+${ACTIVE_EXAC_FLAG}
+${ACTIVE_HGVD_2016_FLAG}
+${ANNOTATION_DB}
+${BLAT} 
+${BREAKPOINT_OPTION}
+${CONTROL_BAM_LIST}
+${FILTER_PAIR_OPTION}
+${FILTER_SINGLE_OPTION}
+${FISHER_INTERVAL_LIST}
+${FISHER_PAIR_OPTION}
+${FISHER_PAIR_SAMTOOLS}
+${FISHER_SINGLE_OPTION}
+${FISHER_SINGLE_SAMTOOLS}
+${HOTSPOT_DB}
+${HOTSPOT_OPTION}
+${HOTSPOT_SAMTOOLS}
+${INDEL_OPTION}
+${INDEL_SAMTOOLS}
+${INPUT_BAM1}
+${INPUT_BAM2}
+${INPUT_DIR1}
+${INPUT_DIR2}
+${OUTPUT_DIR}
+${PATH}
+${REALIGNMENT_OPTION}
+${REFERENCE}
+${SAMPLE1}
+${SAMPLE2}
+${SAMTOOLS} 
+"""
+            for (tumor, normal, controlpanel) in sample_conf.genomon_mutation_call:
                 
                 hout.write(
                     '\t'.join([
@@ -51,10 +78,6 @@ class Task(abstract_task.Abstract_task):
                         "%s/genomon_mutation_call/%s" % (run_conf.output_dir, tumor),
                         "%s" % (tumor),
                         "%s" % (normal),
-                        param_conf.get(self.CONF_SECTION, "gatk_jar"),
-                        param_conf.get(self.CONF_SECTION, "mutect_java_option"),
-                        param_conf.get(self.CONF_SECTION, "mutect_option"),
-                        param_conf.get(self.CONF_SECTION, "mutect_threads_option"),
                     ]) + "\n"
                 )
 

@@ -3,40 +3,53 @@
 set -o errexit
 set -o nounset
 
-mkdir -p ${OUTPUT_DIR}
+mkdir -p ${TUMOR_OUTPUT_DIR}
 
+TUMOR_BAM=${TUMOR_BAM_DIR}/${TUMOR_BAM}
+NORMAL_BAM=${NORMAL_BAM_DIR}/${NORMAL_BAM}
+REFERENCE=${REFERENCE_DIR}/${REFERENCE_FILE}
+
+# GenomonSV parse tumor
 GenomonSV \
     parse \
-    ${INPUT_DIR}/${NORMAL_BAM} \
-    ${OUTPUT_DIR}/${SAMPLE} \
+    ${TUMOR_BAM} \
+    ${TUMOR_OUTPUT_DIR}/${TUMOR_SAMPLE} \
+    --reference ${REFERENCE} \
     ${GENOMONSV_PARSE_OPTION}
 
 
-TUMOR_BAM=${TUMOR_BAM_DIR}/${TUMOR_BAM}
+if [ ! _${NORMAL_SAMPLE} = "_None" ]
+then
+    mkdir -p ${NORMAL_OUTPUT_DIR}
+    # GenomonSV parse normal
+    GenomonSV \
+        parse \
+        ${NORMAL_BAM} \
+        ${NORMAL_OUTPUT_DIR}/${NORMAL_SAMPLE} \
+        --reference ${REFERENCE} \
+        ${GENOMONSV_PARSE_OPTION}
+fi
 
-ARGUMENT="${TUMOR_BAM} ${TUMOR_SV_DIR}/${TUMOR_SAMPLE} ${REFERENCE}"
+# GenomonSV filt
+argument="${TUMOR_BAM} ${TUMOR_OUTPUT_DIR}/${TUMOR_SAMPLE} ${REFERENCE}"
 
 if [ ! _${CONTROL_PANEL} = "_None" ]
 then
-    ARGUMENT="${ARGUMENT} --non_matched_control_junction ${MERGED_JUNCTION}/${CONTROL_PANEL}.merged.junction.control.bedpe.gz"
+    argument="${argument} --non_matched_control_junction ${MERGED_JUNCTION_DIR}/${CONTROL_PANEL}"
 fi
 
 if [ ! _${NORMAL_SAMPLE} = "_None" ]
 then
-    NORMAL_BAM=${NORMAL_BAM_DIR}/${NORMAL_BAM}
-    ARGUMENT="${ARGUMENT} --matched_control_bam ${NORMAL_BAM}"
+    argument="${argument} --matched_control_bam ${NORMAL_BAM}"
 
     if [ ! _${CONTROL_PANEL} = "_None" ]
     then
-        ARGUMENT="${ARGUMENT} --matched_control_label ${NORMAL_SAMPLE}"
+        argument="${argument} --matched_control_label ${NORMAL_SAMPLE}"
     fi
 fi
 
-ARGUMENT="${ARGUMENT} ${GENOMONSV_FILT_OPTION}"
+argument="${argument} ${GENOMONSV_FILT_OPTION}"
 
-GenomonSV filt ${ARGUMENT}
+GenomonSV filt ${argument}
 
-sed -i "1i${META}" ${TUMOR_SV_DIR}/${TUMOR_SAMPLE}.genomonSV.result.txt
-
-sv_utils filter ${TUMOR_SV_DIR}/${TUMOR_SAMPLE}.genomonSV.result.txt ${TUMOR_SV_DIR}/${TUMOR_SAMPLE}.genomonSV.result.filt.txt ${SV_UTILS_FILT_OPTION}
-
+sv_utils filter ${TUMOR_OUTPUT_DIR}/${TUMOR_SAMPLE}.genomonSV.result.txt ${TUMOR_OUTPUT_DIR}/${TUMOR_SAMPLE}.genomonSV.result.filt.txt ${SV_UTILS_FILT_OPTION}

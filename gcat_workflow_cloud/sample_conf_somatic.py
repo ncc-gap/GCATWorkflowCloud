@@ -89,17 +89,19 @@ class Sample_conf(abc.Sample_conf_abc):
         if self.SECTION_MANTA in splited:
             self.manta += self.parse_data_tumor_normal(splited[self.SECTION_MANTA], sample_ids, self.SECTION_MANTA)
             
-        
         if self.SECTION_GENOMON_SV in splited:
-            self.genomon_sv += self.parse_data_tumor_normal(
+            self.genomon_sv += self.parse_data_tumor_normal_controlpanel(
                 splited[self.SECTION_GENOMON_SV],
                 sample_ids,
+                self.control_panel.keys(),
                 self.SECTION_GENOMON_SV
             )
+
         if self.SECTION_GENOMON_MUTATION_CALL in splited:
-            self.genomon_mutation_call += self.parse_data_tumor_normal(
+            self.genomon_mutation_call += self.parse_data_tumor_normal_controlpanel(
                 splited[self.SECTION_GENOMON_MUTATION_CALL],
                 sample_ids,
+                self.control_panel.keys(),
                 self.SECTION_GENOMON_MUTATION_CALL
             )
 
