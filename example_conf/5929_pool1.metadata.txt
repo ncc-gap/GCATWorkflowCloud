@@ -1,0 +1,1 @@
+@RG\tID:5929_pool1\tPL:na\tLB:ILLUMINA\tSM:5929_pool1\tPU:na

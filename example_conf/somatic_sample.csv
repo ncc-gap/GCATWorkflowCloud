@@ -1,6 +1,6 @@
 [fastq]
-5929_tumor,s3://keisuke-virginia/evaluation/sample/exome/5929_tumor_100/100percent_5929_100K_R1.fastq.gz,s3://keisuke-virginia/evaluation/sample/exome/5929_tumor_100/100percent_5929_100K_R2.fastq.gz
-5929_control,s3://keisuke-virginia/evaluation/sample/exome/5929_control/CTRL_5929_R1.fastq.gz,s3://keisuke-virginia/evaluation/sample/exome/5929_control/CTRL_5929_R2.fastq.gz
+5929_tumor, s3://aokad-ana-virginia/travis_data/sequence/5929_tumor/sequence1.fastq, s3://aokad-ana-virginia/travis_data/sequence/5929_tumor/sequence2.fastq
+5929_control, s3://aokad-ana-virginia/travis_data/sequence/5929_control/sequence1.fastq,s3://aokad-ana-virginia/travis_data/sequence/5929_control/sequence2.fastq
 
 [mutectcaller_parabricks]
 5929_tumor,5929_control
@@ -27,5 +27,5 @@
 5929_control,None
 
 [readgroup]
-5929_tumor,s3://aokad-ana-virginia/travis_data/5929_tumor1.txt
-5929_control,s3://aokad-ana-virginia/travis_data/5929_tumor1.txt
+5929_tumor,s3://aokad-ana-virginia/travis_data/5929_tumor.metadata.txt
+5929_control,s3://aokad-ana-virginia/travis_data/5929_control.metadata.txt

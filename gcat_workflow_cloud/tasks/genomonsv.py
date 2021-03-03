@@ -49,7 +49,7 @@ class Task(abstract_task.Abstract_task):
                     normal_sample = normal
                     normal_bam_dir = "%s/cram/%s" % (run_conf.output_dir, normal)
                     normal_bam = "%s.markdup.cram" % (normal)
-                    normal_output_dir = "%s/genomonsv/%s" % (run_conf.output_dir, normal),
+                    normal_output_dir = "%s/genomonsv/%s" % (run_conf.output_dir, normal)
                 
                 hout.write(
                     '\t'.join([

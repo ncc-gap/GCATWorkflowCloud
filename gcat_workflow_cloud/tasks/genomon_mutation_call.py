@@ -34,37 +34,6 @@ class Task(abstract_task.Abstract_task):
                     "--env NORMAL_SAMPLE",
                 ]) + "\n"
             )
-"""
-${ACTIVE_EXAC_FLAG}
-${ACTIVE_HGVD_2016_FLAG}
-${ANNOTATION_DB}
-${BLAT} 
-${BREAKPOINT_OPTION}
-${CONTROL_BAM_LIST}
-${FILTER_PAIR_OPTION}
-${FILTER_SINGLE_OPTION}
-${FISHER_INTERVAL_LIST}
-${FISHER_PAIR_OPTION}
-${FISHER_PAIR_SAMTOOLS}
-${FISHER_SINGLE_OPTION}
-${FISHER_SINGLE_SAMTOOLS}
-${HOTSPOT_DB}
-${HOTSPOT_OPTION}
-${HOTSPOT_SAMTOOLS}
-${INDEL_OPTION}
-${INDEL_SAMTOOLS}
-${INPUT_BAM1}
-${INPUT_BAM2}
-${INPUT_DIR1}
-${INPUT_DIR2}
-${OUTPUT_DIR}
-${PATH}
-${REALIGNMENT_OPTION}
-${REFERENCE}
-${SAMPLE1}
-${SAMPLE2}
-${SAMTOOLS} 
-"""
             for (tumor, normal, controlpanel) in sample_conf.genomon_mutation_call:
                 
                 hout.write(
