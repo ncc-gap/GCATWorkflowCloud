@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -x
 set -o errexit
 set -o nounset
 
@@ -47,11 +47,13 @@ bash gridss.sh \
     --picardoptions VALIDATION_STRINGENCY=LENIENT \
     ${NORMAL_BAM} ${TUMOR_BAM}
 
-Rscript gridss_somatic_filter.R \
-    -i ${OUTPUT_DIR}/${VCF} \
-    -o ${OUTPUT_DIR}/${VCF_SOMATIC} \
-    --normalordinal 1 --tumourordinal 2
-    
+if [ "${NORMAL_CRAM}" != "" ]; then
+    Rscript gridss_somatic_filter.R \
+        -i ${OUTPUT_DIR}/${VCF} \
+        -o ${OUTPUT_DIR}/${VCF_SOMATIC} \
+        --normalordinal 1 --tumourordinal 2
+fi
+
 rm -rf ${OUTPUT_DIR}/temp_tumor.bam.gridss.working
 rm -rf ${OUTPUT_DIR}/temp_normal.bam.gridss.working
 rm -rf ${OUTPUT_DIR}/${ASSEMBLE}.gridss.working
