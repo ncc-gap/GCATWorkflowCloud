@@ -2,7 +2,7 @@
 5929_tumor,s3://keisuke-virginia/evaluation/sample/exome/5929_tumor_100/100percent_5929_100K_R1.fastq.gz,s3://keisuke-virginia/evaluation/sample/exome/5929_tumor_100/100percent_5929_100K_R2.fastq.gz
 5929_control,s3://keisuke-virginia/evaluation/sample/exome/5929_control/CTRL_5929_R1.fastq.gz,s3://keisuke-virginia/evaluation/sample/exome/5929_control/CTRL_5929_R2.fastq.gz
 
-[mutect_caller]
+[mutectcaller_parabricks]
 5929_tumor,5929_control
 5929_control,None
 
