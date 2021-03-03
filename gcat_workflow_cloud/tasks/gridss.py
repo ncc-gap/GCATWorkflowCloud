@@ -12,7 +12,7 @@ class Task(abstract_task.Abstract_task):
             script_name = "gridss-germline.sh"
 
         elif run_conf.analysis_type == "somatic":
-            script_name = "gridss-somatic.sh",
+            script_name = "gridss-somatic.sh"
 
         super(Task, self).__init__(
             script_name,
