@@ -21,3 +21,11 @@
 [gridss]
 5929_tumor,5929_control
 5929_control,None
+
+[genomon_sv]
+5929_tumor,5929_control
+5929_control,None
+
+[readgroup]
+5929_tumor,s3://aokad-ana-virginia/travis_data/5929_tumor1.txt
+5929_control,s3://aokad-ana-virginia/travis_data/5929_tumor1.txt
