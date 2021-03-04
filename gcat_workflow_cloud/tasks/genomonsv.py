@@ -49,7 +49,7 @@ class Task(abstract_task.Abstract_task):
                     normal_sample = normal
                     normal_bam_dir = "%s/cram/%s" % (run_conf.output_dir, normal)
                     normal_bam = "%s.markdup.cram" % (normal)
-                    normal_output_dir = "%s/genomonsv/%s" % (run_conf.output_dir, normal)
+                    normal_output_dir = "%s/genomonsv/%s/%s" % (run_conf.output_dir, tumor, normal)
                 
                 hout.write(
                     '\t'.join([
@@ -63,7 +63,7 @@ class Task(abstract_task.Abstract_task):
                         param_conf.get(self.CONF_SECTION, "reference_dir"),
                         param_conf.get(self.CONF_SECTION, "reference_file"),
                         "",
-                        "%s/genomonsv/%s" % (run_conf.output_dir, tumor),
+                        "%s/genomonsv/%s/%s" % (run_conf.output_dir, tumor, tumor),
                         normal_output_dir,
                         param_conf.get(self.CONF_SECTION, "genomonsv_parse_option"),
                         param_conf.get(self.CONF_SECTION, "genomonsv_filt_option"),

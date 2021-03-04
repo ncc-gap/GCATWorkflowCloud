@@ -25,7 +25,7 @@ if [ "${INPUT_NORMAL_CRAM}" != "" ]; then
         -jar ${GATK_JAR} Mutect2 \
         -I=${INPUT_TUMOR_CRAM} -tumor ${TUMOR_SAMPLE} \
         -I=${INPUT_NORMAL_CRAM} -normal ${NORMAL_SAMPLE} \
-        -O=${OUTPUT_DIR}/${TUMOR_SAMPLE}.vcf \
+        -O=${OUTPUT_DIR}/${TUMOR_SAMPLE}.mutectcaller.vcf \
         -R=${REFERENCE_DIR}/${REFERENCE_FASTA} \
         --native-pair-hmm-threads=${NPROC} ${MUTECT_OPTION} \
         --tmp-dir=${OUTPUT_DIR}_tmp
@@ -34,13 +34,13 @@ else
         -XX:-UseContainerSupport ${MUTECT_JAVA_OPTION} \
         -jar ${GATK_JAR} Mutect2 \
         -I=${INPUT_TUMOR_CRAM} -tumor ${TUMOR_SAMPLE} \
-        -O=${OUTPUT_DIR}/${TUMOR_SAMPLE}.vcf \
+        -O=${OUTPUT_DIR}/${TUMOR_SAMPLE}.mutectcaller.vcf \
         -R=${REFERENCE_DIR}/${REFERENCE_FASTA} ${MUTECT_OPTION} \
         --native-pair-hmm-threads=${NPROC} \
         --tmp-dir=${OUTPUT_DIR}_tmp
 fi
 
-bgzip -@ $(nproc) ${OUTPUT_DIR}/${TUMOR_SAMPLE}.vcf
-tabix -p vcf ${OUTPUT_DIR}/${TUMOR_SAMPLE}.vcf.gz
-rm -f ${OUTPUT_DIR}/${TUMOR_SAMPLE}.vcf.idx
+bgzip -@ $(nproc) ${OUTPUT_DIR}/${TUMOR_SAMPLE}.mutectcaller.vcf
+tabix -p vcf ${OUTPUT_DIR}/${TUMOR_SAMPLE}.mutectcaller.vcf.gz
+rm -f ${OUTPUT_DIR}/${TUMOR_SAMPLE}.mutectcaller.vcf.idx
 
