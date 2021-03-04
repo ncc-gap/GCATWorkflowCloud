@@ -23,30 +23,59 @@ class Task(abstract_task.Abstract_task):
             
             hout.write(
                 '\t'.join([
+                    "--input-recursive INPUT_BAM_DIR1",
+                    "--env INPUT_BAM1",
+                    "--input-recursive INPUT_BAM_DIR2",
+                    "--env INPUT_BAM2",
                     "--input-recursive REFERENCE_DIR",
-                    "--env REFERENCE_FASTA",
-                    "--input INPUT_TUMOR_CRAM",
-                    "--input INPUT_TUMOR_CRAI",
-                    "--input INPUT_NORMAL_CRAM",
-                    "--input INPUT_NORMAL_CRAI",
+                    "--env REFERENCE_FILE",
+                    "--input FISHER_INTERVAL_LIST",
+                    "--env FISHER_PAIR_OPTION",
+                    "--env FISHER_SINGLE_OPTION",
+                    "--env FISHER_SAMTOOLS_OPTION",
+                    "--env REALIGNMENT_OPTION",
+                    "--env INDEL_OPTION",
+                    "--env INDEL_SAMTOOLS_OPTION",
+                    "--env BREAKPOINT_OPTION",
                     "--output-recursive OUTPUT_DIR",
-                    "--env TUMOR_SAMPLE",
-                    "--env NORMAL_SAMPLE",
+                    "--env SAMPLE1",
+                    "--env SAMPLE2",
+                    "--input-recursive ANNOTATION_DB",
+                    "--env FILTER_PAIR_OPTION",
+                    "--env FILTER_SINGLE_OPTION",
                 ]) + "\n"
             )
             for (tumor, normal, controlpanel) in sample_conf.genomon_mutation_call:
+                normal_sample = "None"
+                normal_bam_dir = ""
+                normal_bam = ""
+                if normal != None:
+                    normal_sample = normal
+                    normal_bam_dir = "%s/cram/%s" % (run_conf.output_dir, normal)
+                    normal_bam = "%s.markdup.cram" % (normal)
                 
                 hout.write(
                     '\t'.join([
+                        "%s/cram/%s" % (run_conf.output_dir, tumor),
+                        "%s.markdup.cram" % (tumor),
+                        normal_bam_dir,
+                        normal_bam,
                         param_conf.get(self.CONF_SECTION, "reference_dir"),
                         param_conf.get(self.CONF_SECTION, "reference_file"),
-                        "%s/cram/%s/%s.markdup.cram" % (run_conf.output_dir, tumor, tumor),
-                        "%s/cram/%s/%s.markdup.cram.crai" % (run_conf.output_dir, tumor, tumor),
-                        "%s/cram/%s/%s.markdup.cram" % (run_conf.output_dir, normal, normal),
-                        "%s/cram/%s/%s.markdup.cram.crai" % (run_conf.output_dir, normal, normal),
+                        param_conf.get(self.CONF_SECTION, "fisher_interval_list"),
+                        param_conf.get(self.CONF_SECTION, "fisher_pair_option"),
+                        param_conf.get(self.CONF_SECTION, "fisher_single_option"),
+                        param_conf.get(self.CONF_SECTION, "fisher_samtools_option"),
+                        param_conf.get(self.CONF_SECTION, "realignment_option"),
+                        param_conf.get(self.CONF_SECTION, "indel_option"),
+                        param_conf.get(self.CONF_SECTION, "indel_samtools_option"),
+                        param_conf.get(self.CONF_SECTION, "breakpoint_option"),
                         "%s/genomon_mutation_call/%s" % (run_conf.output_dir, tumor),
-                        "%s" % (tumor),
-                        "%s" % (normal),
+                        tumor,
+                        normal_sample,
+                        param_conf.get(self.CONF_SECTION, "annotation_db"),
+                        param_conf.get(self.CONF_SECTION, "filter_pair_option"),
+                        param_conf.get(self.CONF_SECTION, "filter_single_option"),
                     ]) + "\n"
                 )
 

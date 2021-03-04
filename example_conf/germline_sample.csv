@@ -95,5 +95,5 @@
 5929_tumor
 
 [readgroup]
-5929_tumor,s3://aokad-ana-virginia/travis_data/5929tumor.metadata.txt
+5929_tumor,s3://aokad-ana-virginia/travis_data/metadata/5929tumor.metadata.txt
 
