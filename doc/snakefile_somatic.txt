@@ -142,7 +142,7 @@ rule genomon_mutation_call:
     shell:
         "touch {output}"
 
-rule genomonsv_filt:
+rule genomonsv:
     input:
         lambda wildcards: config["genomonsv_filt_samples"][wildcards.sample],
     output:
