@@ -16,7 +16,7 @@ python setup.py build install
 
 ## Dependency
 
-See, https://github.com/aokad/ecsub
+[ecsub](https://github.com/aokad/ecsub)
 
 # Quick Start
 

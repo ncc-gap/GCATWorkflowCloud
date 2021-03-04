@@ -25,12 +25,10 @@ genomon_mutation_call_samples:
   - cram/A_control/A_control.markdup.cram
 genomonsv_filt_samples:
   A_tumor:
-  - genomonsv/A_tumor/A_tumor.junction.clustered.bedpe.gz.tbi
-  - genomonsv/A_control/A_control.junction.clustered.bedpe.gz.tbi
+  - cram/A_control/A_control.markdup.cram
+  - cram/A_tumor/A_tumor.markdup.cram
 genomonsv_merge_samples: {}
-genomonsv_parse_samples:
-  A_control: cram/A_control/A_control.markdup.cram
-  A_tumor: cram/A_tumor/A_tumor.markdup.cram
+genomonsv_parse_samples: {}
 gridss_samples:
   A_tumor:
   - cram/A_tumor/A_tumor.markdup.cram

@@ -142,28 +142,6 @@ rule genomon_mutation_call:
     shell:
         "touch {output}"
 
-rule genomonsv_parse:
-    input:
-        lambda wildcards: config["genomonsv_parse_samples"][wildcards.sample],
-    output:
-        "genomonsv/{sample}/{sample}.junction.clustered.bedpe.gz.tbi"
-    params:
-        script = "script/{sample}/singularity_genomonsv_parse.sh",
-        yaml = "script/{sample}/conf_genomonsv_parse.yml"
-    shell:
-        "gcat_runner {params.script} {params.yaml}"
-
-rule genomonsv_merge:
-    input:
-        lambda wildcards: config["genomonsv_merge_samples"][wildcards.sample],
-    output:
-        "genomonsv/non_matched_control_panel/{sample}.merged.junction.control.bedpe.gz.tbi"
-    params:
-        script = "script/{sample}/singularity_genomonsv_merge.sh",
-        yaml = "script/{sample}/conf_genomonsv_merge.yml"
-    shell:
-        "gcat_runner {params.script} {params.yaml}"
-
 rule genomonsv_filt:
     input:
         lambda wildcards: config["genomonsv_filt_samples"][wildcards.sample],
