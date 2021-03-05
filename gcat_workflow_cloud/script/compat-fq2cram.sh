@@ -25,7 +25,7 @@ do
         -T 0 \
         -Y \
         -R "${RG}" \
-        ${REFERENCE} \
+        ${REFERENCE_DIR}/${REFERENCE_FASTA} \
         ${!INPUT_FASTQ_1} \
         ${!INPUT_FASTQ_2} \
     | /usr/bin/java \
@@ -57,7 +57,7 @@ rm -f ${REMOVE_BAMS}
 /tools/samtools-1.9/samtools view \
     -@ $(nproc) \
     -C \
-    -T ${REFERENCE} \
+    -T ${REFERENCE_DIR}/${REFERENCE_FASTA} \
     -o ${OUTPUT_CRAM} \
     ${work_dir}/${SAMPLE_NAME}.markdup.bam
 

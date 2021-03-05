@@ -55,6 +55,7 @@ class Task(abstract_task.Abstract_task):
                 '\t'.join([
                     "--input REFERENCE",
                     "--input REFERENCE_IDX",
+                    "--input REFERENCE_DICT",
                     "--input INTERVAL",
                     "--input INPUT_CRAM",
                     "--input INPUT_CRAI",
@@ -74,6 +75,7 @@ class Task(abstract_task.Abstract_task):
                     '\t'.join([
                         param_conf.get(self.CONF_SECTION, "reference"),
                         param_conf.get(self.CONF_SECTION, "reference_idx"),
+                        param_conf.get(self.CONF_SECTION, "reference_dict"),
                         param_conf.get(self.CONF_SECTION, TAGS[key]["interval"]),
                         "%s/cram/%s/%s.markdup.cram" % (run_conf.output_dir, sample, sample),
                         "%s/cram/%s/%s.markdup.cram.crai" % (run_conf.output_dir, sample, sample),

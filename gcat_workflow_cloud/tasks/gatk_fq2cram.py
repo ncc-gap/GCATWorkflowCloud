@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 
 import gcat_workflow_cloud.abstract_task as abstract_task
+import os
 
 class Task(abstract_task.Abstract_task):
     CONF_SECTION = "gatk_bwa_alignment_parabricks_compatible"
@@ -37,8 +38,8 @@ class Task(abstract_task.Abstract_task):
         with open(task_file, 'w') as hout:
             hout.write(
                 '\t'.join([
-                    "--input REFERENCE",
-                    "--input REFERENCE_IDX",
+                    "--input-recursive REFERENCE_DIR",
+                    "--env REFERENCE_FASTA",
                     "--env SAMPLE_NAME",
                     "--env GATK_JAR",
                     "--output OUTPUT_CRAM",
@@ -63,8 +64,8 @@ class Task(abstract_task.Abstract_task):
 
                 hout.write(
                     '\t'.join([
-                        param_conf.get(self.CONF_SECTION, "reference"),
-                        param_conf.get(self.CONF_SECTION, "reference_idx"),
+                        param_conf.get(self.CONF_SECTION, "reference_dir"),
+                        param_conf.get(self.CONF_SECTION, "reference_file"),
                         sample,
                         param_conf.get(self.CONF_SECTION, "gatk_jar"),
                         "%s/cram/%s/%s.markdup.cram" % (run_conf.output_dir, sample, sample),

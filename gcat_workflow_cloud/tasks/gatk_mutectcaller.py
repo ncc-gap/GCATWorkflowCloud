@@ -25,6 +25,7 @@ class Task(abstract_task.Abstract_task):
                 '\t'.join([
                     "--input REFERENCE",
                     "--input REFERENCE_IDX",
+                    "--input REFERENCE_DICT",
                     "--input INPUT_TUMOR_CRAM",
                     "--input INPUT_TUMOR_CRAI",
                     "--input INPUT_NORMAL_CRAM",
@@ -51,6 +52,7 @@ class Task(abstract_task.Abstract_task):
                     '\t'.join([
                         param_conf.get(self.CONF_SECTION, "reference"),
                         param_conf.get(self.CONF_SECTION, "reference_idx"),
+                        param_conf.get(self.CONF_SECTION, "reference_dict"),
                         "%s/cram/%s/%s.markdup.cram" % (run_conf.output_dir, tumor, tumor),
                         "%s/cram/%s/%s.markdup.cram.crai" % (run_conf.output_dir, tumor, tumor),
                         normal_bam,
