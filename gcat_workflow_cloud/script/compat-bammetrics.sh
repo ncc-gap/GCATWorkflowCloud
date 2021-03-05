@@ -15,5 +15,5 @@ fi
     -jar ${GATK_JAR} CollectWgsMetrics \
     -I=${INPUT_CRAM} \
     -O=${OUTPUT_DIR}/${SAMPLE_NAME}.CollectWgsMetrics.txt \
-    -R=${REFERENCE_DIR}/${REFERENCE_FASTA} \
+    -R=${REFERENCE} \
     --TMP_DIR=${OUTPUT_DIR}

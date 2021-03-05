@@ -33,8 +33,8 @@ class Task(abstract_task.Abstract_task):
                     "--input-recursive NORMAL_BAM_DIR",
                     "--env NORMAL_BAM_FILE",
                     "--output-recursive OUTPUT_DIR",
-                    "--input-recursive  REFERENCE_DIR",
-                    "--env  REFERENCE_FILE",
+                    "--input REFERENCE",
+                    "--input REFERENCE_IDX",
                     "--env CONFIG_MANTA_OPTION",
                     "--env WORKFLOW_OPTION",
                 ]) + "\n"
@@ -45,8 +45,8 @@ class Task(abstract_task.Abstract_task):
                         "%s/cram/%s" % (run_conf.output_dir, sample),
                         "%s.markdup.cram" % (sample),
                         "%s/manta/%s" % (run_conf.output_dir, sample),
-                        param_conf.get(self.CONF_SECTION, "reference_dir"),
-                        param_conf.get(self.CONF_SECTION, "reference_file"),
+                        param_conf.get(self.CONF_SECTION, "reference"),
+                        param_conf.get(self.CONF_SECTION, "reference_idx"),
                         param_conf.get(self.CONF_SECTION, "manta_config_option"),
                         param_conf.get(self.CONF_SECTION, "manta_workflow_option") + " " + param_conf.get(self.CONF_SECTION, "manta_workflow_threads_option"),
                     ]) + "\n"
@@ -65,8 +65,8 @@ class Task(abstract_task.Abstract_task):
                     "--input-recursive TUMOR_BAM_DIR",
                     "--env TUMOR_BAM_FILE",
                     "--output-recursive OUTPUT_DIR",
-                    "--input-recursive  REFERENCE_DIR",
-                    "--env  REFERENCE_FILE",
+                    "--input REFERENCE",
+                    "--input REFERENCE_IDX",
                     "--env CONFIG_MANTA_OPTION",
                     "--env WORKFLOW_OPTION",
                 ]) + "\n"
@@ -85,8 +85,8 @@ class Task(abstract_task.Abstract_task):
                         "%s/cram/%s" % (run_conf.output_dir, tumor),
                         "%s.markdup.cram" % (tumor),
                         "%s/manta/%s" % (run_conf.output_dir, tumor),
-                        param_conf.get(self.CONF_SECTION, "reference_dir"),
-                        param_conf.get(self.CONF_SECTION, "reference_file"),
+                        param_conf.get(self.CONF_SECTION, "reference"),
+                        param_conf.get(self.CONF_SECTION, "reference_idx"),
                         param_conf.get(self.CONF_SECTION, "manta_config_option"),
                         param_conf.get(self.CONF_SECTION, "manta_workflow_option") + " " + param_conf.get(self.CONF_SECTION, "manta_workflow_threads_option"),
                     ]) + "\n"

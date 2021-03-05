@@ -26,7 +26,7 @@ fi
     -L=${INTERVAL} \
     -I=${INPUT_CRAM} \
     -O=${OUTPUT_DIR}/${SAMPLE}.${TAG}.g.vcf \
-    -R=${REFERENCE_DIR}/${REFERENCE_FASTA} \
+    -R=${REFERENCE} \
     --native-pair-hmm-threads=${NPROC} ${HAPLOTYPE_OPTION} \
     --sample-ploidy ${PLOIDY} \
     --tmp-dir=${OUTPUT_DIR}_tmp

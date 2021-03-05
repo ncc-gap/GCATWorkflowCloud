@@ -5,7 +5,6 @@ set -o nounset
 
 mkdir -p ${OUTPUT_DIR}
 OUTPUT_PREF=${OUTPUT_DIR}/${SAMPLE1}
-REFERENCE=${REFERENCE_DIR}/${REFERENCE_FILE}
 SAMTOOLS=samtools
 
 # INPUT_BAM1: target

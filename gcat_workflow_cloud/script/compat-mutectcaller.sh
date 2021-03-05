@@ -26,7 +26,7 @@ if [ "${INPUT_NORMAL_CRAM}" != "" ]; then
         -I=${INPUT_TUMOR_CRAM} -tumor ${TUMOR_SAMPLE} \
         -I=${INPUT_NORMAL_CRAM} -normal ${NORMAL_SAMPLE} \
         -O=${OUTPUT_DIR}/${TUMOR_SAMPLE}.mutectcaller.vcf \
-        -R=${REFERENCE_DIR}/${REFERENCE_FASTA} \
+        -R=${REFERENCE} \
         --native-pair-hmm-threads=${NPROC} ${MUTECT_OPTION} \
         --tmp-dir=${OUTPUT_DIR}_tmp
 else
@@ -35,7 +35,7 @@ else
         -jar ${GATK_JAR} Mutect2 \
         -I=${INPUT_TUMOR_CRAM} -tumor ${TUMOR_SAMPLE} \
         -O=${OUTPUT_DIR}/${TUMOR_SAMPLE}.mutectcaller.vcf \
-        -R=${REFERENCE_DIR}/${REFERENCE_FASTA} ${MUTECT_OPTION} \
+        -R=${REFERENCE} ${MUTECT_OPTION} \
         --native-pair-hmm-threads=${NPROC} \
         --tmp-dir=${OUTPUT_DIR}_tmp
 fi

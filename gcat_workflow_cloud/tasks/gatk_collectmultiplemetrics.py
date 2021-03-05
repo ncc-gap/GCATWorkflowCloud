@@ -24,8 +24,8 @@ class Task(abstract_task.Abstract_task):
             
             hout.write(
                 '\t'.join([
-                    "--input-recursive REFERENCE_DIR",
-                    "--env REFERENCE_FASTA",
+                    "--input REFERENCE",
+                    "--input REFERENCE_IDX",
                     "--input INPUT_CRAM",
                     "--input INPUT_CRAI",
                     "--output-recursive OUTPUT_DIR",
@@ -36,8 +36,8 @@ class Task(abstract_task.Abstract_task):
             for sample in sample_conf.multiple_metrics:
                 hout.write(
                     '\t'.join([
-                        param_conf.get(self.CONF_SECTION, "reference_dir"),
-                        param_conf.get(self.CONF_SECTION, "reference_file"),
+                        param_conf.get(self.CONF_SECTION, "reference"),
+                        param_conf.get(self.CONF_SECTION, "reference_idx"),
                         "%s/cram/%s/%s.markdup.cram" % (run_conf.output_dir, sample, sample),
                         "%s/cram/%s/%s.markdup.cram.crai" % (run_conf.output_dir, sample, sample),
                         "%s/summary/%s/metrics" % (run_conf.output_dir, sample),

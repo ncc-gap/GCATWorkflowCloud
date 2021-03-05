@@ -15,7 +15,7 @@ fi
     -jar ${GATK_JAR} CollectMultipleMetrics \
     -I=${INPUT_CRAM} \
     -O=${OUTPUT_DIR}/${SAMPLE_NAME}.CollectMultipleMetrics \
-    -R=${REFERENCE_DIR}/${REFERENCE_FASTA} \
+    -R=${REFERENCE} \
     --TMP_DIR=${OUTPUT_DIR} \
     --PROGRAM CollectAlignmentSummaryMetrics \
     --PROGRAM CollectInsertSizeMetrics \

@@ -27,8 +27,8 @@ class Task(abstract_task.Abstract_task):
                     "--input INPUT_BAM",
                     "--input INPUT_BAI",
                     "--output-recursive OUTPUT_DIR",
-                    "--input-recursive REFERENCE_DIR",
-                    "--env REFERENCE_FILE",
+                    "--input REFERENCE",
+                    "--input REFERENCE_IDX",
                 ]) + "\n"
             )
             for sample in sample_conf.melt:
@@ -37,8 +37,8 @@ class Task(abstract_task.Abstract_task):
                         "%s/cram/%s/%s.markdup.cram" % (run_conf.output_dir, sample, sample),
                         "%s/cram/%s/%s.markdup.cram.crai" % (run_conf.output_dir, sample, sample),
                         "%s/melt/%s" % (run_conf.output_dir, sample),
-                        param_conf.get(self.CONF_SECTION, "reference_dir"),
-                        param_conf.get(self.CONF_SECTION, "reference_file"),
+                        param_conf.get(self.CONF_SECTION, "reference"),
+                        param_conf.get(self.CONF_SECTION, "reference_idx"),
                     ]) + "\n"
                 )
 

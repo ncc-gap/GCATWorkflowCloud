@@ -13,7 +13,7 @@ time java \
     -XX:-UseContainerSupport \
     -jar /MELTv2.2.0/MELT.jar Single \
     -a \
-    -h ${REFERENCE_DIR}/${REFERENCE_FILE} \
+    -h ${REFERENCE} \
     -w ${OUTPUT_DIR} \
     -t mei_list.txt \
     -n /MELTv2.2.0/add_bed_files/Hg38/Hg38.genes.bed \

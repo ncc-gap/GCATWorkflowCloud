@@ -53,8 +53,8 @@ class Task(abstract_task.Abstract_task):
             
             hout.write(
                 '\t'.join([
-                    "--input-recursive REFERENCE_DIR",
-                    "--env REFERENCE_FASTA",
+                    "--input REFERENCE",
+                    "--input REFERENCE_IDX",
                     "--input INTERVAL",
                     "--input INPUT_CRAM",
                     "--input INPUT_CRAI",
@@ -72,8 +72,8 @@ class Task(abstract_task.Abstract_task):
                 
                 hout.write(
                     '\t'.join([
-                        param_conf.get(self.CONF_SECTION, "reference_dir"),
-                        param_conf.get(self.CONF_SECTION, "reference_file"),
+                        param_conf.get(self.CONF_SECTION, "reference"),
+                        param_conf.get(self.CONF_SECTION, "reference_idx"),
                         param_conf.get(self.CONF_SECTION, TAGS[key]["interval"]),
                         "%s/cram/%s/%s.markdup.cram" % (run_conf.output_dir, sample, sample),
                         "%s/cram/%s/%s.markdup.cram.crai" % (run_conf.output_dir, sample, sample),
