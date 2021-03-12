@@ -1,4 +1,4 @@
-__version__ = '0.2.1'
+__version__ = '0.2.2'
 
 import argparse
 import gcat_workflow_cloud.run
@@ -14,7 +14,8 @@ def main():
     aparser.add_argument("param_conf_file", help = "Parameter config file", type = str)
     aparser.add_argument("--engine", choices = ["awsub", "dsub", "azmon", "ecsub"], default = "ecsub", type = str,
                          help = "Batch job engine")
-    aparser.add_argument("--dryrun", help = "For dry run ", action = 'store_true')
+    aparser.add_argument("--dryrun", help = "For dry run", action = 'store_true')
+    aparser.add_argument("--skip-price", help = "Skip get pricing from aws", action = 'store_true')
     aparser.add_argument("--work_dir", default = "", type = str, help = "The directory path for local work")
     args = aparser.parse_args()
 

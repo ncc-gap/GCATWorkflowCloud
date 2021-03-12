@@ -289,16 +289,18 @@ def run(args):
             raise JobError(JobError.error_text(intron_retention_task.TASK_NAME, p_intron_retention.exitcode))
         
     if args.engine == "ecsub":
-        metrics_dir = tmp_dir + "/metrics"
-        os.makedirs(metrics_dir, exist_ok=True)
-        
-        metrics_file = metrics_dir + "/summary.json"
-        files = batch_engine.print_metrics(metrics_file)
-        storage.upload(metrics_file, run_conf.output_dir + "/metrics/metrics.json")
-        for f in files:
-            storage.upload(f, "%s/%s" % (batch_engine.s3_wdir, "/".join(f.split("/")[-3:])))
+        if args.skip_price == True:
+            print ("Skip print price.")
+        else:
+            metrics_dir = tmp_dir + "/metrics"
+            os.makedirs(metrics_dir, exist_ok=True)
+            
+            metrics_file = metrics_dir + "/summary.json"
+            files = batch_engine.print_metrics(metrics_file)
+            storage.upload(metrics_file, run_conf.output_dir + "/metrics/metrics.json")
+            for f in files:
+                storage.upload(f, "%s/%s" % (batch_engine.s3_wdir, "/".join(f.split("/")[-3:])))
 
-        cost_file = metrics_dir + "/cost.csv"
-        batch_engine.print_summary(cost_file)
-        storage.upload(cost_file, run_conf.output_dir + "/metrics/cost.csv")
-        
+            cost_file = metrics_dir + "/cost.csv"
+            batch_engine.print_summary(cost_file)
+            storage.upload(cost_file, run_conf.output_dir + "/metrics/cost.csv")
