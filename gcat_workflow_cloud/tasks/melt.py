@@ -34,8 +34,8 @@ class Task(abstract_task.Abstract_task):
             for sample in sample_conf.melt:
                 hout.write(
                     '\t'.join([
-                        "%s/cram/%s/%s.markdup.cram" % (run_conf.output_dir, sample, sample),
-                        "%s/cram/%s/%s.markdup.cram.crai" % (run_conf.output_dir, sample, sample),
+                        "{root}/{cram}/{sample}/{sample}.markdup.{cram}".format(root = run_conf.output_dir, sample = sample, cram = run_conf.seq_format),
+                        "{root}/{cram}/{sample}/{sample}.markdup.{crai}".format(root = run_conf.output_dir, sample = sample, cram = run_conf.seq_format, crai = run_conf.seq_index),
                         "%s/melt/%s" % (run_conf.output_dir, sample),
                         param_conf.get(self.CONF_SECTION, "reference"),
                         param_conf.get(self.CONF_SECTION, "reference_idx"),

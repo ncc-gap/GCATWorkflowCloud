@@ -16,14 +16,20 @@ class Run_conf(object):
     def __init__(self, sample_conf_file = None, 
                        param_conf_file = None,
                        analysis_type = None,
-                       output_dir = None):
+                       output_dir = None,
+                       use_bam = False):
 
         self.sample_conf_file = sample_conf_file
         self.sample_conf_name = os.path.splitext(os.path.basename(sample_conf_file))[0]
         self.param_conf_file = param_conf_file
         self.analysis_type = analysis_type
         self.output_dir = output_dir.rstrip("/")
-        
+        self.seq_format = "cram"
+        self.seq_index = "cram.crai"
+        if use_bam:
+            self.seq_format = "bam"
+            self.seq_index = "bam.bai"
+            
         now = datetime.datetime.now()
         # format "YYYY-mm-dd HH:MM:SS"
         self.analysis_date = date_format.format(

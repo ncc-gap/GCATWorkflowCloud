@@ -34,7 +34,7 @@ class Task(abstract_task.Abstract_task):
             for sample in sample_conf.ir_count:
                 hout.write(
                     '\t'.join([
-                        "%s/cram/%s/%s.Aligned.sortedByCoord.out.cram" % (run_conf.output_dir, sample, sample),
+                        "{root}/{cram}/{sample}/{sample}.Aligned.sortedByCoord.out.{cram}".format(root = run_conf.output_dir, sample = sample, cram = run_conf.seq_format),
                         "%s/ir_count/%s/%s.ir_simple_count.txt.gz" % (run_conf.output_dir, sample, sample),
                         "%s/ir_count/%s/%s.ir_simple_count.txt.gz.tbi" % (run_conf.output_dir, sample, sample),
                         param_conf.get(self.CONF_SECTION, "reference"),

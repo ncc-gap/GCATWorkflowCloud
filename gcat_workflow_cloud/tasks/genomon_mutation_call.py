@@ -51,13 +51,13 @@ class Task(abstract_task.Abstract_task):
                 normal_bam = ""
                 if normal != None:
                     normal_sample = normal
-                    normal_bam_dir = "%s/cram/%s" % (run_conf.output_dir, normal)
-                    normal_bam = "%s.markdup.cram" % (normal)
+                    normal_bam_dir = "{root}/{cram}/{sample}".format(root = run_conf.output_dir, sample = normal, cram = run_conf.seq_format)
+                    normal_bam = "{sample}.markdup.{cram}".format(sample = normal, cram = run_conf.seq_format)
                 
                 hout.write(
                     '\t'.join([
-                        "%s/cram/%s" % (run_conf.output_dir, tumor),
-                        "%s.markdup.cram" % (tumor),
+                        "{root}/{cram}/{sample}".format(root = run_conf.output_dir, sample = tumor, cram = run_conf.seq_format),
+                        "{sample}.markdup.{cram}".format(sample = tumor, cram = run_conf.seq_format),
                         normal_bam_dir,
                         normal_bam,
                         param_conf.get(self.CONF_SECTION, "reference"),

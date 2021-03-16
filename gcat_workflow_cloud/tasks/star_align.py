@@ -49,6 +49,7 @@ class Task(abstract_task.Abstract_task):
                     "--env STAR_OPTION",
                     "--env SAMPLE",
                     "--env FQ_TYPE",
+                    "--env SEQ_FORMAT",
                 ]) + "\n"
             )
             for sample in sample_conf.fastq:
@@ -60,13 +61,14 @@ class Task(abstract_task.Abstract_task):
                     fq_type = "pair"
                 hout.write(
                     '\t'.join(fq1 + fq2 + [
-                        "%s/cram/%s" % (run_conf.output_dir, sample),
+                        "{root}/{cram}/{sample}".format(root = run_conf.output_dir, sample = sample, cram = run_conf.seq_format),
                         param_conf.get(self.CONF_SECTION, "star_genome"),
                         param_conf.get(self.CONF_SECTION, "reference"),
                         param_conf.get(self.CONF_SECTION, "reference_index"),
                         param_conf.get(self.CONF_SECTION, "star_option"),
                         sample,
                         fq_type,
+                        run_conf.seq_format,
                     ]) + "\n"
                 )
         return task_file

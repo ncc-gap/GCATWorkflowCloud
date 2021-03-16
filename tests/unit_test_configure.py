@@ -44,6 +44,28 @@ class ConfigureTest(unittest.TestCase):
 
     def test2_02_configure(self):
         options = [
+            "germline",
+            "./tests/germline_sample.csv",
+            "s3://travisci-work",
+            "./tests/germline_gcat_ecsub.cfg",
+            "--dryrun",
+            "--skip-price",
+        ]
+        subprocess.check_call(['gcat_workflow_cloud'] + options)
+
+    def test2_03_configure(self):
+        options = [
+            "germline",
+            "./tests/germline_sample.csv",
+            "s3://travisci-work",
+            "./tests/germline_gcat_ecsub.cfg",
+            "--dryrun",
+            "--use-bam",
+        ]
+        subprocess.check_call(['gcat_workflow_cloud'] + options)
+        
+    def test3_01_configure(self):
+        options = [
             "rna",
             "./tests/rna_sample.csv",
             "s3://travisci-work",
@@ -52,7 +74,29 @@ class ConfigureTest(unittest.TestCase):
         ]
         subprocess.check_call(['gcat_workflow_cloud'] + options)
 
-    def test2_03_configure(self):
+    def test3_02_configure(self):
+        options = [
+            "rna",
+            "./tests/rna_sample.csv",
+            "s3://travisci-work",
+            "./tests/rna_gcat_ecsub.cfg",
+            "--dryrun",
+            "--skip-price",
+        ]
+        subprocess.check_call(['gcat_workflow_cloud'] + options)
+
+    def test3_03_configure(self):
+        options = [
+            "rna",
+            "./tests/rna_sample.csv",
+            "s3://travisci-work",
+            "./tests/rna_gcat_ecsub.cfg",
+            "--dryrun",
+            "--use-bam",
+        ]
+        subprocess.check_call(['gcat_workflow_cloud'] + options)
+        
+    def test4_01_configure(self):
         options = [
             "somatic",
             "./tests/somatic_sample.csv",
@@ -62,7 +106,7 @@ class ConfigureTest(unittest.TestCase):
         ]
         subprocess.check_call(['gcat_workflow_cloud'] + options)
 
-    def test2_04_configure(self):
+    def test4_02_configure(self):
         options = [
             "somatic",
             "./tests/somatic_sample.csv",
@@ -70,6 +114,17 @@ class ConfigureTest(unittest.TestCase):
             "./tests/somatic_gcat_ecsub.cfg",
             "--dryrun",
             "--skip-price",
+        ]
+        subprocess.check_call(['gcat_workflow_cloud'] + options)
+        
+    def test4_03_configure(self):
+        options = [
+            "somatic",
+            "./tests/somatic_sample.csv",
+            "s3://travisci-work",
+            "./tests/somatic_gcat_ecsub.cfg",
+            "--dryrun",
+            "--use-bam",
         ]
         subprocess.check_call(['gcat_workflow_cloud'] + options)
         

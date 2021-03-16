@@ -42,8 +42,8 @@ class Task(abstract_task.Abstract_task):
             for sample in sample_conf.manta:
                 hout.write(
                     '\t'.join([
-                        "%s/cram/%s" % (run_conf.output_dir, sample),
-                        "%s.markdup.cram" % (sample),
+                        "{root}/{cram}/{sample}".format(root = run_conf.output_dir, sample = sample, cram = run_conf.seq_format),
+                        "{sample}.markdup.{cram}".format(sample = sample, cram = run_conf.seq_format),
                         "%s/manta/%s" % (run_conf.output_dir, sample),
                         param_conf.get(self.CONF_SECTION, "reference"),
                         param_conf.get(self.CONF_SECTION, "reference_idx"),
@@ -75,15 +75,15 @@ class Task(abstract_task.Abstract_task):
                 normal_bam_dir = ""
                 normal_bam_file = ""
                 if normal != None:
-                    normal_bam_dir = "%s/cram/%s" % (run_conf.output_dir, normal)
-                    normal_bam_file = "%s.markdup.cram" % (normal)
-
+                    normal_bam_dir = "{root}/{cram}/{sample}".format(root = run_conf.output_dir, sample = normal, cram = run_conf.seq_format)
+                    normal_bam_file = "{sample}.markdup.{cram}".format(sample = normal, cram = run_conf.seq_format)
+                    
                 hout.write(
                     '\t'.join([
                         normal_bam_dir,
                         normal_bam_file,
-                        "%s/cram/%s" % (run_conf.output_dir, tumor),
-                        "%s.markdup.cram" % (tumor),
+                        "{root}/{cram}/{sample}".format(root = run_conf.output_dir, sample = tumor, cram = run_conf.seq_format),
+                        "{sample}.markdup.{cram}".format(sample = tumor, cram = run_conf.seq_format),
                         "%s/manta/%s" % (run_conf.output_dir, tumor),
                         param_conf.get(self.CONF_SECTION, "reference"),
                         param_conf.get(self.CONF_SECTION, "reference_idx"),

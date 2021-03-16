@@ -29,7 +29,8 @@ def run(args):
         sample_conf_file = args.sample_conf_file, 
         param_conf_file = args.param_conf_file,
         analysis_type = args.analysis_type,
-        output_dir = args.output_dir
+        output_dir = args.output_dir,
+        use_bam = args.use_bam
     )
                         
     # temporary procedure

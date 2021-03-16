@@ -44,17 +44,16 @@ class Task(abstract_task.Abstract_task):
                 normal_bai = ""
                 normal_sample = ""
                 if normal != None:
-                    normal_bam = "%s/cram/%s/%s.markdup.cram" % (run_conf.output_dir, normal, normal)
-                    normal_bai = "%s/cram/%s/%s.markdup.cram.crai" % (run_conf.output_dir, normal, normal)
+                    normal_bam = "{root}/{cram}/{sample}/{sample}.markdup.{cram}".format(root = run_conf.output_dir, sample = normal, cram = run_conf.seq_format)
+                    normal_bai = "{root}/{cram}/{sample}/{sample}.markdup.{crai}".format(root = run_conf.output_dir, sample = normal, cram = run_conf.seq_format, crai = run_conf.seq_index)
                     normal_sample = "%s" % (normal)
-
                 hout.write(
                     '\t'.join([
                         param_conf.get(self.CONF_SECTION, "reference"),
                         param_conf.get(self.CONF_SECTION, "reference_idx"),
                         param_conf.get(self.CONF_SECTION, "reference_dict"),
-                        "%s/cram/%s/%s.markdup.cram" % (run_conf.output_dir, tumor, tumor),
-                        "%s/cram/%s/%s.markdup.cram.crai" % (run_conf.output_dir, tumor, tumor),
+                        "{root}/{cram}/{sample}/{sample}.markdup.{cram}".format(root = run_conf.output_dir, sample = tumor, cram = run_conf.seq_format),
+                        "{root}/{cram}/{sample}/{sample}.markdup.{crai}".format(root = run_conf.output_dir, sample = tumor, cram = run_conf.seq_format, crai = run_conf.seq_index),
                         normal_bam,
                         normal_bai,
                         "%s/mutectcaller/%s" % (run_conf.output_dir, tumor),

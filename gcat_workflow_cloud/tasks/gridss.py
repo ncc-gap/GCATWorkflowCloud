@@ -48,8 +48,8 @@ class Task(abstract_task.Abstract_task):
                         "%s_gridss-assembly.bam" % (sample),
                         param_conf.get(self.CONF_SECTION, "reference_dir"),
                         param_conf.get(self.CONF_SECTION, "reference_file"),
-                        "%s/cram/%s/%s.markdup.cram" % (run_conf.output_dir, sample, sample),
-                        "%s/cram/%s/%s.markdup.cram.crai" % (run_conf.output_dir, sample, sample),
+                        "{root}/{cram}/{sample}/{sample}.markdup.{cram}".format(root = run_conf.output_dir, sample = sample, cram = run_conf.seq_format),
+                        "{root}/{cram}/{sample}/{sample}.markdup.{crai}".format(root = run_conf.output_dir, sample = sample, cram = run_conf.seq_format, crai = run_conf.seq_index),
                         param_conf.get(self.CONF_SECTION, "gridss_jar"),
                     ]) + "\n"
                 )
@@ -81,8 +81,8 @@ class Task(abstract_task.Abstract_task):
                 normal_bam = ""
                 normal_bai = ""
                 if normal != None:
-                    normal_bam = "%s/cram/%s/%s.markdup.cram" % (run_conf.output_dir, normal, normal)
-                    normal_bai = "%s/cram/%s/%s.markdup.cram.crai" % (run_conf.output_dir, normal, normal)
+                    normal_bam = "{root}/{cram}/{sample}/{sample}.markdup.{cram}".format(root = run_conf.output_dir, sample = normal, cram = run_conf.seq_format)
+                    normal_bai = "{root}/{cram}/{sample}/{sample}.markdup.{crai}".format(root = run_conf.output_dir, sample = normal, cram = run_conf.seq_format, crai = run_conf.seq_index)
 
                 hout.write(
                     '\t'.join([
@@ -94,8 +94,8 @@ class Task(abstract_task.Abstract_task):
                         param_conf.get(self.CONF_SECTION, "reference_file"),
                         normal_bam,
                         normal_bai,
-                        "%s/cram/%s/%s.markdup.cram" % (run_conf.output_dir, tumor, tumor),
-                        "%s/cram/%s/%s.markdup.cram.crai" % (run_conf.output_dir, tumor, tumor),
+                        "{root}/{cram}/{sample}/{sample}.markdup.{cram}".format(root = run_conf.output_dir, sample = tumor, cram = run_conf.seq_format),
+                        "{root}/{cram}/{sample}/{sample}.markdup.{crai}".format(root = run_conf.output_dir, sample = tumor, cram = run_conf.seq_format, crai = run_conf.seq_index),
                         param_conf.get(self.CONF_SECTION, "gridss_jar"),
                     ]) + "\n"
                 )

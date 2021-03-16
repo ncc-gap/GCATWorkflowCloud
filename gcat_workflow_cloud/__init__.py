@@ -1,4 +1,4 @@
-__version__ = '0.2.2'
+__version__ = '0.2.3'
 
 import argparse
 import gcat_workflow_cloud.run
@@ -17,6 +17,7 @@ def main():
     aparser.add_argument("--dryrun", help = "For dry run", action = 'store_true')
     aparser.add_argument("--skip-price", help = "Skip get pricing from aws", action = 'store_true')
     aparser.add_argument("--work_dir", default = "", type = str, help = "The directory path for local work")
+    aparser.add_argument("--use-bam", help = "Use BAM format", action = 'store_true')
     args = aparser.parse_args()
 
     gcat_workflow_cloud.run.run(args)

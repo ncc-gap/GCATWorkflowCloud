@@ -49,6 +49,7 @@ class Task(abstract_task.Abstract_task):
                     "\t".join(input_fq2_header),
                     "--env ARRAY_RG",
                     "--env SAMPLE_MAX_INDEX",
+                    "--env SEQ_FORMAT",
                 ]) + "\n"
             )
             for sample in sample_conf.fastq:
@@ -68,13 +69,14 @@ class Task(abstract_task.Abstract_task):
                         param_conf.get(self.CONF_SECTION, "reference_file"),
                         sample,
                         param_conf.get(self.CONF_SECTION, "gatk_jar"),
-                        "%s/cram/%s/%s.markdup.cram" % (run_conf.output_dir, sample, sample),
-                        "%s/cram/%s/%s.markdup.cram.crai" % (run_conf.output_dir, sample, sample),
-                        "%s/cram/%s/%s.markdup.metrics" % (run_conf.output_dir, sample, sample),
+                        "{root}/{cram}/{sample}/{sample}.markdup.{cram}".format(root = run_conf.output_dir, sample = sample, cram = run_conf.seq_format),
+                        "{root}/{cram}/{sample}/{sample}.markdup.{crai}".format(root = run_conf.output_dir, sample = sample, cram = run_conf.seq_format, crai = run_conf.seq_index),
+                        "{root}/{cram}/{sample}/{sample}.markdup.metrics".format(root = run_conf.output_dir, sample = sample, cram = run_conf.seq_format),
                         "\t".join(input_fq1),
                         "\t".join(input_fq2),
                         '%s' % (" ".join(array_rg)),
                         str(len(sample_conf.fastq[sample][0]) - 1),
+                        run_conf.seq_format,
                     ]) + "\n"
                 )
         return task_file

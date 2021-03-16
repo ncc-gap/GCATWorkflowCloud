@@ -54,15 +54,23 @@ done
 
 rm -f ${REMOVE_BAMS}
 
-/tools/samtools-1.9/samtools view \
-    -@ $(nproc) \
-    -C \
-    -T ${REFERENCE_DIR}/${REFERENCE_FASTA} \
-    -o ${OUTPUT_CRAM} \
-    ${work_dir}/${SAMPLE_NAME}.markdup.bam
+if [ ${SEQ_FORMAT} = "cram" ]; then
+    /tools/samtools-1.9/samtools view \
+        -@ $(nproc) \
+        -C \
+        -T ${REFERENCE_DIR}/${REFERENCE_FASTA} \
+        -o ${OUTPUT_CRAM} \
+        ${work_dir}/${SAMPLE_NAME}.markdup.bam
 
-/tools/samtools-1.9/samtools index \
-    -@ $(nproc) \
-    ${OUTPUT_CRAM}
+    /tools/samtools-1.9/samtools index \
+        -@ $(nproc) \
+        ${OUTPUT_CRAM}
 
-rm -f ${work_dir}/${SAMPLE_NAME}.markdup.bam
+    rm -f ${work_dir}/${SAMPLE_NAME}.markdup.bam
+
+else
+    # index
+    /usr/local/bin/samtools index \
+        -@ $(nproc) \
+        ${work_dir}/${SAMPLE_NAME}.markdup.bam
+fi

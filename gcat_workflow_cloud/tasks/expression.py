@@ -35,7 +35,7 @@ class Task(abstract_task.Abstract_task):
             for sample in sample_conf.expression:
                 hout.write(
                     '\t'.join([
-                        "%s/cram/%s/%s.Aligned.sortedByCoord.out.cram" % (run_conf.output_dir, sample, sample),
+                        "{root}/{cram}/{sample}/{sample}.Aligned.sortedByCoord.out.{cram}".format(root = run_conf.output_dir, sample = sample, cram = run_conf.seq_format),
                         "%s/expression/%s" % (run_conf.output_dir, sample),
                         param_conf.get(self.CONF_SECTION, "reference"),
                         param_conf.get(self.CONF_SECTION, "reference_index"),

@@ -52,18 +52,23 @@ rm ${OUTPUT_DIR}/temp1
 rm ${OUTPUT_PREF}.Aligned.out.bam
 
 # cram
-export REF_CACHE=/scratch/.cache/
-mkdir -p ${REF_CACHE}
+if [ ${SEQ_FORMAT} = "cram" ]; then
+    export REF_CACHE=/scratch/.cache/
+    mkdir -p ${REF_CACHE}
 
-cd ${OUTPUT_DIR}
-/usr/local/bin/samtools view \
-    ${OUTPUT_PREF}.Aligned.sortedByCoord.out.bam \
-    -@ 6 -C -T ${REFERENCE} \
-    -o ${OUTPUT_PREF}.Aligned.sortedByCoord.out.cram
+    cd ${OUTPUT_DIR}
+    /usr/local/bin/samtools view \
+        ${OUTPUT_PREF}.Aligned.sortedByCoord.out.bam \
+        -@ 6 -C -T ${REFERENCE} \
+        -o ${OUTPUT_PREF}.Aligned.sortedByCoord.out.cram
 
-rm ${OUTPUT_PREF}.Aligned.sortedByCoord.out.bam
+    rm ${OUTPUT_PREF}.Aligned.sortedByCoord.out.bam
 
-# index
-/usr/local/bin/samtools index \
-    ${OUTPUT_PREF}.Aligned.sortedByCoord.out.cram
-
+    # index
+    /usr/local/bin/samtools index \
+        ${OUTPUT_PREF}.Aligned.sortedByCoord.out.cram
+else
+    # index
+    /usr/local/bin/samtools index \
+        ${OUTPUT_PREF}.Aligned.sortedByCoord.out.bam
+fi

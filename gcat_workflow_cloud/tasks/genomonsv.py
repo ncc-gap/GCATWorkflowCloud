@@ -47,8 +47,9 @@ class Task(abstract_task.Abstract_task):
                 normal_output_dir = ""
                 if normal != None:
                     normal_sample = normal
-                    normal_bam_dir = "%s/cram/%s" % (run_conf.output_dir, normal)
-                    normal_bam = "%s.markdup.cram" % (normal)
+                    normal_bam_dir = "{root}/{cram}/{sample}".format(root = run_conf.output_dir, sample = normal, cram = run_conf.seq_format)
+                    normal_bam = "{sample}.markdup.{cram}".format(sample = normal, cram = run_conf.seq_format)
+                    
                     normal_output_dir = "%s/genomonsv/%s/%s" % (run_conf.output_dir, tumor, normal)
                 
                 hout.write(
