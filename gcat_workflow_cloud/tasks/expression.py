@@ -30,6 +30,7 @@ class Task(abstract_task.Abstract_task):
                     "--input REFERENCE_INDEX",
                     "--input GTF",
                     "--env SAMPLE",
+                    "--env SEQ_FORMAT",
                 ]) + "\n"
             )
             for sample in sample_conf.expression:
@@ -41,6 +42,7 @@ class Task(abstract_task.Abstract_task):
                         param_conf.get(self.CONF_SECTION, "reference_index"),
                         param_conf.get(self.CONF_SECTION, "gtf"),
                         sample,
+                        run_conf.seq_format,
                     ]) + "\n"
                 )
         return task_file
