@@ -38,8 +38,8 @@ class Task(abstract_task.Abstract_task):
                     '\t'.join([
                         param_conf.get(self.CONF_SECTION, "reference"),
                         param_conf.get(self.CONF_SECTION, "reference_idx"),
-                        "%s/cram/%s/%s.markdup.cram" % (run_conf.output_dir, sample, sample),
-                        "%s/cram/%s/%s.markdup.cram.crai" % (run_conf.output_dir, sample, sample),
+                        "{root}/{cram}/{sample}/{sample}.markdup.{cram}".format(root = run_conf.output_dir, sample = sample, cram = run_conf.seq_format),
+                        "{root}/{cram}/{sample}/{sample}.markdup.{crai}".format(root = run_conf.output_dir, sample = sample, cram = run_conf.seq_format, crai = run_conf.seq_index),
                         "%s/summary/%s/metrics" % (run_conf.output_dir, sample),
                         sample,
                         param_conf.get(self.CONF_SECTION, "gatk_jar"),
