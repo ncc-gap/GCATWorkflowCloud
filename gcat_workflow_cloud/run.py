@@ -75,7 +75,8 @@ def run(args):
             local_path = "%s/%s.txt" % (readgroup_dir, sample)
             storage.download(local_path, sample_conf.readgroup[sample])
             sample_conf.readgroup_local[sample] = local_path
-            
+        
+        import gcat_workflow_cloud.tasks.bamtofastq as bamtofastq
         import gcat_workflow_cloud.tasks.gatk_fq2cram as fq2cram
         import gcat_workflow_cloud.tasks.gatk_haploypecaller as haploypecaller
         import gcat_workflow_cloud.tasks.gatk_collectwgsmetrics as collectwgsmetrics
@@ -85,6 +86,7 @@ def run(args):
         import gcat_workflow_cloud.tasks.melt as melt
         import gcat_workflow_cloud.tasks.fastqc as fastqc
 
+        bamtofastq_task = bamtofastq.Task(tmp_dir, sample_conf, param_conf, run_conf)
         fq2cram_task = fq2cram.Task(tmp_dir, sample_conf, param_conf, run_conf)
         haploypecaller_task_list = []
         for key in sorted(haploypecaller.TAGS.keys()):
@@ -96,6 +98,18 @@ def run(args):
         melt_task = melt.Task(tmp_dir, sample_conf, param_conf, run_conf)
         fastqc_task = fastqc.Task(tmp_dir, sample_conf, param_conf, run_conf)
 
+        # bamtofastq
+        p_bamtofastq = multiprocessing.Process(target = batch_engine.execute, args = (bamtofastq_task,))
+        try:
+            p_bamtofastq.start()
+            p_bamtofastq.join()
+        except KeyboardInterrupt:
+            pass
+        
+        if p_bamtofastq.exitcode != 0:
+            raise JobError(JobError.error_text(bamtofastq_task.TASK_NAME, p_bamtofastq.exitcode))
+
+        # fq2cram
         p_fq2cram = multiprocessing.Process(target = batch_engine.execute, args = (fq2cram_task,))
         p_fastqc = multiprocessing.Process(target = batch_engine.execute, args = (fastqc_task,))
 
@@ -109,6 +123,7 @@ def run(args):
         if p_fq2cram.exitcode != 0:
             raise JobError(JobError.error_text(fq2cram_task.TASK_NAME, p_fq2cram.exitcode))
 
+        # analysis
         p_haploypecaller = multiprocessing.Process(target = batch_engine.seq_execute, args = (haploypecaller_task_list, ))
         p_collectwgsmetrics = multiprocessing.Process(target = batch_engine.execute, args = (collectwgsmetrics_task,))
         p_collectmultiplemetrics = multiprocessing.Process(target = batch_engine.execute, args = (collectmultiplemetrics_task,))
@@ -168,7 +183,8 @@ def run(args):
             local_path = "%s/%s.txt" % (readgroup_dir, sample)
             storage.download(local_path, sample_conf.readgroup[sample])
             sample_conf.readgroup_local[sample] = local_path
-            
+        
+        import gcat_workflow_cloud.tasks.bamtofastq as bamtofastq
         import gcat_workflow_cloud.tasks.gatk_fq2cram as fq2cram
         import gcat_workflow_cloud.tasks.gatk_mutectcaller as mutectcaller
         import gcat_workflow_cloud.tasks.gatk_collectwgsmetrics as collectwgsmetrics
@@ -177,7 +193,9 @@ def run(args):
         import gcat_workflow_cloud.tasks.manta as manta
         import gcat_workflow_cloud.tasks.genomonsv as genomonsv
         import gcat_workflow_cloud.tasks.genomon_mutation_call as genomon_mutation_call
+        import gcat_workflow_cloud.tasks.fastqc as fastqc
 
+        bamtofastq_task = bamtofastq.Task(tmp_dir, sample_conf, param_conf, run_conf)
         fq2cram_task = fq2cram.Task(tmp_dir, sample_conf, param_conf, run_conf)
         mutectcaller_task = mutectcaller.Task(tmp_dir, sample_conf, param_conf, run_conf)
         collectwgsmetrics_task = collectwgsmetrics.Task(tmp_dir, sample_conf, param_conf, run_conf)
@@ -186,11 +204,26 @@ def run(args):
         manta_task = manta.Task(tmp_dir, sample_conf, param_conf, run_conf)
         genomonsv_task = genomonsv.Task(tmp_dir, sample_conf, param_conf, run_conf)
         genomon_mutation_call_task = genomon_mutation_call.Task(tmp_dir, sample_conf, param_conf, run_conf)
+        fastqc_task = fastqc.Task(tmp_dir, sample_conf, param_conf, run_conf)
 
+        # bamtofastq
+        p_bamtofastq = multiprocessing.Process(target = batch_engine.execute, args = (bamtofastq_task,))
+        try:
+            p_bamtofastq.start()
+            p_bamtofastq.join()
+        except KeyboardInterrupt:
+            pass
+        
+        if p_bamtofastq.exitcode != 0:
+            raise JobError(JobError.error_text(bamtofastq_task.TASK_NAME, p_bamtofastq.exitcode))
+
+        # fq2cram
         p_fq2cram = multiprocessing.Process(target = batch_engine.execute, args = (fq2cram_task,))
+        p_fastqc = multiprocessing.Process(target = batch_engine.execute, args = (fastqc_task,))
 
         try:
             p_fq2cram.start()
+            p_fastqc.start()
             p_fq2cram.join()
         except KeyboardInterrupt:
             pass
@@ -198,6 +231,7 @@ def run(args):
         if p_fq2cram.exitcode != 0:
             raise JobError(JobError.error_text(fq2cram_task.TASK_NAME, p_fq2cram.exitcode))
 
+        # analysis
         p_mutectcaller = multiprocessing.Process(target = batch_engine.execute, args = (mutectcaller_task, ))
         p_collectwgsmetrics = multiprocessing.Process(target = batch_engine.execute, args = (collectwgsmetrics_task,))
         p_collectmultiplemetrics = multiprocessing.Process(target = batch_engine.execute, args = (collectmultiplemetrics_task,))
@@ -222,6 +256,7 @@ def run(args):
             p_manta.join()
             p_genomonsv.join()
             p_genomon_mutation_call.join()
+            p_fastqc.join()
 
         except KeyboardInterrupt:
             pass
@@ -247,6 +282,9 @@ def run(args):
         if p_genomon_mutation_call.exitcode != 0:
             raise JobError(JobError.error_text(genomon_mutation_call_task.TASK_NAME, p_genomon_mutation_call.exitcode))
         
+        if p_fastqc.exitcode != 0:
+            raise JobError(JobError.error_text(fastqc_task.TASK_NAME, p_fastqc.exitcode))
+
     ##########
     # rna
     elif args.analysis_type == "rna":

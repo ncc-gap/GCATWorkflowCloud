@@ -5,6 +5,12 @@
 #5929_tumor,s3://aokad-ana-virginia/gcat_somatic/cram/5929_tumor/5929_tumor.markdup.cram
 #5929_control,s3://aokad-ana-virginia/gcat_somatic/cram/5929_control/5929_control.markdup.cram
 
+[bam_tofastq]
+5929_tumor_bam,s3://aokad-ana-virginia/travis_data/sequence/travis_data/sequence/5929_tumor/bam/5929_tumor.markdup.bam
+5929_tumor_cram,s3://aokad-ana-virginia/travis_data/sequence/travis_data/sequence/5929_tumor/cram/5929_tumor.markdup.cram
+5929_control_bam,s3://aokad-ana-virginia/travis_data/sequence/travis_data/sequence/5929_control/bam/5929_control.markdup.bam
+5929_control_cram,s3://aokad-ana-virginia/travis_data/sequence/travis_data/sequence/5929_control/cram/5929_control.markdup.cram
+
 [mutectcaller_parabricks]
 5929_tumor,5929_control
 5929_control,None
@@ -36,3 +42,7 @@
 [readgroup]
 5929_tumor,s3://aokad-ana-virginia/travis_data/metadata/5929_tumor.metadata.txt
 5929_control,s3://aokad-ana-virginia/travis_data/metadata/5929_control.metadata.txt
+5929_tumor_bam,s3://aokad-ana-virginia/travis_data/metadata/5929_tumor.metadata.txt
+5929_tumor_cram,s3://aokad-ana-virginia/travis_data/metadata/5929_tumor.metadata.txt
+5929_control_bam,s3://aokad-ana-virginia/travis_data/metadata/5929_control.metadata.txt
+5929_control_cram,s3://aokad-ana-virginia/travis_data/metadata/5929_control.metadata.txt

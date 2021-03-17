@@ -13,7 +13,8 @@ class Sample_conf(abc.Sample_conf_abc):
     SECTION_GENOMON_SV = "genomon_sv"
     SECTION_GENOMON_MUTATION_CALL = "genomon_mutation_call"
     SECTION_READGROUP = "readgroup"
-    
+    SECTION_FASTQC = "fastqc"
+
     def __init__(self, sample_conf_file, exist_check = True):
 
         self.fastq = {}
@@ -32,6 +33,7 @@ class Sample_conf(abc.Sample_conf_abc):
         self.genomon_mutation_call = []
         self.readgroup = {}
         self.readgroup_src = {}
+        self.fastqc = []
         self.exist_check = exist_check
         
         self.parse_file(sample_conf_file)
@@ -47,6 +49,7 @@ class Sample_conf(abc.Sample_conf_abc):
             self.SECTION_MANTA, 
             self.SECTION_GENOMON_SV,
             self.SECTION_GENOMON_MUTATION_CALL,
+            self.SECTION_FASTQC, 
         ]
         controlpanel_sections = []
         extend_sections = [self.SECTION_READGROUP]
@@ -104,6 +107,8 @@ class Sample_conf(abc.Sample_conf_abc):
                 self.control_panel.keys(),
                 self.SECTION_GENOMON_MUTATION_CALL
             )
+        if self.SECTION_FASTQC in splited:
+            self.fastqc += self.parse_data_general(splited[self.SECTION_FASTQC])
 
         if len(bwa_samples) > 0:
             if not self.SECTION_READGROUP in splited:

@@ -52,16 +52,25 @@ class Task(abstract_task.Abstract_task):
                     "--env SEQ_FORMAT",
                 ]) + "\n"
             )
-            for sample in sample_conf.fastq:
+            samples = list(sample_conf.fastq.keys()) + list(sample_conf.bam_tofastq.keys())
+            for sample in samples:
                 input_fq1 = [""] * input_num
                 input_fq2 = [""] * input_num
                 array_rg = []
                 readgroups = open(sample_conf.readgroup_local[sample]).readlines()
-                for i, fq1 in enumerate(sample_conf.fastq[sample][0]):
-                    #print((fq1, i))
-                    input_fq1[i] = fq1
-                    input_fq2[i] = sample_conf.fastq[sample][1][i]
-                    array_rg.append(readgroups[i].rstrip())
+
+                if sample in sample_conf.fastq:
+                    for i, fq1 in enumerate(sample_conf.fastq[sample][0]):
+                        #print((fq1, i))
+                        input_fq1[i] = fq1
+                        input_fq2[i] = sample_conf.fastq[sample][1][i]
+                        array_rg.append(readgroups[i].rstrip())
+                        sample_max_index = len(sample_conf.fastq[sample][0]) - 1
+                else:
+                    input_fq1[0] = "%s/fastq/%s/1_1.fastq" % (run_conf.output_dir, sample)
+                    input_fq2[0] = "%s/fastq/%s/1_2.fastq" % (run_conf.output_dir, sample)
+                    array_rg.append(readgroups[0].rstrip())
+                    sample_max_index = 0
 
                 hout.write(
                     '\t'.join([
@@ -75,7 +84,7 @@ class Task(abstract_task.Abstract_task):
                         "\t".join(input_fq1),
                         "\t".join(input_fq2),
                         '%s' % (" ".join(array_rg)),
-                        str(len(sample_conf.fastq[sample][0]) - 1),
+                        str(sample_max_index),
                         run_conf.seq_format,
                     ]) + "\n"
                 )
