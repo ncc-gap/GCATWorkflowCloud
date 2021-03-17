@@ -1,10 +1,10 @@
 [fastq]
 5929_tumor,s3://keisuke-virginia/evaluation/sample/exome/5929_tumor_100/100percent_5929_100K_R1.fastq.gz,s3://keisuke-virginia/evaluation/sample/exome/5929_tumor_100/100percent_5929_100K_R2.fastq.gz
 [bam_tofastq]
-5929_tumor_bam,s3://aokad-ana-virginia/travis_data/sequence/travis_data/sequence/5929_tumor/bam/5929_tumor.markdup.bam
-5929_tumor_cram,s3://aokad-ana-virginia/travis_data/sequence/travis_data/sequence/5929_tumor/cram/5929_tumor.markdup.cram
-5929_control_bam,s3://aokad-ana-virginia/travis_data/sequence/travis_data/sequence/5929_control/bam/5929_control.markdup.bam
-5929_control_cram,s3://aokad-ana-virginia/travis_data/sequence/travis_data/sequence/5929_control/cram/5929_control.markdup.cram
+5929_tumor_bam,s3://aokad-ana-virginia/travis_data/sequence/5929_tumor/bam/5929_tumor.markdup.bam
+5929_tumor_cram,s3://aokad-ana-virginia/travis_data/sequence/5929_tumor/cram/5929_tumor.markdup.cram
+5929_control_bam,s3://aokad-ana-virginia/travis_data/sequence/5929_control/bam/5929_control.markdup.bam
+5929_control_cram,s3://aokad-ana-virginia/travis_data/sequence/5929_control/cram/5929_control.markdup.cram
 
 [haplotypecaller_parabricks_chr1]
 5929_tumor

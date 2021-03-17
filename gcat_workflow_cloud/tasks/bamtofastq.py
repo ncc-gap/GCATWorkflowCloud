@@ -27,10 +27,9 @@ class Task(abstract_task.Abstract_task):
                 if i == 0 and len(path) > max_len_bam:
                     max_len_bam = len(path)
 
-
         header_bam = []
         for i in range(max_len_bam):
-            header_bam.append("--input INPUT_BAM_%d" % (i+1))
+            header_bam.append("--input INPUT_BAM_%d" % (i))
 
         with open(task_file, 'w') as hout:
             
@@ -42,12 +41,13 @@ class Task(abstract_task.Abstract_task):
                 ]) + "\n"
             )
             for sample in sample_conf.bam_tofastq:
-                bam = ([sample_conf.bam_tofastq[sample]] + [""] * max_len_bam)[0:max_len_bam]
+                bam_paths = sample_conf.bam_tofastq[sample].split(";")
+                bam = (bam_paths + [""] * max_len_bam)[0:max_len_bam]
 
                 hout.write(
                     '\t'.join(bam + [
                         "%s/fastq/%s" % (run_conf.output_dir, sample),
-                        str(max_len_bam),
+                        str(len(bam_paths)-1),
                         param_conf.get(self.CONF_SECTION, "option"),
                     ]) + "\n"
                 )

@@ -22,18 +22,25 @@ do
 
     touch ${F1_NAME} ${F2_NAME} ${T} ${S} ${O1_NAME} ${O2_NAME}
 
-    /usr/local/bin/bamtofastq ${PARAM} filename=${INPUT_BAM} F=${F1_NAME}.tmp F2=${F2_NAME}.tmp T=${T}.tmp S=${S}.tmp O=${O1_NAME}.tmp O2=${O2_NAME}.tmp
+    /usr/local/bin/bamtofastq ${PARAM} filename=${!INPUT_BAM} F=${F1_NAME}.tmp F2=${F2_NAME}.tmp T=${T}.tmp S=${S}.tmp O=${O1_NAME}.tmp O2=${O2_NAME}.tmp
     if [ -s ${F1_NAME}.tmp ]; then
         cat ${F1_NAME}.tmp >> ${F1_NAME}
         cat ${F2_NAME}.tmp >> ${F2_NAME}
-        cat ${S}.tmp >> ${S}
+        if [ -s ${S}.tmp ]; then
+            cat ${S}.tmp >> ${S}
+        fi
     elif [ -s ${S}.tmp ]; then
         cat ${S}.tmp >> ${F1_NAME}
     fi
-        
-    cat ${T}.tmp >> ${T}
-    cat ${O1_NAME}.tmp >> ${O1_NAME}
-    cat ${O2_NAME}.tmp >> ${O2_NAME}
-    
+    if [ -s ${T}.tmp ]; then        
+        cat ${T}.tmp >> ${T}
+    fi
+    if [ -s ${O1_NAME}.tmp ]; then
+        cat ${O1_NAME}.tmp >> ${O1_NAME}
+    fi
+    if [ -s ${O2_NAME}.tmp ]; then
+        cat ${O2_NAME}.tmp >> ${O2_NAME}
+    fi
+
     rm -f ${F1_NAME}.tmp ${F2_NAME}.tmp ${T}.tmp ${S}.tmp ${O1_NAME}.tmp ${O2_NAME}.tmp
 done
