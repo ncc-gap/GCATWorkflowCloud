@@ -1,6 +1,6 @@
 [bam_tofastq]
 5929_tumor_bam1,s3://aokad-ana-virginia/travis_data/sequence/5929_tumor/bam/5929_tumor.markdup.bam
-5929_tumor_bam2,s3://aokad-ana-virginia/bwa/bam/5929_tumor_split1/5929_tumor_split1.markdup.bam,s3://aokad-ana-virginia/bwa/bam/5929_tumor_split2/5929_tumor_split2.markdup.bam
+5929_tumor_bam2,s3://aokad-ana-virginia/bwa/bam/5929_tumor_split1/5929_tumor_split1.markdup.bam;s3://aokad-ana-virginia/bwa/bam/5929_tumor_split2/5929_tumor_split2.markdup.bam
 
 [haplotypecaller_parabricks_chr1]
 5929_tumor_bam1
