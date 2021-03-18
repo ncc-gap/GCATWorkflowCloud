@@ -63,7 +63,91 @@ class ConfigureTest(unittest.TestCase):
             "--use-bam",
         ]
         subprocess.check_call(['gcat_workflow_cloud'] + options)
-        
+
+    def test2_04_configure(self):
+        options = [
+            "germline",
+            "./tests/germline_sample_allinone_cram.csv",
+            "s3://travisci-work",
+            "./tests/germline_gcat_ecsub.cfg",
+            "--dryrun",
+        ]
+        subprocess.check_call(['gcat_workflow_cloud'] + options)
+
+    def test2_05_configure(self):
+        options = [
+            "germline",
+            "./tests/germline_sample_allinone_bam.csv",
+            "s3://travisci-work",
+            "./tests/germline_gcat_ecsub.cfg",
+            "--dryrun",
+            "--use-bam",
+        ]
+        subprocess.check_call(['gcat_workflow_cloud'] + options)
+
+    def test2_06_configure(self):
+        options = [
+            "germline",
+            "./tests/germline_sample_fastq.csv",
+            "s3://travisci-work",
+            "./tests/germline_gcat_ecsub.cfg",
+            "--dryrun",
+        ]
+        subprocess.check_call(['gcat_workflow_cloud'] + options)
+
+    def test2_07_configure(self):
+        options = [
+            "germline",
+            "./tests/germline_sample_fastq.csv",
+            "s3://travisci-work",
+            "./tests/germline_gcat_ecsub.cfg",
+            "--dryrun",
+            "--use-bam",
+        ]
+        subprocess.check_call(['gcat_workflow_cloud'] + options)
+
+    def test2_08_configure(self):
+        options = [
+            "germline",
+            "./tests/germline_sample_bamimport_cram.csv",
+            "s3://travisci-work",
+            "./tests/germline_gcat_ecsub.cfg",
+            "--dryrun",
+        ]
+        subprocess.check_call(['gcat_workflow_cloud'] + options)
+
+    def test2_09_configure(self):
+        options = [
+            "germline",
+            "./tests/germline_sample_bamimport_bam.csv",
+            "s3://travisci-work",
+            "./tests/germline_gcat_ecsub.cfg",
+            "--dryrun",
+            "--use-bam",
+        ]
+        subprocess.check_call(['gcat_workflow_cloud'] + options)
+
+    def test2_10_configure(self):
+        options = [
+            "germline",
+            "./tests/germline_sample_bamtofastq.csv",
+            "s3://travisci-work",
+            "./tests/germline_gcat_ecsub.cfg",
+            "--dryrun",
+        ]
+        subprocess.check_call(['gcat_workflow_cloud'] + options)
+
+    def test2_11_configure(self):
+        options = [
+            "germline",
+            "./tests/germline_sample_bamtofastq.csv",
+            "s3://travisci-work",
+            "./tests/germline_gcat_ecsub.cfg",
+            "--dryrun",
+            "--use-bam",
+        ]
+        subprocess.check_call(['gcat_workflow_cloud'] + options)
+
     def test3_01_configure(self):
         options = [
             "rna",
@@ -127,6 +211,102 @@ class ConfigureTest(unittest.TestCase):
             "--use-bam",
         ]
         subprocess.check_call(['gcat_workflow_cloud'] + options)
-        
+
+
+    def test4_03_configure(self):
+        options = [
+            "somatic",
+            "./tests/somatic_sample.csv",
+            "s3://travisci-work",
+            "./tests/somatic_gcat_ecsub.cfg",
+            "--dryrun",
+            "--use-bam",
+        ]
+        subprocess.check_call(['gcat_workflow_cloud'] + options)
+
+    def test4_04_configure(self):
+        options = [
+            "somatic",
+            "./tests/somatic_sample_allinone_cram.csv",
+            "s3://travisci-work",
+            "./tests/somatic_gcat_ecsub.cfg",
+            "--dryrun",
+        ]
+        subprocess.check_call(['gcat_workflow_cloud'] + options)
+
+    def test4_05_configure(self):
+        options = [
+            "somatic",
+            "./tests/somatic_sample_allinone_bam.csv",
+            "s3://travisci-work",
+            "./tests/somatic_gcat_ecsub.cfg",
+            "--dryrun",
+            "--use-bam",
+        ]
+        subprocess.check_call(['gcat_workflow_cloud'] + options)
+
+    def test4_06_configure(self):
+        options = [
+            "somatic",
+            "./tests/somatic_sample_fastq.csv",
+            "s3://travisci-work",
+            "./tests/somatic_gcat_ecsub.cfg",
+            "--dryrun",
+        ]
+        subprocess.check_call(['gcat_workflow_cloud'] + options)
+
+    def test4_07_configure(self):
+        options = [
+            "somatic",
+            "./tests/somatic_sample_fastq.csv",
+            "s3://travisci-work",
+            "./tests/somatic_gcat_ecsub.cfg",
+            "--dryrun",
+            "--use-bam",
+        ]
+        subprocess.check_call(['gcat_workflow_cloud'] + options)
+
+    def test4_08_configure(self):
+        options = [
+            "somatic",
+            "./tests/somatic_sample_bamimport_cram.csv",
+            "s3://travisci-work",
+            "./tests/somatic_gcat_ecsub.cfg",
+            "--dryrun",
+        ]
+        subprocess.check_call(['gcat_workflow_cloud'] + options)
+
+    def test4_09_configure(self):
+        options = [
+            "somatic",
+            "./tests/somatic_sample_bamimport_bam.csv",
+            "s3://travisci-work",
+            "./tests/somatic_gcat_ecsub.cfg",
+            "--dryrun",
+            "--use-bam",
+        ]
+        subprocess.check_call(['gcat_workflow_cloud'] + options)
+
+    def test4_10_configure(self):
+        options = [
+            "somatic",
+            "./tests/somatic_sample_bamtofastq.csv",
+            "s3://travisci-work",
+            "./tests/somatic_gcat_ecsub.cfg",
+            "--dryrun",
+        ]
+        subprocess.check_call(['gcat_workflow_cloud'] + options)
+
+    def test4_11_configure(self):
+        options = [
+            "somatic",
+            "./tests/somatic_sample_bamtofastq.csv",
+            "s3://travisci-work",
+            "./tests/somatic_gcat_ecsub.cfg",
+            "--dryrun",
+            "--use-bam",
+        ]
+        subprocess.check_call(['gcat_workflow_cloud'] + options)
+
 if __name__ == '__main__':
     unittest.main()
