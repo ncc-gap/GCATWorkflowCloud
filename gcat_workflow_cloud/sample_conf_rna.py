@@ -15,7 +15,7 @@ class Sample_conf(abc.Sample_conf_abc):
     SECTION_CONTROL_PANEL = "controlpanel"
     SECTION_SRA_FASTQ_DUMP = "sra_fastq_dump"
 
-    def __init__(self, sample_conf_file, exist_check = True):
+    def __init__(self, sample_conf_file, exist_check = True, use_bam = False):
         self.fastq = {}
         self.fastq_src = {}
         self.bam_tofastq = {}
@@ -32,6 +32,7 @@ class Sample_conf(abc.Sample_conf_abc):
         self.kallisto = []
         self.sra_fastq_dump = {}
         self.exist_check = exist_check
+        self.use_bam = use_bam
         self.parse_file(sample_conf_file)
     
     def parse_data(self, _data):

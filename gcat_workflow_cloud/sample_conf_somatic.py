@@ -15,7 +15,7 @@ class Sample_conf(abc.Sample_conf_abc):
     SECTION_READGROUP = "readgroup"
     SECTION_FASTQC = "fastqc"
 
-    def __init__(self, sample_conf_file, exist_check = True):
+    def __init__(self, sample_conf_file, exist_check = True, use_bam = False):
 
         self.fastq = {}
         self.fastq_src = {}
@@ -35,7 +35,7 @@ class Sample_conf(abc.Sample_conf_abc):
         self.readgroup_src = {}
         self.fastqc = []
         self.exist_check = exist_check
-        
+        self.use_bam = use_bam 
         self.parse_file(sample_conf_file)
 
     def parse_data(self, _data):
@@ -73,6 +73,15 @@ class Sample_conf(abc.Sample_conf_abc):
 
         if self.SECTION_BAM_IMPORT in splited:
             parsed_bam_import = self.parse_data_bam_import(splited[self.SECTION_BAM_IMPORT])
+            ext = "cram"
+            if self.use_bam:
+                ext = "bam"
+            for sample in parsed_bam_import["bam_import"]:
+                for path in parsed_bam_import["bam_import"][sample].split(";"):
+                    print(path)
+                    if not path.rstrip().endswith(ext):
+                        err_msg = "[%s]:%s, use %s file" % (self.SECTION_BAM_IMPORT, sample, ext)
+                        raise ValueError(err_msg)
             self.bam_import.update(parsed_bam_import["bam_import"])
             self.bam_import_src.update(parsed_bam_import["bam_import_src"])
             sample_ids += parsed_bam_import["bam_import"].keys()

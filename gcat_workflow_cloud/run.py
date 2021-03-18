@@ -20,7 +20,7 @@ def run(args):
 
     args.output_dir = args.output_dir.rstrip("/")
     
-    sample_conf = sc.Sample_conf(args.sample_conf_file, exist_check = False)
+    sample_conf = sc.Sample_conf(args.sample_conf_file, exist_check = False, use_bam = args.use_bam)
     
     param_conf = configparser.ConfigParser()
     param_conf.read(args.param_conf_file)

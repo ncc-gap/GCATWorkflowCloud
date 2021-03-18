@@ -1,107 +1,109 @@
 [fastq]
-5929_tumor,s3://keisuke-virginia/evaluation/sample/exome/5929_tumor_100/100percent_5929_100K_R1.fastq.gz,s3://keisuke-virginia/evaluation/sample/exome/5929_tumor_100/100percent_5929_100K_R2.fastq.gz
+#5929_tumor,s3://keisuke-virginia/evaluation/sample/exome/5929_tumor_100/100percent_5929_100K_R1.fastq.gz,s3://keisuke-virginia/evaluation/sample/exome/5929_tumor_100/100percent_5929_100K_R2.fastq.gz
 [bam_tofastq]
 5929_tumor_bam,s3://aokad-ana-virginia/travis_data/sequence/5929_tumor/bam/5929_tumor.markdup.bam
-5929_tumor_cram,s3://aokad-ana-virginia/travis_data/sequence/5929_tumor/cram/5929_tumor.markdup.cram
-5929_control_bam,s3://aokad-ana-virginia/travis_data/sequence/5929_control/bam/5929_control.markdup.bam
-5929_control_cram,s3://aokad-ana-virginia/travis_data/sequence/5929_control/cram/5929_control.markdup.cram
+#5929_tumor_cram,s3://aokad-ana-virginia/travis_data/sequence/5929_tumor/cram/5929_tumor.markdup.cram
 
 [haplotypecaller_parabricks_chr1]
-5929_tumor
+#5929_tumor
+5929_tumor_bam
 
 [haplotypecaller_parabricks_chr2]
-5929_tumor
+#5929_tumor
 
 [haplotypecaller_parabricks_chr3]
-5929_tumor
+#5929_tumor
 
 [haplotypecaller_parabricks_chr4]
-5929_tumor
+#5929_tumor
 
 [haplotypecaller_parabricks_chr5]
-5929_tumor
+#5929_tumor
 
 [haplotypecaller_parabricks_chr6]
-5929_tumor
+#5929_tumor
 
 [haplotypecaller_parabricks_chr7]
-5929_tumor
+#5929_tumor
 
 [haplotypecaller_parabricks_chr8]
-5929_tumor
+#5929_tumor
 
 [haplotypecaller_parabricks_chr9]
-5929_tumor
+#5929_tumor
 
 [haplotypecaller_parabricks_chr10]
-5929_tumor
+#5929_tumor
 
 [haplotypecaller_parabricks_chr11]
-5929_tumor
+#5929_tumor
 
 [haplotypecaller_parabricks_chr12]
-5929_tumor
+#5929_tumor
 
 [haplotypecaller_parabricks_chr13]
-5929_tumor
+#5929_tumor
 
 [haplotypecaller_parabricks_chr14]
-5929_tumor
+#5929_tumor
 
 [haplotypecaller_parabricks_chr15]
-5929_tumor
+#5929_tumor
 
 [haplotypecaller_parabricks_chr16]
-5929_tumor
+#5929_tumor
 
 [haplotypecaller_parabricks_chr17]
-5929_tumor
+#5929_tumor
 
 [haplotypecaller_parabricks_chr18]
-5929_tumor
+#5929_tumor
 
 [haplotypecaller_parabricks_chr19]
-5929_tumor
+#5929_tumor
 
 [haplotypecaller_parabricks_chr20]
-5929_tumor
+#5929_tumor
 
 [haplotypecaller_parabricks_chr21]
-5929_tumor
+#5929_tumor
 
 [haplotypecaller_parabricks_chr22]
-5929_tumor
+#5929_tumor
 
 [haplotypecaller_parabricks_chrx_female]
-5929_tumor
+#5929_tumor
 
 [haplotypecaller_parabricks_chrx_male]
-5929_tumor
+#5929_tumor
 
 [haplotypecaller_parabricks_chry_male]
-5929_tumor
+#5929_tumor
 
 [haplotypecaller_parabricks_par]
-5929_tumor
+#5929_tumor
 
 [collect_wgs_metrics]
-5929_tumor
+#5929_tumor
+5929_tumor_bam
 
 [collect_multiple_metrics]
-5929_tumor
+#5929_tumor
+5929_tumor_bam
 
 [manta]
-5929_tumor
+#5929_tumor
+5929_tumor_bam
 
 [gridss]
-5929_tumor
+#5929_tumor
+5929_tumor_bam
 
 [fastqc]
-5929_tumor
+#5929_tumor
+5929_tumor_bam
 
 [readgroup]
-5929_tumor,s3://aokad-ana-virginia/travis_data/metadata/5929tumor.metadata.txt
+#5929_tumor,s3://aokad-ana-virginia/travis_data/metadata/5929tumor.metadata.txt
 5929_tumor_bam,s3://aokad-ana-virginia/travis_data/metadata/5929_tumor.metadata.txt
-5929_tumor_cram,s3://aokad-ana-virginia/travis_data/metadata/5929_tumor.metadata.txt
-5929_control_bam,s3://aokad-ana-virginia/travis_data/metadata/5929_control.metadata.txt
-5929_control_cram,s3://aokad-ana-virginia/travis_data/metadata/5929_control.metadata.txt
+#5929_tumor_cram,s3://aokad-ana-virginia/travis_data/metadata/5929_tumor.metadata.txt

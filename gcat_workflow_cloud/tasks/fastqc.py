@@ -21,7 +21,7 @@ class Task(abstract_task.Abstract_task):
 
         task_file = "{}/{}-tasks-{}.tsv".format(task_dir, self.TASK_NAME, run_conf.project_name)
 
-        input_num = 0
+        input_num = 1
         for sample in sample_conf.fastq:
             if len(sample_conf.fastq[sample][0]) != len(sample_conf.fastq[sample][1]):
                 raise ValueError("The number of files does not match between R1 and R2. %s" % sample)
@@ -45,20 +45,22 @@ class Task(abstract_task.Abstract_task):
                     "--env SAMPLE_MAX_INDEX",
                 ]) + "\n"
             )
-
             for sample in sample_conf.fastqc:
-                if not sample in sample_conf.fastq:
-                    err_msg = "[fastqc] section, %s is not defined in [fastq] section" % (sample)
-                    raise ValueError(err_msg)
-
                 input_fq1 = [""] * input_num
                 input_fq2 = [""] * input_num
                 arrays = []
-                for i, fq1 in enumerate(sample_conf.fastq[sample][0]):
-                    #print((fq1, i))
-                    input_fq1[i] = fq1
-                    input_fq2[i] = sample_conf.fastq[sample][1][i]
-                    arrays.append('"%s %s"' % (input_fq1[i], input_fq2[i]))
+                if sample in sample_conf.fastq:
+                    sample_max_index = len(sample_conf.fastq[sample][0]) - 1
+                    for i, fq1 in enumerate(sample_conf.fastq[sample][0]):
+                        #print((fq1, i))
+                        input_fq1[i] = fq1
+                        input_fq2[i] = sample_conf.fastq[sample][1][i]
+                        arrays.append('"%s %s"' % (input_fq1[i], input_fq2[i]))
+                else:
+                    sample_max_index = 0
+                    input_fq1[0] = "%s/fastq/%s/1_1.fastq" % (run_conf.output_dir, sample)
+                    input_fq2[0] = "%s/fastq/%s/1_2.fastq" % (run_conf.output_dir, sample)
+                    arrays.append('"%s %s"' % (input_fq1[0], input_fq2[0]))
 
                 hout.write(
                     '\t'.join([
@@ -66,7 +68,7 @@ class Task(abstract_task.Abstract_task):
                         "\t".join(input_fq2),
                         "%s/fastqc/%s" % (run_conf.output_dir, sample),
                         param_conf.get(self.CONF_SECTION, "fastqc_option"),
-                        str(len(sample_conf.fastq[sample][0]) - 1),
+                        str(sample_max_index),
                     ]) + "\n"
                 )
 

@@ -22,7 +22,7 @@ class Task(abstract_task.Abstract_task):
 
         task_file = "{}/{}-tasks-{}.tsv".format(task_dir, self.TASK_NAME, run_conf.project_name)
         
-        input_num = 0
+        input_num = 1
         for sample in sample_conf.fastq:
             if len(sample_conf.fastq[sample][0]) != len(sample_conf.fastq[sample][1]):
                 raise ValueError("The number of files does not match between R1 and R2. %s" % sample)
@@ -60,17 +60,17 @@ class Task(abstract_task.Abstract_task):
                 readgroups = open(sample_conf.readgroup_local[sample]).readlines()
 
                 if sample in sample_conf.fastq:
+                    sample_max_index = len(sample_conf.fastq[sample][0]) - 1
                     for i, fq1 in enumerate(sample_conf.fastq[sample][0]):
                         #print((fq1, i))
                         input_fq1[i] = fq1
                         input_fq2[i] = sample_conf.fastq[sample][1][i]
                         array_rg.append(readgroups[i].rstrip())
-                        sample_max_index = len(sample_conf.fastq[sample][0]) - 1
                 else:
+                    sample_max_index = 0
                     input_fq1[0] = "%s/fastq/%s/1_1.fastq" % (run_conf.output_dir, sample)
                     input_fq2[0] = "%s/fastq/%s/1_2.fastq" % (run_conf.output_dir, sample)
                     array_rg.append(readgroups[0].rstrip())
-                    sample_max_index = 0
 
                 hout.write(
                     '\t'.join([
