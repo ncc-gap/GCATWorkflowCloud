@@ -1,2 +1,0 @@
-@RG\tID:5929Tumor\tPL:na\tLB:ILLUMINA\tSM:5929Tumor2\tPU:na
-@RG\tID:5929Tumor\tPL:na\tLB:ILLUMINA\tSM:5929Tumor2\tPU:na

@@ -1,0 +1,1 @@
+@RG\tID:5929_tumor_bam1\tPL:na\tLB:ILLUMINA\tSM:5929_tumor_bam1\tPU:na

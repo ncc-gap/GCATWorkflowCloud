@@ -159,6 +159,6 @@
 5929_tumor_f3
 
 [readgroup]
-5929_tumor_f1,s3://aokad-ana-virginia/travis_data/metadata/5929_tumor.metadata.txt
-5929_tumor_f2,s3://aokad-ana-virginia/travis_data/metadata/5929_tumor2.txt
-5929_tumor_f3,s3://aokad-ana-virginia/travis_data/metadata/5929_tumor3.txt
+5929_tumor_f1,s3://aokad-ana-virginia/travis_data/metadata/5929_tumor_f1.metadata.txt
+5929_tumor_f2,s3://aokad-ana-virginia/travis_data/metadata/5929_tumor_f2.metadata.txt
+5929_tumor_f3,s3://aokad-ana-virginia/travis_data/metadata/5929_tumor_f3.metadata.txt

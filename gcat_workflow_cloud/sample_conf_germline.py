@@ -124,7 +124,6 @@ class Sample_conf(abc.Sample_conf_abc):
                 ext = "bam"
             for sample in parsed_bam_import["bam_import"]:
                 for path in parsed_bam_import["bam_import"][sample].split(";"):
-                    print(path)
                     if not path.rstrip().endswith(ext):
                         err_msg = "[%s]:%s, use %s file" % (self.SECTION_BAM_IMPORT, sample, ext)
                         raise ValueError(err_msg)
@@ -152,6 +151,10 @@ class Sample_conf(abc.Sample_conf_abc):
 
         if self.SECTION_FASTQC in splited:
             self.fastqc += self.parse_data_general(splited[self.SECTION_FASTQC])
+            for sample in self.fastqc:
+                if sample in self.bam_import:
+                    err_msg = "[%s] section, %s is not defined" % (self.SECTION_FASTQC, sample)
+                    raise ValueError(err_msg)
 
         if len(bwa_samples) > 0:
             if not self.SECTION_READGROUP in splited:

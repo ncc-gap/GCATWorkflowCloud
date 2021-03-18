@@ -52,6 +52,8 @@ class Task(abstract_task.Abstract_task):
                     "--env SEQ_FORMAT",
                 ]) + "\n"
             )
+            print(sample_conf.fastq.keys())
+            print(sample_conf.bam_tofastq.keys())
             samples = list(sample_conf.fastq.keys()) + list(sample_conf.bam_tofastq.keys())
             for sample in samples:
                 input_fq1 = [""] * input_num

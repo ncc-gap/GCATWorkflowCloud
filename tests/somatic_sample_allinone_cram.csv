@@ -6,9 +6,9 @@
 
 [bam_tofastq]
 5929_tumor_bam1,s3://aokad-ana-virginia/travis_data/sequence/5929_tumor/bam/5929_tumor.markdup.bam
-5929_tumor_bam2,s3://aokad-ana-virginia/travis_data/sequence/5929_tumor/bam/5929_tumor.markdup.bam;s3://aokad-ana-virginia/travis_data/sequence/5929_tumor/bam/5929_tumor.markdup.bam
+5929_tumor_bam2,s3://aokad-ana-virginia/travis_data/sequence/5929_tumor/bam/5929_tumor.markdup.bam;s3://aokad-ana-virginia/travis_data/sequence/5929_tumor1/bam/5929_tumor.markdup.bam
 5929_control_bam1,s3://aokad-ana-virginia/travis_data/sequence/5929_control/bam/5929_control.markdup.bam
-5929_control_bam2,s3://aokad-ana-virginia/travis_data/sequence/5929_control/bam/5929_control.markdup.bam;s3://aokad-ana-virginia/travis_data/sequence/5929_control/bam/5929_control.markdup.bam
+5929_control_bam2,s3://aokad-ana-virginia/travis_data/sequence/5929_control/bam/5929_control.markdup.bam;s3://aokad-ana-virginia/travis_data/sequence/5929_control1/bam/5929_control.markdup.bam
 
 [bam_import]
 5929_tumor_i,s3://aokad-ana-virginia/travis_data/sequence/5929_tumor/cram/5929_tumor.markdup.cram
@@ -49,6 +49,16 @@
 5929_control_bam2
 5929_tumor_i
 5929_control_i
+
+[fastqc]
+5929_tumor_f1
+5929_control_f1
+5929_tumor_f2
+5929_tumor_f3
+5929_tumor_bam1
+5929_tumor_bam2
+5929_control_bam1
+5929_control_bam2
 
 [manta]
 5929_tumor_f1,5929_control_f1
@@ -99,11 +109,11 @@
 5929_control_i,None
 
 [readgroup]
-5929_tumor_f1,s3://aokad-ana-virginia/travis_data/metadata/5929_tumor.metadata.txt
-5929_control_f1,s3://aokad-ana-virginia/travis_data/metadata/5929_control.metadata.txt
-5929_tumor_f2,s3://aokad-ana-virginia/travis_data/metadata/5929_tumor2.txt
-5929_tumor_f3,s3://aokad-ana-virginia/travis_data/metadata/5929_tumor3.txt
-5929_tumor_bam1,s3://aokad-ana-virginia/travis_data/metadata/5929_tumor.metadata.txt
-5929_tumor_bam2,s3://aokad-ana-virginia/travis_data/metadata/5929_tumor.metadata.txt
-5929_control_bam1,s3://aokad-ana-virginia/travis_data/metadata/5929_control.metadata.txt
-5929_control_bam2,s3://aokad-ana-virginia/travis_data/metadata/5929_control.metadata.txt
+5929_tumor_f1,s3://aokad-ana-virginia/travis_data/metadata/5929_tumor_f1.metadata.txt
+5929_control_f1,s3://aokad-ana-virginia/travis_data/metadata/5929_control_f1.metadata.txt
+5929_tumor_f2,s3://aokad-ana-virginia/travis_data/metadata/5929_tumor_f2.metadata.txt
+5929_tumor_f3,s3://aokad-ana-virginia/travis_data/metadata/5929_tumor_f3.metadata.txt
+5929_tumor_bam1,s3://aokad-ana-virginia/travis_data/metadata/5929_tumor_bam1.metadata.txt
+5929_tumor_bam2,s3://aokad-ana-virginia/travis_data/metadata/5929_tumor_bam2.metadata.txt
+5929_control_bam1,s3://aokad-ana-virginia/travis_data/metadata/5929_control_bam1.metadata.txt
+5929_control_bam2,s3://aokad-ana-virginia/travis_data/metadata/5929_control_bam1.metadata.txt

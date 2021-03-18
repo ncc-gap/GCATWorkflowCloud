@@ -23,9 +23,9 @@ class Task(abstract_task.Abstract_task):
 
         max_len_bam = 0
         for sample in sample_conf.bam_tofastq:
-            for i,path in enumerate(sample_conf.bam_tofastq[sample]):
-                if i == 0 and len(path) > max_len_bam:
-                    max_len_bam = len(path)
+            pathes = sample_conf.bam_tofastq[sample].split(";")
+            if len(pathes) > max_len_bam:
+                max_len_bam = len(pathes)
 
         header_bam = []
         for i in range(max_len_bam):

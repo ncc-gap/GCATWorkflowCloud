@@ -8,6 +8,7 @@ Created on Tue Jun 28 13:18:34 2016
 
 import unittest
 import subprocess
+import time
 
 class ConfigureTest(unittest.TestCase):
     
@@ -35,9 +36,9 @@ class ConfigureTest(unittest.TestCase):
     def test2_01_configure(self):
         options = [
             "germline",
-            "./tests/germline_sample.csv",
+            "./example_conf/germline_sample.csv",
             "s3://travisci-work",
-            "./tests/germline_gcat_ecsub.cfg",
+            "./example_conf/germline_gcat_ecsub.cfg",
             "--dryrun",
         ]
         subprocess.check_call(['gcat_workflow_cloud'] + options)
@@ -45,9 +46,9 @@ class ConfigureTest(unittest.TestCase):
     def test2_02_configure(self):
         options = [
             "germline",
-            "./tests/germline_sample.csv",
+            "./example_conf/germline_sample.csv",
             "s3://travisci-work",
-            "./tests/germline_gcat_ecsub.cfg",
+            "./example_conf/germline_gcat_ecsub.cfg",
             "--dryrun",
             "--skip-price",
         ]
@@ -56,9 +57,9 @@ class ConfigureTest(unittest.TestCase):
     def test2_03_configure(self):
         options = [
             "germline",
-            "./tests/germline_sample.csv",
+            "./example_conf/germline_sample.csv",
             "s3://travisci-work",
-            "./tests/germline_gcat_ecsub.cfg",
+            "./example_conf/germline_gcat_ecsub.cfg",
             "--dryrun",
             "--use-bam",
         ]
@@ -69,7 +70,7 @@ class ConfigureTest(unittest.TestCase):
             "germline",
             "./tests/germline_sample_allinone_cram.csv",
             "s3://travisci-work",
-            "./tests/germline_gcat_ecsub.cfg",
+            "./example_conf/germline_gcat_ecsub.cfg",
             "--dryrun",
         ]
         subprocess.check_call(['gcat_workflow_cloud'] + options)
@@ -79,7 +80,7 @@ class ConfigureTest(unittest.TestCase):
             "germline",
             "./tests/germline_sample_allinone_bam.csv",
             "s3://travisci-work",
-            "./tests/germline_gcat_ecsub.cfg",
+            "./example_conf/germline_gcat_ecsub.cfg",
             "--dryrun",
             "--use-bam",
         ]
@@ -90,7 +91,7 @@ class ConfigureTest(unittest.TestCase):
             "germline",
             "./tests/germline_sample_fastq.csv",
             "s3://travisci-work",
-            "./tests/germline_gcat_ecsub.cfg",
+            "./example_conf/germline_gcat_ecsub.cfg",
             "--dryrun",
         ]
         subprocess.check_call(['gcat_workflow_cloud'] + options)
@@ -100,7 +101,7 @@ class ConfigureTest(unittest.TestCase):
             "germline",
             "./tests/germline_sample_fastq.csv",
             "s3://travisci-work",
-            "./tests/germline_gcat_ecsub.cfg",
+            "./example_conf/germline_gcat_ecsub.cfg",
             "--dryrun",
             "--use-bam",
         ]
@@ -111,7 +112,7 @@ class ConfigureTest(unittest.TestCase):
             "germline",
             "./tests/germline_sample_bamimport_cram.csv",
             "s3://travisci-work",
-            "./tests/germline_gcat_ecsub.cfg",
+            "./example_conf/germline_gcat_ecsub.cfg",
             "--dryrun",
         ]
         subprocess.check_call(['gcat_workflow_cloud'] + options)
@@ -121,7 +122,7 @@ class ConfigureTest(unittest.TestCase):
             "germline",
             "./tests/germline_sample_bamimport_bam.csv",
             "s3://travisci-work",
-            "./tests/germline_gcat_ecsub.cfg",
+            "./example_conf/germline_gcat_ecsub.cfg",
             "--dryrun",
             "--use-bam",
         ]
@@ -132,7 +133,7 @@ class ConfigureTest(unittest.TestCase):
             "germline",
             "./tests/germline_sample_bamtofastq.csv",
             "s3://travisci-work",
-            "./tests/germline_gcat_ecsub.cfg",
+            "./example_conf/germline_gcat_ecsub.cfg",
             "--dryrun",
         ]
         subprocess.check_call(['gcat_workflow_cloud'] + options)
@@ -142,7 +143,7 @@ class ConfigureTest(unittest.TestCase):
             "germline",
             "./tests/germline_sample_bamtofastq.csv",
             "s3://travisci-work",
-            "./tests/germline_gcat_ecsub.cfg",
+            "./example_conf/germline_gcat_ecsub.cfg",
             "--dryrun",
             "--use-bam",
         ]
@@ -151,41 +152,44 @@ class ConfigureTest(unittest.TestCase):
     def test3_01_configure(self):
         options = [
             "rna",
-            "./tests/rna_sample.csv",
+            "./example_conf/rna_sample.csv",
             "s3://travisci-work",
-            "./tests/rna_gcat_ecsub.cfg",
+            "./example_conf/rna_gcat_ecsub.cfg",
             "--dryrun",
         ]
         subprocess.check_call(['gcat_workflow_cloud'] + options)
+        time.sleep(2)
 
     def test3_02_configure(self):
         options = [
             "rna",
-            "./tests/rna_sample.csv",
+            "./example_conf/rna_sample.csv",
             "s3://travisci-work",
-            "./tests/rna_gcat_ecsub.cfg",
+            "./example_conf/rna_gcat_ecsub.cfg",
             "--dryrun",
             "--skip-price",
         ]
         subprocess.check_call(['gcat_workflow_cloud'] + options)
+        time.sleep(2)
 
     def test3_03_configure(self):
         options = [
             "rna",
-            "./tests/rna_sample.csv",
+            "./example_conf/rna_sample.csv",
             "s3://travisci-work",
-            "./tests/rna_gcat_ecsub.cfg",
+            "./example_conf/rna_gcat_ecsub.cfg",
             "--dryrun",
             "--use-bam",
         ]
         subprocess.check_call(['gcat_workflow_cloud'] + options)
+        time.sleep(2)
         
     def test4_01_configure(self):
         options = [
             "somatic",
-            "./tests/somatic_sample.csv",
+            "./example_conf/somatic_sample.csv",
             "s3://travisci-work",
-            "./tests/somatic_gcat_ecsub.cfg",
+            "./example_conf/somatic_gcat_ecsub.cfg",
             "--dryrun",
         ]
         subprocess.check_call(['gcat_workflow_cloud'] + options)
@@ -193,9 +197,9 @@ class ConfigureTest(unittest.TestCase):
     def test4_02_configure(self):
         options = [
             "somatic",
-            "./tests/somatic_sample.csv",
+            "./example_conf/somatic_sample.csv",
             "s3://travisci-work",
-            "./tests/somatic_gcat_ecsub.cfg",
+            "./example_conf/somatic_gcat_ecsub.cfg",
             "--dryrun",
             "--skip-price",
         ]
@@ -204,21 +208,9 @@ class ConfigureTest(unittest.TestCase):
     def test4_03_configure(self):
         options = [
             "somatic",
-            "./tests/somatic_sample.csv",
+            "./example_conf/somatic_sample.csv",
             "s3://travisci-work",
-            "./tests/somatic_gcat_ecsub.cfg",
-            "--dryrun",
-            "--use-bam",
-        ]
-        subprocess.check_call(['gcat_workflow_cloud'] + options)
-
-
-    def test4_03_configure(self):
-        options = [
-            "somatic",
-            "./tests/somatic_sample.csv",
-            "s3://travisci-work",
-            "./tests/somatic_gcat_ecsub.cfg",
+            "./example_conf/somatic_gcat_ecsub.cfg",
             "--dryrun",
             "--use-bam",
         ]
@@ -229,7 +221,7 @@ class ConfigureTest(unittest.TestCase):
             "somatic",
             "./tests/somatic_sample_allinone_cram.csv",
             "s3://travisci-work",
-            "./tests/somatic_gcat_ecsub.cfg",
+            "./example_conf/somatic_gcat_ecsub.cfg",
             "--dryrun",
         ]
         subprocess.check_call(['gcat_workflow_cloud'] + options)
@@ -239,7 +231,7 @@ class ConfigureTest(unittest.TestCase):
             "somatic",
             "./tests/somatic_sample_allinone_bam.csv",
             "s3://travisci-work",
-            "./tests/somatic_gcat_ecsub.cfg",
+            "./example_conf/somatic_gcat_ecsub.cfg",
             "--dryrun",
             "--use-bam",
         ]
@@ -250,7 +242,7 @@ class ConfigureTest(unittest.TestCase):
             "somatic",
             "./tests/somatic_sample_fastq.csv",
             "s3://travisci-work",
-            "./tests/somatic_gcat_ecsub.cfg",
+            "./example_conf/somatic_gcat_ecsub.cfg",
             "--dryrun",
         ]
         subprocess.check_call(['gcat_workflow_cloud'] + options)
@@ -260,7 +252,7 @@ class ConfigureTest(unittest.TestCase):
             "somatic",
             "./tests/somatic_sample_fastq.csv",
             "s3://travisci-work",
-            "./tests/somatic_gcat_ecsub.cfg",
+            "./example_conf/somatic_gcat_ecsub.cfg",
             "--dryrun",
             "--use-bam",
         ]
@@ -271,7 +263,7 @@ class ConfigureTest(unittest.TestCase):
             "somatic",
             "./tests/somatic_sample_bamimport_cram.csv",
             "s3://travisci-work",
-            "./tests/somatic_gcat_ecsub.cfg",
+            "./example_conf/somatic_gcat_ecsub.cfg",
             "--dryrun",
         ]
         subprocess.check_call(['gcat_workflow_cloud'] + options)
@@ -281,7 +273,7 @@ class ConfigureTest(unittest.TestCase):
             "somatic",
             "./tests/somatic_sample_bamimport_bam.csv",
             "s3://travisci-work",
-            "./tests/somatic_gcat_ecsub.cfg",
+            "./example_conf/somatic_gcat_ecsub.cfg",
             "--dryrun",
             "--use-bam",
         ]
@@ -292,7 +284,7 @@ class ConfigureTest(unittest.TestCase):
             "somatic",
             "./tests/somatic_sample_bamtofastq.csv",
             "s3://travisci-work",
-            "./tests/somatic_gcat_ecsub.cfg",
+            "./example_conf/somatic_gcat_ecsub.cfg",
             "--dryrun",
         ]
         subprocess.check_call(['gcat_workflow_cloud'] + options)
@@ -302,7 +294,7 @@ class ConfigureTest(unittest.TestCase):
             "somatic",
             "./tests/somatic_sample_bamtofastq.csv",
             "s3://travisci-work",
-            "./tests/somatic_gcat_ecsub.cfg",
+            "./example_conf/somatic_gcat_ecsub.cfg",
             "--dryrun",
             "--use-bam",
         ]
