@@ -53,9 +53,10 @@ rm ${OUTPUT_PREF}.Aligned.out.bam
 
 # cram
 if [ ${SEQ_FORMAT} = "cram" ]; then
-    export REF_CACHE=/scratch/.cache/
-    mkdir -p ${REF_CACHE}
-
+    if [ "${REF_CACHE}" != "default" ];
+        export REF_CACHE=/scratch/.cache/
+        mkdir -p ${REF_CACHE}
+    fi
     cd ${OUTPUT_DIR}
     /usr/local/bin/samtools view \
         ${OUTPUT_PREF}.Aligned.sortedByCoord.out.bam \
