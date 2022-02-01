@@ -53,7 +53,7 @@ rm ${OUTPUT_PREF}.Aligned.out.bam
 
 # cram
 if [ ${SEQ_FORMAT} = "cram" ]; then
-    if [ "${REF_CACHE}" != "default" ];
+    if [ "${SET_REF_CACHE}" != "default" ];
         export REF_CACHE=/scratch/.cache/
         mkdir -p ${REF_CACHE}
     fi
